@@ -1,0 +1,35 @@
+package initialize
+
+import (
+	"schedule_gateway/internal/middlewares"
+	"schedule_gateway/internal/routers"
+
+	"github.com/gin-gonic/gin"
+)
+
+func InitRouter(r *gin.Engine) {
+	r.Use(middlewares.TrackLogMiddleware())
+	// cor
+	// limiter global
+	permRouter := routers.RouterGroupApp.AuthorizationRouterEnter.PermissionRouter
+	roleRouter := routers.RouterGroupApp.AuthorizationRouterEnter.RoleRouter
+	tokenRouter := routers.RouterGroupApp.AuthenticationRouterEnter.TokenRouter
+	authRouter := routers.RouterGroupApp.AuthenticationRouterEnter.AuthRouter
+
+	MainGroup := r.Group("v1/api/")
+	{
+		MainGroup.GET("/checkStatus", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"status":  "ok",
+				"message": "Authentication Service is running",
+			})
+		})
+
+	}
+	{
+		permRouter.InitPermissionRouter(MainGroup)
+		roleRouter.InitRoleRouter(MainGroup)
+		tokenRouter.InitTokenRouter(MainGroup)
+		authRouter.InitAuthRouter(MainGroup)
+	}
+}
