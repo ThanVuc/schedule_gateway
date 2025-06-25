@@ -13,6 +13,7 @@ type Config struct {
 	Server      Server      `mapstructure:"server" json:"server" yaml:"server"`
 	Log         Log         `mapstructure:"log" json:"log" yaml:"log"`
 	AuthService AuthService `mapstructure:"auth_service" json:"auth_service" yaml:"auth_service"`
+	UserService UserService `mapstructure:"user_service" json:"user_service" yaml:"user_service"`
 }
 
 type Server struct {
@@ -31,6 +32,11 @@ type Log struct {
 }
 
 type AuthService struct {
+	Host string `mapstructure:"host" json:"host" yaml:"host"`
+	Port int    `mapstructure:"port" json:"port" yaml:"port"`
+}
+
+type UserService struct {
 	Host string `mapstructure:"host" json:"host" yaml:"host"`
 	Port int    `mapstructure:"port" json:"port" yaml:"port"`
 }

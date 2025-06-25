@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"schedule_gateway/internal/controller"
+	v1 "schedule_gateway/internal/grpc/auth.v1"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 
@@ -28,8 +29,17 @@ func (tr *TokenRouter) InitTokenRouter(routerGroup *gin.RouterGroup) {
 
 func RegisterTokenRouterResource() {
 	// Register the resources and their permissions
-	helper.AddResource("token", []string{
-		"refresh",
-		"revoke",
+	resoucePredefine := helper.InitResources()
+	register := helper.NewResourceRegiseter(resoucePredefine.TokenResource.ResourceId)
+
+	register.AddResource(resoucePredefine.TokenResource, []*v1.Action{
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "revoke",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "refresh",
+		},
 	})
 }

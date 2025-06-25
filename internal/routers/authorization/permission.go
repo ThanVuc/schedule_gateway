@@ -2,6 +2,7 @@ package authorization
 
 import (
 	"schedule_gateway/internal/controller"
+	v1 "schedule_gateway/internal/grpc/auth.v1"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 
@@ -24,17 +25,36 @@ func (p *PermissionRouter) InitPermissionRouter(Router *gin.RouterGroup) {
 
 		permissionRouterPrivate.DELETE("/:id", middlewares.CheckPerm("permissions", "delete"), permissionController.DeletePermission)
 
-		permissionRouterPrivate.POST("/assign-permission-to-role", middlewares.CheckPerm("permissions", "assignToRole"), permissionController.AssignPermissionToRole)
+		permissionRouterPrivate.POST("/assign-permission-to-role", middlewares.CheckPerm("permissions", "assign"), permissionController.AssignPermissionToRole)
 	}
 	RegisterPermissionRouterResource()
 }
 
 func RegisterPermissionRouterResource() {
-	helper.AddResource("permissions", []string{
-		"readAll",
-		"create",
-		"update",
-		"delete",
-		"assignToRole",
+	// Register the resources and their permissions
+	resoucePredefine := helper.InitResources()
+
+	register := helper.NewResourceRegiseter(resoucePredefine.PermissionResource.ResourceId)
+	register.AddResource(resoucePredefine.PermissionResource, []*v1.Action{
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "readAll",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "create",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "update",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "delete",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "assign",
+		},
 	})
 }

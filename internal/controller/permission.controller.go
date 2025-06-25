@@ -1,15 +1,24 @@
 package controller
 
 import (
+	"schedule_gateway/global"
+	"schedule_gateway/internal/client"
+	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
 
-type PermissionController struct{}
+type PermissionController struct {
+	logger           *loggers.LoggerZap
+	permissionClient client.IPermissionClient
+}
 
 func NewPermissionController() *PermissionController {
-	return &PermissionController{}
+	return &PermissionController{
+		logger:           global.Logger,
+		permissionClient: client.NewPermissionClient(),
+	}
 }
 
 func (pc *PermissionController) GetPermissions(c *gin.Context) {

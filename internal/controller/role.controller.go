@@ -1,15 +1,24 @@
 package controller
 
 import (
+	"schedule_gateway/global"
+	"schedule_gateway/internal/client"
+	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
 
-type RoleController struct{}
+type RoleController struct {
+	logger     *loggers.LoggerZap
+	roleClient client.IRoleClient
+}
 
 func NewRoleController() *RoleController {
-	return &RoleController{}
+	return &RoleController{
+		logger:     global.Logger,
+		roleClient: client.NewRoleClient(),
+	}
 }
 
 func (rc *RoleController) GetRoles(c *gin.Context) {

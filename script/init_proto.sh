@@ -27,4 +27,9 @@ protoc -I="../schedule-proto" \
   --go-grpc_out=. \
   "../schedule-proto/auth_service/token.v1.proto"
 
+protoc -I="../schedule-proto" \
+  --go_out=. \
+  --go-grpc_out=. \
+  "../schedule-proto/user_service/user_service.v1.proto"
+
 echo "Protobuf files generated successfully."

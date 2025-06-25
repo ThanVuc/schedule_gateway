@@ -20,6 +20,8 @@ func Run() {
 	LoadConfig()
 	InitLogger()
 
+	// producer := producer.NewProducer()
+
 	// init the app with gin
 	// This order is important, as the middleware needs to be set before the routes are initialized.
 	var r *gin.Engine = gin.New()
@@ -28,6 +30,8 @@ func Run() {
 	InitRouter(r)
 
 	helper.WriteToJsonFile("resources")
+	// producer.SendResources()
+	go InitResource()
 
 	r.Run(fmt.Sprintf(":%d", global.Config.Server.Port)) // listen and serve on
 }

@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"schedule_gateway/internal/controller"
+	v1 "schedule_gateway/internal/grpc/auth.v1"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 
@@ -17,7 +18,7 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 	authRouterPrivate := routerGroup.Group("auth")
 	{
 		authRouterPrivate.POST("logout", middlewares.CheckPerm("auth", "logout"), authController.Logout)
-		authRouterPrivate.POST("reset-password", middlewares.CheckPerm("auth", "update"), authController.ResetPassword)
+		authRouterPrivate.POST("reset-password", middlewares.CheckPerm("auth", "reset"), authController.ResetPassword)
 		authRouterPrivate.POST("forgot-password", middlewares.CheckPerm("auth", "retrieve"), authController.ForgotPassword)
 	}
 
@@ -34,9 +35,21 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 
 func RegisterAuthRouterResource() {
 	// Register the resources and their permissions
-	helper.AddResource("auth", []string{
-		"logout",
-		"update",
-		"retrieve",
+	resoucePredefine := helper.InitResources()
+	register := helper.NewResourceRegiseter(resoucePredefine.AuthResource.ResourceId)
+
+	register.AddResource(resoucePredefine.AuthResource, []*v1.Action{
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "logout",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "reset",
+		},
+		{
+			ActionId: register.GenerateActionId(),
+			Action:   "retrieve",
+		},
 	})
 }

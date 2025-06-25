@@ -2,7 +2,7 @@ package controller
 
 import (
 	"schedule_gateway/global"
-	auth_service "schedule_gateway/internal/client/auth"
+	"schedule_gateway/internal/client"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/response"
 
@@ -11,13 +11,13 @@ import (
 
 type AuthController struct {
 	logger     *loggers.LoggerZap
-	authClient auth_service.IAuthClient
+	authClient client.IAuthClient
 }
 
 func NewAuthController() *AuthController {
 	return &AuthController{
 		logger:     global.Logger,
-		authClient: auth_service.NewAuthClient(),
+		authClient: client.NewAuthClient(),
 	}
 }
 

@@ -1,4 +1,8 @@
 POST http://localhost:8080/v1/api/auth/create-author
 
 ###
-POST http://localhost:8080/v1/api/auth/login
+POST http://localhost:8080/v1/api/auth/save-router-resource
+
+
+###
+GET http://localhost:8080/v1/api/user-info/123

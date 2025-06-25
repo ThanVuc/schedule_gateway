@@ -4,41 +4,49 @@ import (
 	"encoding/json"
 	"os"
 	"schedule_gateway/global"
+	v1 "schedule_gateway/internal/grpc/auth.v1"
+	"strconv"
 
 	"go.uber.org/zap"
 )
 
-type ResourceItem struct {
-	Resource string   `json:"resource"`
-	Actions  []string `json:"actions"`
+type Resource struct {
+	ResourceId string `json:"resource_id"`
+	Resource   string `json:"resource"`
 }
 
-var resourceList []ResourceItem = []ResourceItem{}
+type Action struct {
+	ActionId string `json:"action_id"`
+	Action   string `json:"action"`
+}
 
-func AddResource(resource string, actions []string) {
-	resourceList = append(resourceList, ResourceItem{
+type ResourceItem struct {
+	Resource Resource `json:"resource"`
+	Actions  []Action `json:"actions"`
+}
+
+var resourceList []*v1.ResourceItem = make([]*v1.ResourceItem, 0)
+
+type ResourceRegiseter struct {
+	count      int
+	resourceId string
+}
+
+func NewResourceRegiseter(resourceId string) *ResourceRegiseter {
+	return &ResourceRegiseter{
+		count:      0,
+		resourceId: resourceId,
+	}
+}
+
+func (rr *ResourceRegiseter) AddResource(resource *v1.Resource, actions []*v1.Action) {
+	resourceList = append(resourceList, &v1.ResourceItem{
 		Resource: resource,
 		Actions:  actions,
 	})
 }
 
-func GetResources(fileName string) []ResourceItem {
-	filePath := "./backup/" + fileName + ".json"
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		return []ResourceItem{}
-	}
-
-	file, err := os.Open(filePath)
-	if err != nil {
-		return []ResourceItem{}
-	}
-	defer file.Close()
-
-	decoder := json.NewDecoder(file)
-	resourceList = []ResourceItem{}
-	if err := decoder.Decode(resourceList); err != nil {
-		return []ResourceItem{}
-	}
+func GetResources() []*v1.ResourceItem {
 	return resourceList
 }
 
@@ -58,4 +66,10 @@ func WriteToJsonFile(fileName string) {
 	} else {
 		logger.InfoString("Resource list written to JSON file successfully", zap.String("file_path", filePath))
 	}
+}
+
+func (rr *ResourceRegiseter) GenerateActionId() string {
+	// Generate a unique action ID based on resource ID and action name
+	rr.count++
+	return rr.resourceId + strconv.Itoa(rr.count)
 }

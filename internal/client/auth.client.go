@@ -1,4 +1,4 @@
-package auth_service
+package client
 
 import (
 	"context"
@@ -21,6 +21,7 @@ type IAuthClient interface {
 	ResetPassword(userId, oldPassword, newPassword string) (*v1Auth.ResetPasswordResponse, error)
 	ForgotPassword(email string) (*v1Auth.ForgotPasswordResponse, error)
 	ConfirmForgotPassword(token, userId string) (*v1Auth.ConfirmForgotPasswordResponse, error)
+	SaveRouteResource(resources []*v1Auth.ResourceItem) (*v1Auth.SaveRouteResourceResponse, error)
 }
 
 type AuthClient struct {
@@ -139,6 +140,18 @@ func (a *AuthClient) ConfirmForgotPassword(token, userId string) (*v1Auth.Confir
 	resp, err := a.authClient.ConfirmForgotPassword(context.Background(), req)
 	if err != nil {
 		a.logger.ErrorString("ConfirmForgotPassword failed", zap.Error(err))
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (a *AuthClient) SaveRouteResource(resources []*v1Auth.ResourceItem) (*v1Auth.SaveRouteResourceResponse, error) {
+	req := &v1Auth.SaveRouteResourceRequest{
+		Items: resources,
+	}
+	resp, err := a.authClient.SaveRouteResource(context.Background(), req)
+	if err != nil {
+		a.logger.ErrorString("SaveRouteResource failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
