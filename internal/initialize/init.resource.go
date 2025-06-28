@@ -1,8 +1,10 @@
 package initialize
 
 import (
+	"context"
 	"schedule_gateway/global"
 	"schedule_gateway/internal/client"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"time"
 
@@ -13,7 +15,9 @@ func InitResource() {
 	logger := global.Logger
 	failAttempt := 0
 	for {
-		resp, err := client.NewAuthClient().SaveRouteResource(helper.GetResources())
+		resp, err := client.NewAuthClient().SaveRouteResource(context.Background(), &auth.SaveRouteResourceRequest{
+			Items: helper.GetResources(),
+		})
 
 		if err != nil || !resp.Success {
 			if failAttempt < 5 {

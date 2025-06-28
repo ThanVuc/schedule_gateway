@@ -22,18 +22,10 @@ func NewAuthController() *AuthController {
 }
 
 func (ac *AuthController) Login(c *gin.Context) {
-	resp, err := ac.authClient.Login("sinhnguyen1", "123456")
-	if err != nil {
-		panic(response.InternalServerError("Something went wrong"))
-	}
-
-	if resp == nil || resp.AccessToken == "" {
-		panic(response.Unauthorized("Invalid credentials"))
-	}
 
 	response.Ok(c, "Login called", gin.H{
-		"access_token":  resp.AccessToken,
-		"refresh_token": resp.RefreshToken,
+		"access_token":  "",
+		"refresh_token": "",
 	})
 }
 

@@ -1,36 +1,36 @@
 package helper
 
-import v1 "schedule_gateway/internal/grpc/auth.v1"
+import "schedule_gateway/internal/grpc/auth"
 
 type ResourcePredefine struct {
-	AuthResource       *v1.Resource
-	TokenResource      *v1.Resource
-	RoleResource       *v1.Resource
-	PermissionResource *v1.Resource
-	UserResource       *v1.Resource
+	AuthResource       *auth.Resource
+	TokenResource      *auth.Resource
+	RoleResource       *auth.Resource
+	PermissionResource *auth.Resource
+	UserResource       *auth.Resource
 }
 
 func InitResources() *ResourcePredefine {
 	r := &ResourcePredefine{
-		AuthResource: &v1.Resource{
-			ResourceId: "1",
-			Resource:   "auth",
+		AuthResource: &auth.Resource{
+			Id:   "1",
+			Name: "auth",
 		},
-		TokenResource: &v1.Resource{
-			ResourceId: "2",
-			Resource:   "token",
+		TokenResource: &auth.Resource{
+			Id:   "2",
+			Name: "token",
 		},
-		RoleResource: &v1.Resource{
-			ResourceId: "3",
-			Resource:   "roles",
+		RoleResource: &auth.Resource{
+			Id:   "3",
+			Name: "roles",
 		},
-		PermissionResource: &v1.Resource{
-			ResourceId: "4",
-			Resource:   "permissions",
+		PermissionResource: &auth.Resource{
+			Id:   "4",
+			Name: "permissions",
 		},
-		UserResource: &v1.Resource{
-			ResourceId: "5",
-			Resource:   "uesrs",
+		UserResource: &auth.Resource{
+			Id:   "5",
+			Name: "uesrs",
 		},
 	}
 	return r

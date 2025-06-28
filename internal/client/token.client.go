@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"schedule_gateway/global"
-	v1Token "schedule_gateway/internal/grpc/token.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/settings"
 
@@ -14,14 +14,14 @@ import (
 )
 
 type ITokenClient interface {
-	RefreshToken(refreshToken string) (*v1Token.RefreshTokenResponse, error)
-	RevokeToken(token string) (*v1Token.RevokeTokenResponse, error)
+	RefreshToken(ctx context.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
+	RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error)
 }
 
 type TokenClient struct {
 	logger      *loggers.LoggerZap
 	config      *settings.AuthService
-	tokenClient v1Token.TokenServiceClient
+	tokenClient auth.TokenServiceClient
 }
 
 func NewTokenClient() ITokenClient {
@@ -34,7 +34,7 @@ func NewTokenClient() ITokenClient {
 		return nil
 	}
 
-	client := v1Token.NewTokenServiceClient(conn)
+	client := auth.NewTokenServiceClient(conn)
 	if client == nil {
 		logger.ErrorString("Failed to create TokenService client", zap.String("host", config.Host), zap.Int("port", config.Port))
 		return nil
@@ -47,11 +47,8 @@ func NewTokenClient() ITokenClient {
 	}
 }
 
-func (t *TokenClient) RefreshToken(refreshToken string) (*v1Token.RefreshTokenResponse, error) {
-	req := &v1Token.RefreshTokenRequest{
-		RefreshToken: refreshToken,
-	}
-	resp, err := t.tokenClient.RefreshToken(context.Background(), req)
+func (t *TokenClient) RefreshToken(ctx context.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
+	resp, err := t.tokenClient.RefreshToken(ctx, req)
 	if err != nil {
 		t.logger.ErrorString("RefreshToken failed", zap.Error(err))
 		return nil, err
@@ -59,11 +56,8 @@ func (t *TokenClient) RefreshToken(refreshToken string) (*v1Token.RefreshTokenRe
 	return resp, nil
 }
 
-func (t *TokenClient) RevokeToken(token string) (*v1Token.RevokeTokenResponse, error) {
-	req := &v1Token.RevokeTokenRequest{
-		Token: token,
-	}
-	resp, err := t.tokenClient.RevokeToken(context.Background(), req)
+func (t *TokenClient) RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error) {
+	resp, err := t.tokenClient.RevokeToken(ctx, req)
 	if err != nil {
 		t.logger.ErrorString("RevokeToken failed", zap.Error(err))
 		return nil, err
