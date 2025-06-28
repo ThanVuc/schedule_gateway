@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"schedule_gateway/global"
-	v1 "schedule_gateway/internal/grpc/user.v1"
+	"schedule_gateway/internal/grpc/user"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/settings"
 
@@ -15,14 +15,14 @@ import (
 )
 
 type IUserClient interface {
-	GetUserInfo(userId string) (*v1.GetUserInfoResponse, error)
-	UpdateUserInfo(userId string, name string, email string) (*v1.UpdateUserInfoResponse, error)
+	GetUserInfo(ctx context.Context, req *user.GetUserInfoRequest) (*user.GetUserInfoResponse, error)
+	UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoRequest) (*user.UpdateUserInfoResponse, error)
 }
 
 type UserClient struct {
 	logger     *loggers.LoggerZap
 	config     *settings.UserService
-	userClient v1.UserServiceClient
+	userClient user.UserServiceClient
 }
 
 func NewUserClient() IUserClient {
@@ -35,7 +35,7 @@ func NewUserClient() IUserClient {
 		return nil
 	}
 
-	client := v1.NewUserServiceClient(conn)
+	client := user.NewUserServiceClient(conn)
 	if client == nil {
 		logger.ErrorString("Failed to create UserService client", zap.String("host", config.Host), zap.Int("port", config.Port))
 		return nil
@@ -48,27 +48,19 @@ func NewUserClient() IUserClient {
 	}
 }
 
-func (a *UserClient) GetUserInfo(userId string) (*v1.GetUserInfoResponse, error) {
-	req := &v1.GetUserInfoRequest{
-		UserId: userId,
-	}
-	resp, err := a.userClient.GetUserInfo(context.Background(), req)
+func (a *UserClient) GetUserInfo(ctx context.Context, req *user.GetUserInfoRequest) (*user.GetUserInfoResponse, error) {
+	resp, err := a.userClient.GetUserInfo(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("Failed to get user info", zap.String("userId", userId), zap.Error(err))
+		a.logger.ErrorString("Failed to get user info", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
 }
 
-func (a *UserClient) UpdateUserInfo(userId string, name string, email string) (*v1.UpdateUserInfoResponse, error) {
-	req := &v1.UpdateUserInfoRequest{
-		UserId: userId,
-		Name:   name,
-		Email:  email,
-	}
-	resp, err := a.userClient.UpdateUserInfo(context.Background(), req)
+func (a *UserClient) UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoRequest) (*user.UpdateUserInfoResponse, error) {
+	resp, err := a.userClient.UpdateUserInfo(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("Failed to update user info", zap.String("userId", userId), zap.Error(err))
+		a.logger.ErrorString("Failed to update user info", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil

@@ -2,7 +2,7 @@ package authorization
 
 import (
 	"schedule_gateway/internal/controller"
-	v1 "schedule_gateway/internal/grpc/auth.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 
@@ -34,27 +34,27 @@ func RegisterPermissionRouterResource() {
 	// Register the resources and their permissions
 	resoucePredefine := helper.InitResources()
 
-	register := helper.NewResourceRegiseter(resoucePredefine.PermissionResource.ResourceId)
-	register.AddResource(resoucePredefine.PermissionResource, []*v1.Action{
+	register := helper.NewResourceRegiseter(resoucePredefine.PermissionResource.Id)
+	register.AddResource(resoucePredefine.PermissionResource, []*auth.Action{
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "readAll",
+			Id:   register.GenerateActionId(),
+			Name: "readAll",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "create",
+			Id:   register.GenerateActionId(),
+			Name: "create",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "update",
+			Id:   register.GenerateActionId(),
+			Name: "update",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "delete",
+			Id:   register.GenerateActionId(),
+			Name: "delete",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "assign",
+			Id:   register.GenerateActionId(),
+			Name: "assign",
 		},
 	})
 }

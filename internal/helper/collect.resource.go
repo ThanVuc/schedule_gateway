@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"schedule_gateway/global"
-	v1 "schedule_gateway/internal/grpc/auth.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"strconv"
 
 	"go.uber.org/zap"
@@ -25,7 +25,7 @@ type ResourceItem struct {
 	Actions  []Action `json:"actions"`
 }
 
-var resourceList []*v1.ResourceItem = make([]*v1.ResourceItem, 0)
+var resourceList []*auth.ResourceItem = make([]*auth.ResourceItem, 0)
 
 type ResourceRegiseter struct {
 	count      int
@@ -39,14 +39,14 @@ func NewResourceRegiseter(resourceId string) *ResourceRegiseter {
 	}
 }
 
-func (rr *ResourceRegiseter) AddResource(resource *v1.Resource, actions []*v1.Action) {
-	resourceList = append(resourceList, &v1.ResourceItem{
+func (rr *ResourceRegiseter) AddResource(resource *auth.Resource, actions []*auth.Action) {
+	resourceList = append(resourceList, &auth.ResourceItem{
 		Resource: resource,
 		Actions:  actions,
 	})
 }
 
-func GetResources() []*v1.ResourceItem {
+func GetResources() []*auth.ResourceItem {
 	return resourceList
 }
 

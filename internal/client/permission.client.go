@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"schedule_gateway/global"
-	v1Permission "schedule_gateway/internal/grpc/permission.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/settings"
 
@@ -14,17 +14,17 @@ import (
 )
 
 type IPermissionClient interface {
-	GetPermissions(userID string) (*v1Permission.GetPermissionsResponse, error)
-	CreatePermission(name, description string) (*v1Permission.CreatePermissionResponse, error)
-	UpdatePermission(permissionID, name, description string) (*v1Permission.UpdatePermissionResponse, error)
-	DeletePermission(permissionID string) (*v1Permission.DeletePermissionResponse, error)
-	AssignPermissionToRole(permissionID, roleID string) (*v1Permission.AssignPermissionResponse, error)
+	GetPermissions(ctx context.Context, req *auth.GetPermissionsRequest) (*auth.GetPermissionsResponse, error)
+	CreatePermission(ctx context.Context, req *auth.CreatePermissionRequest) (*auth.CreatePermissionResponse, error)
+	UpdatePermission(ctx context.Context, req *auth.UpdatePermissionRequest) (*auth.UpdatePermissionResponse, error)
+	DeletePermission(ctx context.Context, req *auth.DeletePermissionRequest) (*auth.DeletePermissionResponse, error)
+	AssignPermissionToRole(ctx context.Context, req *auth.AssignPermissionRequest) (*auth.AssignPermissionResponse, error)
 }
 
 type PermissionClient struct {
 	logger           *loggers.LoggerZap
 	config           *settings.AuthService
-	permissionClient v1Permission.PermissionServiceClient
+	permissionClient auth.PermissionServiceClient
 }
 
 func NewPermissionClient() IPermissionClient {
@@ -37,7 +37,7 @@ func NewPermissionClient() IPermissionClient {
 		return nil
 	}
 
-	client := v1Permission.NewPermissionServiceClient(conn)
+	client := auth.NewPermissionServiceClient(conn)
 	if client == nil {
 		logger.ErrorString("Failed to create PermissionService client", zap.String("host", config.Host), zap.Int("port", config.Port))
 		return nil
@@ -50,11 +50,8 @@ func NewPermissionClient() IPermissionClient {
 	}
 }
 
-func (p *PermissionClient) GetPermissions(userID string) (*v1Permission.GetPermissionsResponse, error) {
-	req := &v1Permission.GetPermissionsRequest{
-		UserId: userID,
-	}
-	resp, err := p.permissionClient.GetPermissions(context.Background(), req)
+func (p *PermissionClient) GetPermissions(ctx context.Context, req *auth.GetPermissionsRequest) (*auth.GetPermissionsResponse, error) {
+	resp, err := p.permissionClient.GetPermissions(ctx, req)
 	if err != nil {
 		p.logger.ErrorString("GetPermissions failed", zap.Error(err))
 		return nil, err
@@ -62,12 +59,8 @@ func (p *PermissionClient) GetPermissions(userID string) (*v1Permission.GetPermi
 	return resp, nil
 }
 
-func (p *PermissionClient) CreatePermission(name, description string) (*v1Permission.CreatePermissionResponse, error) {
-	req := &v1Permission.CreatePermissionRequest{
-		Name:        name,
-		Description: description,
-	}
-	resp, err := p.permissionClient.CreatePermission(context.Background(), req)
+func (p *PermissionClient) CreatePermission(ctx context.Context, req *auth.CreatePermissionRequest) (*auth.CreatePermissionResponse, error) {
+	resp, err := p.permissionClient.CreatePermission(ctx, req)
 	if err != nil {
 		p.logger.ErrorString("CreatePermission failed", zap.Error(err))
 		return nil, err
@@ -75,13 +68,8 @@ func (p *PermissionClient) CreatePermission(name, description string) (*v1Permis
 	return resp, nil
 }
 
-func (p *PermissionClient) UpdatePermission(permissionID, name, description string) (*v1Permission.UpdatePermissionResponse, error) {
-	req := &v1Permission.UpdatePermissionRequest{
-		PermissionId: permissionID,
-		Name:         name,
-		Description:  description,
-	}
-	resp, err := p.permissionClient.UpdatePermission(context.Background(), req)
+func (p *PermissionClient) UpdatePermission(ctx context.Context, req *auth.UpdatePermissionRequest) (*auth.UpdatePermissionResponse, error) {
+	resp, err := p.permissionClient.UpdatePermission(ctx, req)
 	if err != nil {
 		p.logger.ErrorString("UpdatePermission failed", zap.Error(err))
 		return nil, err
@@ -89,11 +77,8 @@ func (p *PermissionClient) UpdatePermission(permissionID, name, description stri
 	return resp, nil
 }
 
-func (p *PermissionClient) DeletePermission(permissionID string) (*v1Permission.DeletePermissionResponse, error) {
-	req := &v1Permission.DeletePermissionRequest{
-		PermissionId: permissionID,
-	}
-	resp, err := p.permissionClient.DeletePermission(context.Background(), req)
+func (p *PermissionClient) DeletePermission(ctx context.Context, req *auth.DeletePermissionRequest) (*auth.DeletePermissionResponse, error) {
+	resp, err := p.permissionClient.DeletePermission(ctx, req)
 	if err != nil {
 		p.logger.ErrorString("DeletePermission failed", zap.Error(err))
 		return nil, err
@@ -101,12 +86,8 @@ func (p *PermissionClient) DeletePermission(permissionID string) (*v1Permission.
 	return resp, nil
 }
 
-func (p *PermissionClient) AssignPermissionToRole(permissionID, roleID string) (*v1Permission.AssignPermissionResponse, error) {
-	req := &v1Permission.AssignPermissionRequest{
-		PermissionId: permissionID,
-		RoleId:       roleID,
-	}
-	resp, err := p.permissionClient.AssignPermissionToRole(context.Background(), req)
+func (p *PermissionClient) AssignPermissionToRole(ctx context.Context, req *auth.AssignPermissionRequest) (*auth.AssignPermissionResponse, error) {
+	resp, err := p.permissionClient.AssignPermissionToRole(ctx, req)
 	if err != nil {
 		p.logger.ErrorString("AssignPermissionToRole failed", zap.Error(err))
 		return nil, err

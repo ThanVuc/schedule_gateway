@@ -2,7 +2,7 @@ package authorization
 
 import (
 	"schedule_gateway/internal/controller"
-	v1 "schedule_gateway/internal/grpc/auth.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 
@@ -36,32 +36,32 @@ func RegisterRoleRouterResouce() {
 	// Register the resources and their permissions
 	resoucePredefine := helper.InitResources()
 
-	register := helper.NewResourceRegiseter(resoucePredefine.RoleResource.ResourceId)
+	register := helper.NewResourceRegiseter(resoucePredefine.RoleResource.Id)
 
-	register.AddResource(resoucePredefine.RoleResource, []*v1.Action{
+	register.AddResource(resoucePredefine.RoleResource, []*auth.Action{
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "readAll",
+			Id:   register.GenerateActionId(),
+			Name: "readAll",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "create",
+			Id:   register.GenerateActionId(),
+			Name: "create",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "update",
+			Id:   register.GenerateActionId(),
+			Name: "update",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "delete",
+			Id:   register.GenerateActionId(),
+			Name: "delete",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "disableOrEnable",
+			Id:   register.GenerateActionId(),
+			Name: "disableOrEnable",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "assignToUser",
+			Id:   register.GenerateActionId(),
+			Name: "assignToUser",
 		},
 	})
 }

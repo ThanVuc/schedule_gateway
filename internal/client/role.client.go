@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"schedule_gateway/global"
-	v1Role "schedule_gateway/internal/grpc/role.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/settings"
 
@@ -14,18 +14,18 @@ import (
 )
 
 type IRoleClient interface {
-	GetRoles(userID string) (*v1Role.GetRolesResponse, error)
-	CreateRole(name, description string) (*v1Role.CreateRoleResponse, error)
-	UpdateRole(roleID, name, description string) (*v1Role.UpdateRoleResponse, error)
-	DeleteRole(roleID string) (*v1Role.DeleteRoleResponse, error)
-	DisableOrEnableRole(roleID string, disable bool) (*v1Role.DisableOrEnableRoleResponse, error)
-	AssignRoleToUser(userID, roleID string) (*v1Role.AssignRoleResponse, error)
+	GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error)
+	CreateRole(ctx context.Context, req *auth.CreateRoleRequest) (*auth.CreateRoleResponse, error)
+	UpdateRole(ctx context.Context, req *auth.UpdateRoleRequest) (*auth.UpdateRoleResponse, error)
+	DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error)
+	DisableOrEnableRole(ctx context.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error)
+	AssignRoleToUser(ctx context.Context, req *auth.AssignRoleRequest) (*auth.AssignRoleResponse, error)
 }
 
 type RoleClient struct {
 	logger     *loggers.LoggerZap
 	config     *settings.AuthService
-	roleClient v1Role.RoleServiceClient
+	roleClient auth.RoleServiceClient
 }
 
 func NewRoleClient() IRoleClient {
@@ -38,7 +38,7 @@ func NewRoleClient() IRoleClient {
 		return nil
 	}
 
-	client := v1Role.NewRoleServiceClient(conn)
+	client := auth.NewRoleServiceClient(conn)
 	if client == nil {
 		logger.ErrorString("Failed to create RoleService client", zap.String("host", config.Host), zap.Int("port", config.Port))
 		return nil
@@ -51,11 +51,8 @@ func NewRoleClient() IRoleClient {
 	}
 }
 
-func (r *RoleClient) GetRoles(userID string) (*v1Role.GetRolesResponse, error) {
-	req := &v1Role.GetRolesRequest{
-		UserId: userID,
-	}
-	resp, err := r.roleClient.GetRoles(context.Background(), req)
+func (r *RoleClient) GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error) {
+	resp, err := r.roleClient.GetRoles(ctx, req)
 	if err != nil {
 		r.logger.ErrorString("GetRoles failed", zap.Error(err))
 		return nil, err
@@ -63,12 +60,8 @@ func (r *RoleClient) GetRoles(userID string) (*v1Role.GetRolesResponse, error) {
 	return resp, nil
 }
 
-func (r *RoleClient) CreateRole(name, description string) (*v1Role.CreateRoleResponse, error) {
-	req := &v1Role.CreateRoleRequest{
-		Name:        name,
-		Description: description,
-	}
-	resp, err := r.roleClient.CreateRole(context.Background(), req)
+func (r *RoleClient) CreateRole(ctx context.Context, req *auth.CreateRoleRequest) (*auth.CreateRoleResponse, error) {
+	resp, err := r.roleClient.CreateRole(ctx, req)
 	if err != nil {
 		r.logger.ErrorString("CreateRole failed", zap.Error(err))
 		return nil, err
@@ -76,13 +69,8 @@ func (r *RoleClient) CreateRole(name, description string) (*v1Role.CreateRoleRes
 	return resp, nil
 }
 
-func (r *RoleClient) UpdateRole(roleID, name, description string) (*v1Role.UpdateRoleResponse, error) {
-	req := &v1Role.UpdateRoleRequest{
-		RoleId:      roleID,
-		Name:        name,
-		Description: description,
-	}
-	resp, err := r.roleClient.UpdateRole(context.Background(), req)
+func (r *RoleClient) UpdateRole(ctx context.Context, req *auth.UpdateRoleRequest) (*auth.UpdateRoleResponse, error) {
+	resp, err := r.roleClient.UpdateRole(ctx, req)
 	if err != nil {
 		r.logger.ErrorString("UpdateRole failed", zap.Error(err))
 		return nil, err
@@ -90,11 +78,8 @@ func (r *RoleClient) UpdateRole(roleID, name, description string) (*v1Role.Updat
 	return resp, nil
 }
 
-func (r *RoleClient) DeleteRole(roleID string) (*v1Role.DeleteRoleResponse, error) {
-	req := &v1Role.DeleteRoleRequest{
-		RoleId: roleID,
-	}
-	resp, err := r.roleClient.DeleteRole(context.Background(), req)
+func (r *RoleClient) DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error) {
+	resp, err := r.roleClient.DeleteRole(ctx, req)
 	if err != nil {
 		r.logger.ErrorString("DeleteRole failed", zap.Error(err))
 		return nil, err
@@ -102,12 +87,8 @@ func (r *RoleClient) DeleteRole(roleID string) (*v1Role.DeleteRoleResponse, erro
 	return resp, nil
 }
 
-func (r *RoleClient) DisableOrEnableRole(roleID string, disable bool) (*v1Role.DisableOrEnableRoleResponse, error) {
-	req := &v1Role.DisableOrEnableRoleRequest{
-		RoleId:  roleID,
-		Disable: disable,
-	}
-	resp, err := r.roleClient.DisableOrEnableRole(context.Background(), req)
+func (r *RoleClient) DisableOrEnableRole(ctx context.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error) {
+	resp, err := r.roleClient.DisableOrEnableRole(ctx, req)
 	if err != nil {
 		r.logger.ErrorString("DisableOrEnableRole failed", zap.Error(err))
 		return nil, err
@@ -115,12 +96,8 @@ func (r *RoleClient) DisableOrEnableRole(roleID string, disable bool) (*v1Role.D
 	return resp, nil
 }
 
-func (r *RoleClient) AssignRoleToUser(userID, roleID string) (*v1Role.AssignRoleResponse, error) {
-	req := &v1Role.AssignRoleRequest{
-		UserId: userID,
-		RoleId: roleID,
-	}
-	resp, err := r.roleClient.AssignRoleToUser(context.Background(), req)
+func (r *RoleClient) AssignRoleToUser(ctx context.Context, req *auth.AssignRoleRequest) (*auth.AssignRoleResponse, error) {
+	resp, err := r.roleClient.AssignRoleToUser(ctx, req)
 	if err != nil {
 		r.logger.ErrorString("AssignRoleToUser failed", zap.Error(err))
 		return nil, err

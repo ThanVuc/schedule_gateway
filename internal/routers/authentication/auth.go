@@ -2,7 +2,7 @@ package authentication
 
 import (
 	"schedule_gateway/internal/controller"
-	v1 "schedule_gateway/internal/grpc/auth.v1"
+	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 
@@ -36,20 +36,20 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 func RegisterAuthRouterResource() {
 	// Register the resources and their permissions
 	resoucePredefine := helper.InitResources()
-	register := helper.NewResourceRegiseter(resoucePredefine.AuthResource.ResourceId)
+	register := helper.NewResourceRegiseter(resoucePredefine.AuthResource.Id)
 
-	register.AddResource(resoucePredefine.AuthResource, []*v1.Action{
+	register.AddResource(resoucePredefine.AuthResource, []*auth.Action{
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "logout",
+			Id:   register.GenerateActionId(),
+			Name: "logout",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "reset",
+			Id:   register.GenerateActionId(),
+			Name: "reset",
 		},
 		{
-			ActionId: register.GenerateActionId(),
-			Action:   "retrieve",
+			Id:   register.GenerateActionId(),
+			Name: "retrieve",
 		},
 	})
 }
