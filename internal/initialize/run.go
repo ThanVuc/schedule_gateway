@@ -25,6 +25,7 @@ func Run() {
 	// init the app with gin
 	// This order is important, as the middleware needs to be set before the routes are initialized.
 	var r *gin.Engine = gin.New()
+	r.Use(middlewares.LogResultMiddleware())
 	r.Use(middlewares.TrackLogMiddleware())
 	r.Use(middlewares.ErrorHandler())
 	InitRouter(r)
