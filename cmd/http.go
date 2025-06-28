@@ -1,9 +1,9 @@
-package main
+package cmd
 
 import (
 	"schedule_gateway/internal/initialize"
 )
 
-func main() {
+func RunHttpServer() {
 	initialize.Run()
 }
