@@ -11,7 +11,7 @@ import (
 
 type RoleController struct {
 	logger     *loggers.LoggerZap
-	roleClient client.IRoleClient
+	roleClient client.RoleClient
 }
 
 func NewRoleController() *RoleController {

@@ -11,7 +11,7 @@ import (
 
 type TokenController struct {
 	logger      *loggers.LoggerZap
-	tokenClient client.ITokenClient
+	tokenClient client.TokenClient
 }
 
 func NewTokenController() *TokenController {

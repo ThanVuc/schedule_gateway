@@ -11,7 +11,7 @@ import (
 
 type PermissionController struct {
 	logger           *loggers.LoggerZap
-	permissionClient client.IPermissionClient
+	permissionClient client.PermissionClient
 }
 
 func NewPermissionController() *PermissionController {
