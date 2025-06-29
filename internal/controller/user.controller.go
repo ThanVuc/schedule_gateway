@@ -10,7 +10,7 @@ import (
 
 type UserController struct {
 	logger     *loggers.LoggerZap
-	userClient client.IUserClient
+	userClient client.UserClient
 }
 
 func NewUserController() *UserController {

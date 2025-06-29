@@ -11,7 +11,7 @@ import (
 
 type AuthController struct {
 	logger     *loggers.LoggerZap
-	authClient client.IAuthClient
+	authClient client.AuthClient
 }
 
 func NewAuthController() *AuthController {
