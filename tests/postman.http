@@ -1,8 +1,23 @@
-POST http://localhost:8080/v1/api/auth/register
+### Create Permission
+POST http://localhost:8080/v1/api/permissions
+Content-Type: application/json
+
+{
+  "name": "ViewRoles",
+  "description": "Allows viewing user data",
+  "resource_id": "3",
+  "actions_ids": ["31", "32"]
+}
 
 ###
-POST http://localhost:8080/v1/api/auth/save-router-resource
 
+### Update Permission
+PUT http://localhost:8080/v1/api/permissions/7ac6b429-8b2d-4671-902f-29dbe7969ff7
+Content-Type: application/json
 
-###
-GET http://localhost:8080/v1/api/user-info/123
+{
+  "name": "ManageUsers",
+  "description": "Allows full user management",
+  "resource_id": "3",
+  "actions_ids": ["31"]
+}

@@ -2,9 +2,9 @@ package user_route
 
 import (
 	"schedule_gateway/internal/controller"
-	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
+	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
 )

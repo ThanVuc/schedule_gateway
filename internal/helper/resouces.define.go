@@ -1,6 +1,6 @@
 package helper
 
-import "schedule_gateway/internal/grpc/auth"
+import "schedule_gateway/proto/auth"
 
 type ResourcePredefine struct {
 	AuthResource       *auth.Resource
@@ -30,7 +30,7 @@ func InitResources() *ResourcePredefine {
 		},
 		UserResource: &auth.Resource{
 			Id:   "5",
-			Name: "uesrs",
+			Name: "users",
 		},
 	}
 	return r

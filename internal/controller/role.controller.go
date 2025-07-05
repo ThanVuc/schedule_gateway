@@ -25,14 +25,6 @@ func (rc *RoleController) GetRoles(c *gin.Context) {
 	response.Ok(c, "GetRoles called", nil)
 }
 
-func (rc *RoleController) CreateRole(c *gin.Context) {
-	response.Ok(c, "CreateRole called", nil)
-}
-
-func (rc *RoleController) UpdateRole(c *gin.Context) {
-	response.Ok(c, "UpdateRole called", nil)
-}
-
 func (rc *RoleController) DeleteRole(c *gin.Context) {
 	response.Ok(c, "DeleteRole called", nil)
 }

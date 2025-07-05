@@ -266,7 +266,8 @@ const file_user_service_user_proto_rawDesc = "" +
 	"\x05email\x18\x03 \x01(\tR\x05email2\x9e\x01\n" +
 	"\vUserService\x12B\n" +
 	"\vGetUserInfo\x12\x18.user.GetUserInfoRequest\x1a\x19.user.GetUserInfoResponse\x12K\n" +
-	"\x0eUpdateUserInfo\x12\x1b.user.UpdateUserInfoRequest\x1a\x1c.user.UpdateUserInfoResponseB!Z\x1fuser_service/internal/grpc/userb\x06proto3"
+	"\x0eUpdateUserInfo\x12\x1b.user.UpdateUserInfoRequest\x1a\x1c.user.UpdateUserInfoResponseB\fZ\n" +
+	"proto/userb\x06proto3"
 
 var (
 	file_user_service_user_proto_rawDescOnce sync.Once

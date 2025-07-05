@@ -2,9 +2,9 @@ package authorization
 
 import (
 	"schedule_gateway/internal/controller"
-	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
+	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,13 +19,17 @@ func (p *PermissionRouter) InitPermissionRouter(Router *gin.RouterGroup) {
 	{
 		permissionRouterPrivate.GET("/", middlewares.CheckPerm("permissions", "readAll"), permissionController.GetPermissions)
 
-		permissionRouterPrivate.POST("/", middlewares.CheckPerm("permissions", "create"), permissionController.CreatePermission)
+		permissionRouterPrivate.POST("/", middlewares.CheckPerm("permissions", "create"), permissionController.UpsertPermission)
 
-		permissionRouterPrivate.PUT("/:id", middlewares.CheckPerm("permissions", "update"), permissionController.UpdatePermission)
+		permissionRouterPrivate.PUT("/:id", middlewares.CheckPerm("permissions", "update"), permissionController.UpsertPermission)
 
 		permissionRouterPrivate.DELETE("/:id", middlewares.CheckPerm("permissions", "delete"), permissionController.DeletePermission)
 
 		permissionRouterPrivate.POST("/assign-permission-to-role", middlewares.CheckPerm("permissions", "assign"), permissionController.AssignPermissionToRole)
+
+		permissionRouterPrivate.GET("/resources", middlewares.CheckPerm("permissions", "readResources"), permissionController.GetResources)
+
+		permissionRouterPrivate.GET("/actions", middlewares.CheckPerm("permissions", "readActions"), permissionController.GetActions)
 	}
 	RegisterPermissionRouterResource()
 }
@@ -55,6 +59,14 @@ func RegisterPermissionRouterResource() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: "assign",
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: "readResources",
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: "readActions",
 		},
 	})
 }
