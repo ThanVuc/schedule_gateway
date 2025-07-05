@@ -2,10 +2,8 @@ package client
 
 import (
 	"context"
-	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/pkg/loggers"
-
-	"go.uber.org/zap"
+	"schedule_gateway/proto/auth"
 )
 
 type tokenClient struct {
@@ -16,7 +14,6 @@ type tokenClient struct {
 func (t *tokenClient) RefreshToken(ctx context.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
 	resp, err := t.tokenClient.RefreshToken(ctx, req)
 	if err != nil {
-		t.logger.ErrorString("RefreshToken failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -25,7 +22,6 @@ func (t *tokenClient) RefreshToken(ctx context.Context, req *auth.RefreshTokenRe
 func (t *tokenClient) RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error) {
 	resp, err := t.tokenClient.RevokeToken(ctx, req)
 	if err != nil {
-		t.logger.ErrorString("RevokeToken failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil

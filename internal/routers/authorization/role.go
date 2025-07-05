@@ -2,9 +2,9 @@ package authorization
 
 import (
 	"schedule_gateway/internal/controller"
-	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
+	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,10 +18,6 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	roleRouterPrivate := Router.Group("/roles")
 	{
 		roleRouterPrivate.GET("/", middlewares.CheckPerm("roles", "readAll"), roleController.GetRoles)
-
-		roleRouterPrivate.POST("/", middlewares.CheckPerm("roles", "create"), roleController.CreateRole)
-
-		roleRouterPrivate.PUT("/:id", middlewares.CheckPerm("roles", "update"), roleController.UpdateRole)
 
 		roleRouterPrivate.DELETE("/:id", middlewares.CheckPerm("roles", "delete"), roleController.DeleteRole)
 
@@ -42,14 +38,6 @@ func RegisterRoleRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: "readAll",
-		},
-		{
-			Id:   register.GenerateActionId(),
-			Name: "create",
-		},
-		{
-			Id:   register.GenerateActionId(),
-			Name: "update",
 		},
 		{
 			Id:   register.GenerateActionId(),

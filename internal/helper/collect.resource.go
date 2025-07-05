@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"schedule_gateway/global"
-	"schedule_gateway/internal/grpc/auth"
+	"schedule_gateway/proto/auth"
 	"strconv"
 
 	"go.uber.org/zap"

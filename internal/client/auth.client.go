@@ -2,10 +2,8 @@ package client
 
 import (
 	"context"
-	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/pkg/loggers"
-
-	"go.uber.org/zap"
+	"schedule_gateway/proto/auth"
 )
 
 type authClient struct {
@@ -16,7 +14,6 @@ type authClient struct {
 func (a *authClient) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
 	resp, err := a.authClient.Login(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("Login failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -25,7 +22,6 @@ func (a *authClient) Login(ctx context.Context, req *auth.LoginRequest) (*auth.L
 func (a *authClient) Register(ctx context.Context, req *auth.RegisterRequest) (*auth.RegisterResponse, error) {
 	resp, err := a.authClient.Register(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("Register failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -34,7 +30,6 @@ func (a *authClient) Register(ctx context.Context, req *auth.RegisterRequest) (*
 func (a *authClient) ConfirmEmail(ctx context.Context, req *auth.ConfirmEmailRequest) (*auth.ConfirmEmailResponse, error) {
 	resp, err := a.authClient.ConfirmEmail(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("ConfirmEmail failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -43,7 +38,6 @@ func (a *authClient) ConfirmEmail(ctx context.Context, req *auth.ConfirmEmailReq
 func (a *authClient) Logout(ctx context.Context, req *auth.LogoutRequest) (*auth.LogoutResponse, error) {
 	resp, err := a.authClient.Logout(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("Logout failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -52,7 +46,6 @@ func (a *authClient) Logout(ctx context.Context, req *auth.LogoutRequest) (*auth
 func (a *authClient) ResetPassword(ctx context.Context, req *auth.ResetPasswordRequest) (*auth.ResetPasswordResponse, error) {
 	resp, err := a.authClient.ResetPassword(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("ResetPassword failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -61,7 +54,6 @@ func (a *authClient) ResetPassword(ctx context.Context, req *auth.ResetPasswordR
 func (a *authClient) ForgotPassword(ctx context.Context, req *auth.ForgotPasswordRequest) (*auth.ForgotPasswordResponse, error) {
 	resp, err := a.authClient.ForgotPassword(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("ForgotPassword failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -70,7 +62,6 @@ func (a *authClient) ForgotPassword(ctx context.Context, req *auth.ForgotPasswor
 func (a *authClient) ConfirmForgotPassword(ctx context.Context, req *auth.ConfirmForgotPasswordRequest) (*auth.ConfirmForgotPasswordResponse, error) {
 	resp, err := a.authClient.ConfirmForgotPassword(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("ConfirmForgotPassword failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil
@@ -79,7 +70,6 @@ func (a *authClient) ConfirmForgotPassword(ctx context.Context, req *auth.Confir
 func (a *authClient) SaveRouteResource(ctx context.Context, req *auth.SaveRouteResourceRequest) (*auth.SaveRouteResourceResponse, error) {
 	resp, err := a.authClient.SaveRouteResource(ctx, req)
 	if err != nil {
-		a.logger.ErrorString("SaveRouteResource failed", zap.Error(err))
 		return nil, err
 	}
 	return resp, nil

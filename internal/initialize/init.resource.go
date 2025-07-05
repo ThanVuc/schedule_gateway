@@ -4,8 +4,8 @@ import (
 	"context"
 	"schedule_gateway/global"
 	"schedule_gateway/internal/client"
-	"schedule_gateway/internal/grpc/auth"
 	"schedule_gateway/internal/helper"
+	"schedule_gateway/proto/auth"
 	"time"
 
 	"go.uber.org/zap"
