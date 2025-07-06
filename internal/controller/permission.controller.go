@@ -36,9 +36,7 @@ func (pc *PermissionController) GetPermissions(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permissions: " + permissions.Error.Message))
 	}
 
-	response.Ok(c, "GetPermissions called", gin.H{
-		"permissions": permissions.Permissions,
-	})
+	response.Ok(c, "GetPermissions called", permissions)
 }
 
 func (pc *PermissionController) UpsertPermission(c *gin.Context) {
@@ -60,14 +58,6 @@ func (pc *PermissionController) UpsertPermission(c *gin.Context) {
 	})
 }
 
-func (pc *PermissionController) DeletePermission(c *gin.Context) {
-	response.Ok(c, "DeletePermission called", nil)
-}
-
-func (pc *PermissionController) AssignPermissionToRole(c *gin.Context) {
-	response.Ok(c, "AssignPermissionToRole called", nil)
-}
-
 func (pc *PermissionController) GetResources(c *gin.Context) {
 	req := &auth.GetResourcesRequest{}
 	resources, err := pc.permissionClient.GetResources(c, req)
@@ -76,9 +66,7 @@ func (pc *PermissionController) GetResources(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get resources"))
 	}
 
-	response.Ok(c, "GetResources called", gin.H{
-		"resources": resources.Resources,
-	})
+	response.Ok(c, "GetResources called", resources.Resources)
 }
 
 func (pc *PermissionController) GetActions(c *gin.Context) {
@@ -101,16 +89,69 @@ func (pc *PermissionController) GetActions(c *gin.Context) {
 	})
 }
 
+func (pc *PermissionController) GetPermission(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		panic(response.BadRequest("Permission ID is required"))
+	}
+
+	req := &auth.GetPermissionRequest{
+		PermissionId: id,
+	}
+
+	resp, err := pc.permissionClient.GetPermission(c, req)
+
+	if err != nil {
+		panic(response.InternalServerError("Failed to get permission: " + err.Error()))
+	}
+
+	if resp == nil || resp.Error != nil {
+		panic(response.InternalServerError("Failed to get permission: " + resp.Error.Message))
+	}
+
+	response.Ok(c, "GetPermission called", resp.Permission)
+}
+
+func (pc *PermissionController) DeletePermission(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		panic(response.BadRequest("Permission ID is required"))
+	}
+
+	req := &auth.DeletePermissionRequest{
+		PermissionId: id,
+	}
+
+	resp, err := pc.permissionClient.DeletePermission(c, req)
+
+	if err != nil {
+		panic(response.InternalServerError("Failed to delete permission: " + err.Error()))
+	}
+
+	if resp == nil || resp.Error != nil {
+		panic(response.InternalServerError("Failed to delete permission: " + resp.Error.Message))
+	}
+
+	response.Ok(c, "DeletePermission called", gin.H{
+		"is_success": resp.Success,
+	})
+}
+
 func (pc *PermissionController) buildGetPermissionRequest(c *gin.Context) *auth.GetPermissionsRequest {
 	pageQuery := utils.ToPageQuery(c)
 	searchString := c.Query("search")
 	resourceIdString := c.Query("resource_id")
 
-	req := auth.GetPermissionsRequest{
-		PageQuery:  pageQuery,
-		Search:     searchString,
-		ResourceId: resourceIdString,
+	req := auth.GetPermissionsRequest{}
+	if searchString != "" {
+		req.Search = searchString
 	}
+
+	if resourceIdString != "" {
+		req.ResourceId = resourceIdString
+	}
+
+	req.PageQuery = pageQuery
 
 	return &req
 }

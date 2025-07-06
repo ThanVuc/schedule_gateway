@@ -27,7 +27,8 @@ func InitResource() {
 				logger.Warn("Failed to save resources, retrying...", zap.Int("attempt", failAttempt))
 				continue
 			}
-			panic("Failed to save resources after multiple attempts: " + err.Error())
+			logger.ErrorString("Failed to save resources after multiple attempts", zap.Error(err))
+			return
 		}
 		logger.InfoString("Resources saved successfully")
 

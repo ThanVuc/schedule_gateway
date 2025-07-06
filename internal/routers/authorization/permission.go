@@ -19,13 +19,13 @@ func (p *PermissionRouter) InitPermissionRouter(Router *gin.RouterGroup) {
 	{
 		permissionRouterPrivate.GET("/", middlewares.CheckPerm("permissions", "readAll"), permissionController.GetPermissions)
 
+		permissionRouterPrivate.GET("/:id", middlewares.CheckPerm("permissions", "readOne"), permissionController.GetPermission)
+
 		permissionRouterPrivate.POST("/", middlewares.CheckPerm("permissions", "create"), permissionController.UpsertPermission)
 
 		permissionRouterPrivate.PUT("/:id", middlewares.CheckPerm("permissions", "update"), permissionController.UpsertPermission)
 
 		permissionRouterPrivate.DELETE("/:id", middlewares.CheckPerm("permissions", "delete"), permissionController.DeletePermission)
-
-		permissionRouterPrivate.POST("/assign-permission-to-role", middlewares.CheckPerm("permissions", "assign"), permissionController.AssignPermissionToRole)
 
 		permissionRouterPrivate.GET("/resources", middlewares.CheckPerm("permissions", "readResources"), permissionController.GetResources)
 
@@ -58,15 +58,15 @@ func RegisterPermissionRouterResource() {
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "assign",
-		},
-		{
-			Id:   register.GenerateActionId(),
 			Name: "readResources",
 		},
 		{
 			Id:   register.GenerateActionId(),
 			Name: "readActions",
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: "readOne",
 		},
 	})
 }

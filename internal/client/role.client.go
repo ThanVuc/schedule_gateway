@@ -34,11 +34,3 @@ func (r *roleClient) DisableOrEnableRole(ctx context.Context, req *auth.DisableO
 	}
 	return resp, nil
 }
-
-func (r *roleClient) AssignRoleToUser(ctx context.Context, req *auth.AssignRoleRequest) (*auth.AssignRoleResponse, error) {
-	resp, err := r.roleClient.AssignRoleToUser(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}

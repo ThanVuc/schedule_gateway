@@ -32,7 +32,3 @@ func (rc *RoleController) DeleteRole(c *gin.Context) {
 func (rc *RoleController) DisableOrEnableRole(c *gin.Context) {
 	response.Ok(c, "DisableOrEnableRole called", nil)
 }
-
-func (rc *RoleController) AssignRoleToUser(c *gin.Context) {
-	response.Ok(c, "AssignRoleToUser called", nil)
-}
