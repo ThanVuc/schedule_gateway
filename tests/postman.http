@@ -21,3 +21,12 @@ Content-Type: application/json
   "resource_id": "3",
   "actions_ids": ["31"]
 }
+
+### get all permissions
+GET http://localhost:8080/v1/api/permissions?page=1&size=10
+
+### get permission
+GET http://localhost:8080/v1/api/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330a
+
+### Delete Permission
+DELETE http://localhost:8080/v1/api/permissions/33f55597-be57-4b60-869d-b17ac3f6c81e
