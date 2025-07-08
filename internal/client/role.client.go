@@ -19,6 +19,14 @@ func (r *roleClient) GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*
 	return resp, nil
 }
 
+func (r *roleClient) GetRole(ctx context.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error) {
+	resp, err := r.roleClient.GetRole(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (r *roleClient) DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error) {
 	resp, err := r.roleClient.DeleteRole(ctx, req)
 	if err != nil {
