@@ -30,3 +30,15 @@ GET http://localhost:8080/v1/api/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330
 
 ### Delete Permission
 DELETE http://localhost:8080/v1/api/permissions/33f55597-be57-4b60-869d-b17ac3f6c81e
+
+### get all roles
+GET http://localhost:8080/v1/api/roles?page=1&size=10
+
+### get role
+GET http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6
+
+### delete role
+DELETE http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6
+
+### disable or enable role
+PUT  http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6/disable-or-enable

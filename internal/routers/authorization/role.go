@@ -19,6 +19,8 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	{
 		roleRouterPrivate.GET("/", middlewares.CheckPerm("roles", "readAll"), roleController.GetRoles)
 
+		roleRouterPrivate.GET("/:id", middlewares.CheckPerm("roles", "readOne"), roleController.GetRole)
+
 		roleRouterPrivate.DELETE("/:id", middlewares.CheckPerm("roles", "delete"), roleController.DeleteRole)
 
 		roleRouterPrivate.PUT("/:id/disable-or-enable", middlewares.CheckPerm("roles", "disableOrEnable"), roleController.DisableOrEnableRole)
@@ -45,6 +47,10 @@ func RegisterRoleRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: "disableOrEnable",
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: "readOne",
 		},
 	})
 }

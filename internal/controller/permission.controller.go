@@ -4,6 +4,7 @@ import (
 	"schedule_gateway/global"
 	"schedule_gateway/internal/client"
 	"schedule_gateway/internal/dtos"
+	"schedule_gateway/internal/mapper"
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/response"
@@ -36,7 +37,7 @@ func (pc *PermissionController) GetPermissions(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permissions: " + permissions.Error.Message))
 	}
 
-	response.Ok(c, "GetPermissions called", permissions)
+	response.Ok(c, "GetPermissions called", mapper.MapPermissionsToDTO((permissions)))
 }
 
 func (pc *PermissionController) UpsertPermission(c *gin.Context) {
@@ -109,7 +110,7 @@ func (pc *PermissionController) GetPermission(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permission: " + resp.Error.Message))
 	}
 
-	response.Ok(c, "GetPermission called", resp.Permission)
+	response.Ok(c, "GetPermission called", mapper.MapPermissionToDTO(resp))
 }
 
 func (pc *PermissionController) DeletePermission(c *gin.Context) {
@@ -123,6 +124,9 @@ func (pc *PermissionController) DeletePermission(c *gin.Context) {
 	}
 
 	resp, err := pc.permissionClient.DeletePermission(c, req)
+	if !resp.Success {
+		panic(response.BadRequest("Failed to delete permission: " + *resp.Message))
+	}
 
 	if err != nil {
 		panic(response.InternalServerError("Failed to delete permission: " + err.Error()))

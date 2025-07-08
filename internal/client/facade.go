@@ -36,6 +36,7 @@ type (
 
 	RoleClient interface {
 		GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error)
+		GetRole(ctx context.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error)
 		DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error)
 		DisableOrEnableRole(ctx context.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error)
 	}
