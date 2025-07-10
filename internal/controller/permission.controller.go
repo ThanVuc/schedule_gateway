@@ -4,7 +4,6 @@ import (
 	"schedule_gateway/global"
 	"schedule_gateway/internal/client"
 	"schedule_gateway/internal/dtos"
-	"schedule_gateway/internal/mapper"
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/response"
@@ -37,7 +36,23 @@ func (pc *PermissionController) GetPermissions(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permissions: " + permissions.Error.Message))
 	}
 
-	response.Ok(c, "GetPermissions called", mapper.MapPermissionsToDTO((permissions)))
+	response.Ok(c, "GetPermissions called", dtos.PermissionsResponse{
+		Code: 200,
+		Data: dtos.PermissionItems{
+			Items:             permissions.Permissions,
+			TotalPermissions:  permissions.TotalPermissions,
+			Root:              permissions.Root,
+			NonRoot:           permissions.NonRoot,
+			RootPercentage:    float32(permissions.RootPercentage),
+			NonRootPercentage: float32(permissions.RootPercentage),
+			TotalItems:        permissions.PageInfo.TotalItems,
+			TotalPages:        permissions.PageInfo.TotalPages,
+			PageSize:          permissions.PageInfo.PageSize,
+			Page:              permissions.PageInfo.Page,
+			HasPrev:           permissions.PageInfo.HasPrev,
+			HasNext:           permissions.PageInfo.HasNext,
+		},
+	})
 }
 
 func (pc *PermissionController) UpsertPermission(c *gin.Context) {
@@ -110,7 +125,10 @@ func (pc *PermissionController) GetPermission(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permission: " + resp.Error.Message))
 	}
 
-	response.Ok(c, "GetPermission called", mapper.MapPermissionToDTO(resp))
+	response.Ok(c, "GetPermission called", dtos.PermissionResponse{
+		Code: 200,
+		Data: resp.GetPermission(),
+	})
 }
 
 func (pc *PermissionController) DeletePermission(c *gin.Context) {
@@ -181,14 +199,14 @@ func (pc *PermissionController) buildUpsertPermissionRequest(c *gin.Context) *au
 		panic(response.BadRequest("ResourceId is required"))
 	}
 
-	if len(dto.ActionsIds) == 0 {
+	if len(dto.ActionIds) == 0 {
 		panic(response.BadRequest("At least one action ID is required"))
 	}
 
 	req.Name = dto.Name
 	req.Description = dto.Description
 	req.ResourceId = dto.ResourceId
-	req.ActionsIds = dto.ActionsIds
+	req.ActionIds = dto.ActionIds
 
 	return &req
 }

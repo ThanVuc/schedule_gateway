@@ -25,6 +25,10 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 
 		roleRouterPrivate.PUT("/:id/disable-or-enable", middlewares.CheckPerm("roles", "disableOrEnable"), roleController.DisableOrEnableRole)
 
+		roleRouterPrivate.POST("/", middlewares.CheckPerm("roles", "create"), roleController.UpsertRole)
+
+		roleRouterPrivate.PUT("/:id", middlewares.CheckPerm("roles", "update"), roleController.UpsertRole)
+
 	}
 	RegisterRoleRouterResouce()
 }
@@ -51,6 +55,14 @@ func RegisterRoleRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: "readOne",
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: "create",
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: "update",
 		},
 	})
 }

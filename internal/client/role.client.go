@@ -42,3 +42,11 @@ func (r *roleClient) DisableOrEnableRole(ctx context.Context, req *auth.DisableO
 	}
 	return resp, nil
 }
+
+func (r *roleClient) UpsertRole(ctx context.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error) {
+	resp, err := r.roleClient.UpsertRole(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
