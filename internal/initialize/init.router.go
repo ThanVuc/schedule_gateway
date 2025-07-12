@@ -9,8 +9,7 @@ import (
 
 func InitRouter(r *gin.Engine) {
 	r.Use(middlewares.TrackLogMiddleware())
-	// cor
-	// limiter global
+
 	permRouter := routers.RouterGroupApp.AuthorizationRouterEnter.PermissionRouter
 	roleRouter := routers.RouterGroupApp.AuthorizationRouterEnter.RoleRouter
 	tokenRouter := routers.RouterGroupApp.AuthenticationRouterEnter.TokenRouter
@@ -19,10 +18,10 @@ func InitRouter(r *gin.Engine) {
 
 	MainGroup := r.Group("api/v1/")
 	{
-		MainGroup.GET("/checkStatus", func(c *gin.Context) {
+		MainGroup.GET("/health", func(c *gin.Context) {
 			c.JSON(200, gin.H{
 				"status":  "ok",
-				"message": "Authentication Service is running",
+				"message": "Gateway is running",
 			})
 		})
 	}
