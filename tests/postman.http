@@ -1,5 +1,5 @@
 ### Create Permission
-POST http://localhost:8080/v1/api/permissions
+POST http://localhost:8080/api/v1/permissions
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 ###
 
 ### Update Permission
-PUT http://localhost:8080/v1/api/permissions/7ac6b429-8b2d-4671-902f-29dbe7969ff7
+PUT http://localhost:8080/api/v1/permissions/7ac6b429-8b2d-4671-902f-29dbe7969ff7
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### get all permissions
-GET http://localhost:8080/v1/api/permissions?page=1&size=10
+GET http://localhost:8080/api/v1/permissions?page=1&size=10
 
 ### get permission
 GET http://localhost:8080/v1/api/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330a
@@ -35,10 +35,31 @@ DELETE http://localhost:8080/v1/api/permissions/33f55597-be57-4b60-869d-b17ac3f6
 GET http://localhost:8080/v1/api/roles?page=1&size=10
 
 ### get role
-GET http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6
+GET http://localhost:8080/v1/api/roles/3475e00e-01bb-46c6-9ed4-01ad77b65e3b
 
 ### delete role
 DELETE http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6
 
 ### disable or enable role
 PUT  http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6/disable-or-enable
+
+### Upsert Role (Create)
+POST http://localhost:8080/v1/api/roles
+Content-Type: application/json
+
+{
+  "name": "AdminRole",
+  "description": "Administrator role with full permissions",
+  "permission_ids": ["1ddb3e6c-61ae-4112-bf76-1e8166e8330a"]
+}
+
+### Upsert Role (Update)
+PUT http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6
+Content-Type: application/json
+
+{
+  "role_id": "3475e00e-01bb-46c6-9ed4-01ad77b65e3b",
+  "name": "UserRole",
+  "description": "Updated role description",
+  "permission_ids": ["7ac6b429-8b2d-4671-902f-29dbe7969ff7"]
+}

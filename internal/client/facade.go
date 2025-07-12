@@ -39,6 +39,7 @@ type (
 		GetRole(ctx context.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error)
 		DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error)
 		DisableOrEnableRole(ctx context.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error)
+		UpsertRole(ctx context.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error)
 	}
 
 	TokenClient interface {

@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"os"
 	"schedule_gateway/global"
 
 	"github.com/spf13/viper"
@@ -16,8 +17,13 @@ The configuration file file is loaded to the global.Config variable.
 func LoadConfig() {
 	viper := viper.New()
 	// Add both the relative path and current directory for flexibility
-	viper.AddConfigPath("./config/")
-	viper.SetConfigName("dev")
+	viper.AddConfigPath("./")
+	configName := os.Getenv("GO_ENV")
+	if configName == "" {
+		configName = "dev"
+	}
+
+	viper.SetConfigName(configName)
 	viper.SetConfigType("yaml")
 
 	// Read in the config file

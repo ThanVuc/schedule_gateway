@@ -19,19 +19,14 @@ func InitResource() {
 			Items: helper.GetResources(),
 		})
 
-		if err != nil || !resp.Success {
-			if failAttempt < 5 {
-				failAttempt++
-				// sleep for a while before retrying
-				time.Sleep(time.Second * 5)
-				logger.Warn("Failed to save resources, retrying...", zap.Int("attempt", failAttempt))
-				continue
-			}
-			logger.ErrorString("Failed to save resources after multiple attempts", zap.Error(err))
-			return
+		if err != nil || resp == nil || !resp.Success {
+			failAttempt++
+			logger.ErrorString("Failed to save resources", zap.Error(err), zap.Int("attempt", failAttempt))
+			time.Sleep(5 * time.Second)
+			continue
 		}
-		logger.InfoString("Resources saved successfully")
 
-		break
+		logger.InfoString("Resources saved successfully")
+		return
 	}
 }
