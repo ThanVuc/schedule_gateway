@@ -34,5 +34,5 @@ func Run() {
 	// producer.SendResources()
 	go InitResource()
 
-	r.Run(fmt.Sprintf(":%d", global.Config.Server.Port)) // listen and serve on
+	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port)) // listen and serve on host:port
 }

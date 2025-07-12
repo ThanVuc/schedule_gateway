@@ -1,6 +1,6 @@
 # build stage
 FROM golang:alpine AS builder
-RUN apk add --no-cache git
+RUN apk add --no-cache
 
 WORKDIR /app
 
@@ -8,11 +8,11 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -o author_service ./cmd/server
+RUN go build -o schedule_gateway ./main.go
 
 # stage 2
-FROM scratch
-COPY --from=builder /app/author_service /app/author_service
-COPY config/dev.yaml /app/config/dev.yaml
+FROM alpine:latest
 WORKDIR /app
-ENTRYPOINT ["./authen_service"]
+COPY --from=builder /app/schedule_gateway .
+RUN chmod +x /app/schedule_gateway
+ENTRYPOINT ["./schedule_gateway"]

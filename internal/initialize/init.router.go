@@ -17,7 +17,7 @@ func InitRouter(r *gin.Engine) {
 	authRouter := routers.RouterGroupApp.AuthenticationRouterEnter.AuthRouter
 	userRouter := routers.RouterGroupApp.UserRouterEnter.UserRouter
 
-	MainGroup := r.Group("v1/api/")
+	MainGroup := r.Group("api/v1/")
 	{
 		MainGroup.GET("/checkStatus", func(c *gin.Context) {
 			c.JSON(200, gin.H{
@@ -25,7 +25,6 @@ func InitRouter(r *gin.Engine) {
 				"message": "Authentication Service is running",
 			})
 		})
-
 	}
 	{
 		permRouter.InitPermissionRouter(MainGroup)
