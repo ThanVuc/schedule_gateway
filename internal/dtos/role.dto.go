@@ -2,12 +2,7 @@ package dtos
 
 import "schedule_gateway/proto/auth"
 
-type RolesResponse struct {
-	Code int32     `json:"code"`
-	Data RoleItems `json:"data"`
-}
-
-type RoleItems struct {
+type Roles struct {
 	Items             []*auth.RoleItem `json:"items"`
 	TotalRoles        int32            `json:"total_roles"`
 	Root              int32            `json:"root"`
@@ -20,9 +15,4 @@ type RoleItems struct {
 	Page              int32            `json:"page"`
 	HasPrev           bool             `json:"has_prev"`
 	HasNext           bool             `json:"has_next"`
-}
-
-type RoleResponse struct {
-	Code int32          `json:"code"`
-	Data *auth.RoleItem `json:"data"`
 }

@@ -14,7 +14,7 @@ import (
 type ErrorResponse struct {
 	StatusCode int    `json:"statusCode"`
 	Message    string `json:"message"`
-	CodeReason string `json:"errorReason"`
+	CodeReason string `json:"reasonStatusCode"`
 	CreatedAt  string `json:"createdAt"`
 }
 
