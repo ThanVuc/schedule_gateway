@@ -35,22 +35,19 @@ func (rc *RoleController) GetRoles(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get roles: " + roles.Error.Message))
 	}
 
-	response.Ok(c, "GetRoles called", dtos.RolesResponse{
-		Code: 200,
-		Data: dtos.RoleItems{
-			Items:             roles.Roles,
-			TotalRoles:        roles.TotalRoles,
-			Root:              roles.Root,
-			NonRoot:           roles.NonRoot,
-			RootPercentage:    float32(roles.RootPercentage),
-			NonRootPercentage: float32(roles.NonRootPercentage),
-			TotalItems:        roles.PageInfo.TotalItems,
-			TotalPages:        roles.PageInfo.TotalPages,
-			PageSize:          roles.PageInfo.PageSize,
-			Page:              roles.PageInfo.Page,
-			HasPrev:           roles.PageInfo.HasPrev,
-			HasNext:           roles.PageInfo.HasNext,
-		},
+	response.Ok(c, "GetRoles called", dtos.Roles{
+		Items:             roles.Roles,
+		TotalRoles:        roles.TotalRoles,
+		Root:              roles.Root,
+		NonRoot:           roles.NonRoot,
+		RootPercentage:    float32(roles.RootPercentage),
+		NonRootPercentage: float32(roles.NonRootPercentage),
+		TotalItems:        roles.PageInfo.TotalItems,
+		TotalPages:        roles.PageInfo.TotalPages,
+		PageSize:          roles.PageInfo.PageSize,
+		Page:              roles.PageInfo.Page,
+		HasPrev:           roles.PageInfo.HasPrev,
+		HasNext:           roles.PageInfo.HasNext,
 	})
 }
 
@@ -70,10 +67,7 @@ func (rc *RoleController) GetRole(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get role: " + role.Error.Message))
 	}
 
-	response.Ok(c, "GetRole called", dtos.RoleResponse{
-		Code: 200,
-		Data: role.Role,
-	})
+	response.Ok(c, "GetRole called", role)
 }
 
 func (rc *RoleController) DeleteRole(c *gin.Context) {

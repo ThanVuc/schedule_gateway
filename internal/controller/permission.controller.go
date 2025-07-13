@@ -36,22 +36,19 @@ func (pc *PermissionController) GetPermissions(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permissions: " + permissions.Error.Message))
 	}
 
-	response.Ok(c, "GetPermissions called", dtos.PermissionsResponse{
-		Code: 200,
-		Data: dtos.PermissionItems{
-			Items:             permissions.Permissions,
-			TotalPermissions:  permissions.TotalPermissions,
-			Root:              permissions.Root,
-			NonRoot:           permissions.NonRoot,
-			RootPercentage:    float32(permissions.RootPercentage),
-			NonRootPercentage: float32(permissions.RootPercentage),
-			TotalItems:        permissions.PageInfo.TotalItems,
-			TotalPages:        permissions.PageInfo.TotalPages,
-			PageSize:          permissions.PageInfo.PageSize,
-			Page:              permissions.PageInfo.Page,
-			HasPrev:           permissions.PageInfo.HasPrev,
-			HasNext:           permissions.PageInfo.HasNext,
-		},
+	response.Ok(c, "GetPermissions called", dtos.Permissions{
+		Items:             permissions.Permissions,
+		TotalPermissions:  permissions.TotalPermissions,
+		Root:              permissions.Root,
+		NonRoot:           permissions.NonRoot,
+		RootPercentage:    float32(permissions.RootPercentage),
+		NonRootPercentage: float32(permissions.NonRootPercentage),
+		TotalItems:        permissions.TotalPermissions,
+		TotalPages:        permissions.PageInfo.TotalPages,
+		PageSize:          permissions.PageInfo.PageSize,
+		Page:              permissions.PageInfo.Page,
+		HasPrev:           permissions.PageInfo.HasPrev,
+		HasNext:           permissions.PageInfo.HasNext,
 	})
 }
 
@@ -125,10 +122,7 @@ func (pc *PermissionController) GetPermission(c *gin.Context) {
 		panic(response.InternalServerError("Failed to get permission: " + resp.Error.Message))
 	}
 
-	response.Ok(c, "GetPermission called", dtos.PermissionResponse{
-		Code: 200,
-		Data: resp.GetPermission(),
-	})
+	response.Ok(c, "GetPermission successful", resp.Permission)
 }
 
 func (pc *PermissionController) DeletePermission(c *gin.Context) {
