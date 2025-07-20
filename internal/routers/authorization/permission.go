@@ -17,11 +17,11 @@ func (p *PermissionRouter) InitPermissionRouter(Router *gin.RouterGroup) {
 	// private router
 	permissionRouterPrivate := Router.Group("permissions")
 	{
-		permissionRouterPrivate.GET("/", middlewares.CheckPerm("permissions", "readAll"), permissionController.GetPermissions)
+		permissionRouterPrivate.GET("", middlewares.CheckPerm("permissions", "readAll"), permissionController.GetPermissions)
 
 		permissionRouterPrivate.GET("/:id", middlewares.CheckPerm("permissions", "readOne"), permissionController.GetPermission)
 
-		permissionRouterPrivate.POST("/", middlewares.CheckPerm("permissions", "create"), permissionController.UpsertPermission)
+		permissionRouterPrivate.POST("", middlewares.CheckPerm("permissions", "create"), permissionController.UpsertPermission)
 
 		permissionRouterPrivate.PUT("/:id", middlewares.CheckPerm("permissions", "update"), permissionController.UpsertPermission)
 
