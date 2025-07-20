@@ -9,6 +9,7 @@ import (
 
 func InitRouter(r *gin.Engine) {
 	r.Use(middlewares.TrackLogMiddleware())
+	r.Use(middlewares.CORSMiddleware())
 
 	permRouter := routers.RouterGroupApp.AuthorizationRouterEnter.PermissionRouter
 	roleRouter := routers.RouterGroupApp.AuthorizationRouterEnter.RoleRouter
