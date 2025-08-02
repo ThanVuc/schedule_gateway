@@ -4,6 +4,7 @@ import (
 	"schedule_gateway/internal/controller"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
+	constant "schedule_gateway/internal/routers/constant"
 	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
@@ -17,17 +18,17 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	// private router
 	roleRouterPrivate := Router.Group("roles")
 	{
-		roleRouterPrivate.GET("", middlewares.CheckPerm("roles", "readAll"), roleController.GetRoles)
+		roleRouterPrivate.GET("", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.READ_ALL_ACTION), roleController.GetRoles)
 
-		roleRouterPrivate.GET("/:id", middlewares.CheckPerm("roles", "readOne"), roleController.GetRole)
+		roleRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.READ_ONE_ACTION), roleController.GetRole)
 
-		roleRouterPrivate.DELETE("/:id", middlewares.CheckPerm("roles", "delete"), roleController.DeleteRole)
+		roleRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.DELETE_ACTION), roleController.DeleteRole)
 
-		roleRouterPrivate.PUT("/:id/disable-or-enable", middlewares.CheckPerm("roles", "disableOrEnable"), roleController.DisableOrEnableRole)
+		roleRouterPrivate.PUT("/:id/disable-or-enable", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.ENABLE_AND_DISABLE_ACTION), roleController.DisableOrEnableRole)
 
-		roleRouterPrivate.POST("", middlewares.CheckPerm("roles", "create"), roleController.UpsertRole)
+		roleRouterPrivate.POST("", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.CREATE_ACTION), roleController.UpsertRole)
 
-		roleRouterPrivate.PUT("/:id", middlewares.CheckPerm("roles", "update"), roleController.UpsertRole)
+		roleRouterPrivate.PUT("/:id", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.UPDATE_ACTION), roleController.UpsertRole)
 
 	}
 	RegisterRoleRouterResouce()
@@ -42,27 +43,27 @@ func RegisterRoleRouterResouce() {
 	register.AddResource(resoucePredefine.RoleResource, []*auth.Action{
 		{
 			Id:   register.GenerateActionId(),
-			Name: "readAll",
+			Name: constant.READ_ALL_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "delete",
+			Name: constant.READ_ONE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "disableOrEnable",
+			Name: constant.CREATE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "readOne",
+			Name: constant.UPDATE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "create",
+			Name: constant.DELETE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "update",
+			Name: constant.ENABLE_AND_DISABLE_ACTION,
 		},
 	})
 }
