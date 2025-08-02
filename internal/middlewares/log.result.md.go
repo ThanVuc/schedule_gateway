@@ -18,7 +18,7 @@ func LogResultMiddleware() gin.HandlerFunc {
 		latency := time.Since(start).Milliseconds()
 		method := c.Request.Method
 		path := c.Request.URL.Path
-		requestId, _ := c.Get("requestId")
+		requestId, _ := c.Get("request-id")
 
 		logString := fmt.Sprintf("\033[34m'path': %s, 'status': %d, 'latency': %dms, 'method': %s, 'requestId': %s\033[0m",
 			path, status, latency, method, requestId)

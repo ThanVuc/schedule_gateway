@@ -18,7 +18,7 @@ func TrackLogMiddleware() gin.HandlerFunc {
 		if requestId == "" {
 			requestId = uuid.New().String()
 		}
-		c.Set("requestId", requestId)
+		c.Set("request-id", requestId)
 		c.Next()
 	}
 }

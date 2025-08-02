@@ -4,59 +4,53 @@ import (
 	"context"
 	"fmt"
 	"schedule_gateway/global"
-	"schedule_gateway/pkg/response"
 	"schedule_gateway/pkg/settings"
 	"schedule_gateway/proto/auth"
+	"schedule_gateway/proto/common"
 	"schedule_gateway/proto/user"
 
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type (
 	AuthClient interface {
-		Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error)
-		Register(ctx context.Context, req *auth.RegisterRequest) (*auth.RegisterResponse, error)
-		ConfirmEmail(ctx context.Context, req *auth.ConfirmEmailRequest) (*auth.ConfirmEmailResponse, error)
-		Logout(ctx context.Context, req *auth.LogoutRequest) (*auth.LogoutResponse, error)
-		ResetPassword(ctx context.Context, req *auth.ResetPasswordRequest) (*auth.ResetPasswordResponse, error)
-		ForgotPassword(ctx context.Context, req *auth.ForgotPasswordRequest) (*auth.ForgotPasswordResponse, error)
-		ConfirmForgotPassword(ctx context.Context, req *auth.ConfirmForgotPasswordRequest) (*auth.ConfirmForgotPasswordResponse, error)
-		SaveRouteResource(ctx context.Context, req *auth.SaveRouteResourceRequest) (*auth.SaveRouteResourceResponse, error)
+		LoginWithGoogle(c *gin.Context, req *auth.LoginWithGoogleRequest) (*auth.LoginWithGoogleResponse, error)
+		Logout(c *gin.Context, req *auth.LogoutRequest) (*common.EmptyResponse, error)
+		SaveRouteResource(context context.Context, req *auth.SaveRouteResourceRequest) (*auth.SaveRouteResourceResponse, error)
 	}
 
 	PermissionClient interface {
-		GetPermissions(ctx context.Context, req *auth.GetPermissionsRequest) (*auth.GetPermissionsResponse, error)
-		UpsertPermission(ctx context.Context, req *auth.UpsertPermissionRequest) (*auth.UpsertPermissionResponse, error)
-		DeletePermission(ctx context.Context, req *auth.DeletePermissionRequest) (*auth.DeletePermissionResponse, error)
-		GetResources(ctx context.Context, req *auth.GetResourcesRequest) (*auth.GetResourcesResponse, error)
-		GetActions(ctx context.Context, req *auth.GetActionsRequest) (*auth.GetActionsResponse, error)
-		GetPermission(ctx context.Context, req *auth.GetPermissionRequest) (*auth.GetPermissionResponse, error)
+		GetPermissions(c *gin.Context, req *auth.GetPermissionsRequest) (*auth.GetPermissionsResponse, error)
+		UpsertPermission(c *gin.Context, req *auth.UpsertPermissionRequest) (*auth.UpsertPermissionResponse, error)
+		DeletePermission(c *gin.Context, req *auth.DeletePermissionRequest) (*auth.DeletePermissionResponse, error)
+		GetResources(c *gin.Context, req *auth.GetResourcesRequest) (*auth.GetResourcesResponse, error)
+		GetActions(c *gin.Context, req *auth.GetActionsRequest) (*auth.GetActionsResponse, error)
+		GetPermission(c *gin.Context, req *auth.GetPermissionRequest) (*auth.GetPermissionResponse, error)
 	}
 
 	RoleClient interface {
-		GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error)
-		GetRole(ctx context.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error)
-		DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error)
-		DisableOrEnableRole(ctx context.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error)
-		UpsertRole(ctx context.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error)
+		GetRoles(c *gin.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error)
+		GetRole(c *gin.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error)
+		DeleteRole(c *gin.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error)
+		DisableOrEnableRole(c *gin.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error)
+		UpsertRole(c *gin.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error)
 	}
 
 	TokenClient interface {
-		RefreshToken(ctx context.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
-		RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error)
+		RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
+		RevokeToken(c *gin.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error)
 	}
 
 	UserClient interface {
-		GetUserInfo(ctx context.Context, req *user.GetUserInfoRequest) (*user.GetUserInfoResponse, error)
-		UpdateUserInfo(ctx context.Context, req *user.UpdateUserInfoRequest) (*user.UpdateUserInfoResponse, error)
 	}
 )
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {
 	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", baseConfig.GetHost(), baseConfig.GetPort()), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		panic(response.InternalServerError(fmt.Sprintf("Failed to connect to service at %s:%d", baseConfig.GetHost(), baseConfig.GetPort())))
+		panic("Failed to connect to gRPC server: " + err.Error())
 	}
 	return conn
 }
@@ -66,7 +60,7 @@ func NewAuthClient() AuthClient {
 
 	client := auth.NewAuthServiceClient(conn)
 	if client == nil {
-		panic(response.InternalServerError(fmt.Sprintf("Failed to create AuthService client at %s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort())))
+		panic("Failed to create AuthService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
 	return &authClient{
@@ -80,7 +74,7 @@ func NewPermissionClient() PermissionClient {
 
 	client := auth.NewPermissionServiceClient(conn)
 	if client == nil {
-		panic(response.InternalServerError(fmt.Sprintf("Failed to create PermissionService client at %s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort())))
+		panic("Failed to create PermissionService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
 	return &permissionClient{
@@ -94,7 +88,7 @@ func NewRoleClient() RoleClient {
 
 	client := auth.NewRoleServiceClient(conn)
 	if client == nil {
-		panic(response.InternalServerError(fmt.Sprintf("Failed to create RoleService client at %s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort())))
+		panic("Failed to create RoleService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
 	return &roleClient{
@@ -108,7 +102,7 @@ func NewTokenClient() TokenClient {
 
 	client := auth.NewTokenServiceClient(conn)
 	if client == nil {
-		panic(response.InternalServerError(fmt.Sprintf("Failed to create TokenService client at %s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort())))
+		panic("Failed to create TokenService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
 	return &tokenClient{
@@ -122,7 +116,7 @@ func NewUserClient() UserClient {
 
 	client := user.NewUserServiceClient(conn)
 	if client == nil {
-		panic(response.InternalServerError(fmt.Sprintf("Failed to create UserService client at %s:%d", global.Config.UserService.GetHost(), global.Config.UserService.GetPort())))
+		panic("Failed to create UserService client at " + fmt.Sprintf("%s:%d", global.Config.UserService.GetHost(), global.Config.UserService.GetPort()))
 	}
 
 	return &userClient{

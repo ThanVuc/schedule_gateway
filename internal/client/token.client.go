@@ -2,8 +2,11 @@ package client
 
 import (
 	"context"
+	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/proto/auth"
+
+	"github.com/gin-gonic/gin"
 )
 
 type tokenClient struct {
@@ -11,7 +14,10 @@ type tokenClient struct {
 	tokenClient auth.TokenServiceClient
 }
 
-func (t *tokenClient) RefreshToken(ctx context.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
+func (t *tokenClient) RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := t.tokenClient.RefreshToken(ctx, req)
 	if err != nil {
 		return nil, err
@@ -19,7 +25,10 @@ func (t *tokenClient) RefreshToken(ctx context.Context, req *auth.RefreshTokenRe
 	return resp, nil
 }
 
-func (t *tokenClient) RevokeToken(ctx context.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error) {
+func (t *tokenClient) RevokeToken(c *gin.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := t.tokenClient.RevokeToken(ctx, req)
 	if err != nil {
 		return nil, err

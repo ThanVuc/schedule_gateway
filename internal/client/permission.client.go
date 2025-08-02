@@ -2,8 +2,11 @@ package client
 
 import (
 	"context"
+	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/proto/auth"
+
+	"github.com/gin-gonic/gin"
 )
 
 type permissionClient struct {
@@ -11,7 +14,10 @@ type permissionClient struct {
 	permissionClient auth.PermissionServiceClient
 }
 
-func (p *permissionClient) GetPermissions(ctx context.Context, req *auth.GetPermissionsRequest) (*auth.GetPermissionsResponse, error) {
+func (p *permissionClient) GetPermissions(c *gin.Context, req *auth.GetPermissionsRequest) (*auth.GetPermissionsResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := p.permissionClient.GetPermissions(ctx, req)
 	if err != nil {
 		return nil, err
@@ -20,7 +26,10 @@ func (p *permissionClient) GetPermissions(ctx context.Context, req *auth.GetPerm
 	return resp, nil
 }
 
-func (p *permissionClient) UpsertPermission(ctx context.Context, req *auth.UpsertPermissionRequest) (*auth.UpsertPermissionResponse, error) {
+func (p *permissionClient) UpsertPermission(c *gin.Context, req *auth.UpsertPermissionRequest) (*auth.UpsertPermissionResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := p.permissionClient.UpsertPermission(ctx, req)
 	if err != nil {
 		return nil, err
@@ -28,7 +37,10 @@ func (p *permissionClient) UpsertPermission(ctx context.Context, req *auth.Upser
 	return resp, nil
 }
 
-func (p *permissionClient) DeletePermission(ctx context.Context, req *auth.DeletePermissionRequest) (*auth.DeletePermissionResponse, error) {
+func (p *permissionClient) DeletePermission(c *gin.Context, req *auth.DeletePermissionRequest) (*auth.DeletePermissionResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := p.permissionClient.DeletePermission(ctx, req)
 	if err != nil {
 		return nil, err
@@ -36,7 +48,10 @@ func (p *permissionClient) DeletePermission(ctx context.Context, req *auth.Delet
 	return resp, nil
 }
 
-func (p *permissionClient) GetResources(ctx context.Context, req *auth.GetResourcesRequest) (*auth.GetResourcesResponse, error) {
+func (p *permissionClient) GetResources(c *gin.Context, req *auth.GetResourcesRequest) (*auth.GetResourcesResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := p.permissionClient.GetResources(ctx, req)
 	if err != nil {
 		return nil, err
@@ -45,7 +60,10 @@ func (p *permissionClient) GetResources(ctx context.Context, req *auth.GetResour
 	return resp, nil
 }
 
-func (p *permissionClient) GetActions(ctx context.Context, req *auth.GetActionsRequest) (*auth.GetActionsResponse, error) {
+func (p *permissionClient) GetActions(c *gin.Context, req *auth.GetActionsRequest) (*auth.GetActionsResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := p.permissionClient.GetActions(ctx, req)
 	if err != nil {
 		return nil, err
@@ -54,7 +72,10 @@ func (p *permissionClient) GetActions(ctx context.Context, req *auth.GetActionsR
 	return resp, nil
 }
 
-func (p *permissionClient) GetPermission(ctx context.Context, req *auth.GetPermissionRequest) (*auth.GetPermissionResponse, error) {
+func (p *permissionClient) GetPermission(c *gin.Context, req *auth.GetPermissionRequest) (*auth.GetPermissionResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := p.permissionClient.GetPermission(ctx, req)
 	if err != nil {
 		return nil, err

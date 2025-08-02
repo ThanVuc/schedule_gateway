@@ -26,14 +26,20 @@ func NewPermissionController() *PermissionController {
 
 func (pc *PermissionController) GetPermissions(c *gin.Context) {
 	req := pc.buildGetPermissionRequest(c)
+	if req == nil {
+		return
+	}
+
 	permissions, err := pc.permissionClient.GetPermissions(c, req)
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to get permissions"))
+		response.InternalServerError(c, "Failed to get permissions")
+		return
 	}
 
 	if permissions != nil && permissions.Error != nil {
-		panic(response.InternalServerError("Failed to get permissions: " + permissions.Error.Message))
+		response.InternalServerError(c, "Failed to get permissions: "+permissions.Error.Message)
+		return
 	}
 
 	response.Ok(c, "GetPermissions called", dtos.Permissions{
@@ -54,15 +60,20 @@ func (pc *PermissionController) GetPermissions(c *gin.Context) {
 
 func (pc *PermissionController) UpsertPermission(c *gin.Context) {
 	req := pc.buildUpsertPermissionRequest(c)
+	if req == nil {
+		return
+	}
 
 	resp, err := pc.permissionClient.UpsertPermission(c, req)
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to create permission: " + err.Error()))
+		response.InternalServerError(c, "Failed to upsert permission")
+		return
 	}
 
 	if resp != nil && resp.Error != nil {
-		panic(response.InternalServerError("Failed to create permission: " + resp.Error.Message))
+		response.InternalServerError(c, "Failed to upsert permission")
+		return
 	}
 
 	response.Ok(c, "Upsert Permission Successfult", gin.H{
@@ -76,7 +87,8 @@ func (pc *PermissionController) GetResources(c *gin.Context) {
 	resources, err := pc.permissionClient.GetResources(c, req)
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to get resources"))
+		response.InternalServerError(c, "Failed to get resources")
+		return
 	}
 
 	response.Ok(c, "GetResources called", resources.Resources)
@@ -85,7 +97,8 @@ func (pc *PermissionController) GetResources(c *gin.Context) {
 func (pc *PermissionController) GetActions(c *gin.Context) {
 	resourceId := c.Query("resource_id")
 	if resourceId == "" {
-		panic(response.BadRequest("resource_id is required"))
+		response.BadRequest(c, "Resource ID is required")
+		return
 	}
 
 	req := &auth.GetActionsRequest{
@@ -94,7 +107,8 @@ func (pc *PermissionController) GetActions(c *gin.Context) {
 	actions, err := pc.permissionClient.GetActions(c, req)
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to get actions"))
+		response.InternalServerError(c, "Internal server error")
+		return
 	}
 
 	response.Ok(c, "GetActions called", gin.H{
@@ -105,7 +119,8 @@ func (pc *PermissionController) GetActions(c *gin.Context) {
 func (pc *PermissionController) GetPermission(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		panic(response.BadRequest("Permission ID is required"))
+		response.BadRequest(c, "Permission ID is required")
+		return
 	}
 
 	req := &auth.GetPermissionRequest{
@@ -115,11 +130,13 @@ func (pc *PermissionController) GetPermission(c *gin.Context) {
 	resp, err := pc.permissionClient.GetPermission(c, req)
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to get permission: " + err.Error()))
+		response.InternalServerError(c, "Failed to get permission: "+err.Error())
+		return
 	}
 
 	if resp == nil || resp.Error != nil {
-		panic(response.InternalServerError("Failed to get permission: " + resp.Error.Message))
+		response.InternalServerError(c, "Failed to get permission: "+resp.Error.Message)
+		return
 	}
 
 	response.Ok(c, "GetPermission successful", resp.Permission)
@@ -128,7 +145,8 @@ func (pc *PermissionController) GetPermission(c *gin.Context) {
 func (pc *PermissionController) DeletePermission(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		panic(response.BadRequest("Permission ID is required"))
+		response.BadRequest(c, "Permission ID is required")
+		return
 	}
 
 	req := &auth.DeletePermissionRequest{
@@ -137,15 +155,18 @@ func (pc *PermissionController) DeletePermission(c *gin.Context) {
 
 	resp, err := pc.permissionClient.DeletePermission(c, req)
 	if !resp.Success {
-		panic(response.BadRequest("Failed to delete permission: " + *resp.Message))
+		response.BadRequest(c, "Failed to delete permission: "+*resp.Message)
+		return
 	}
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to delete permission: " + err.Error()))
+		response.InternalServerError(c, "Failed to delete permission: "+err.Error())
+		return
 	}
 
 	if resp == nil || resp.Error != nil {
-		panic(response.InternalServerError("Failed to delete permission: " + resp.Error.Message))
+		response.InternalServerError(c, "Failed to delete permission: "+resp.Error.Message)
+		return
 	}
 
 	response.Ok(c, "DeletePermission called", gin.H{
@@ -182,19 +203,23 @@ func (pc *PermissionController) buildUpsertPermissionRequest(c *gin.Context) *au
 	}
 
 	if err := c.ShouldBindJSON(&dto); err != nil {
-		panic(response.BadRequest("Invalid request body: " + err.Error()))
+		response.BadRequest(c, "Invalid request body: "+err.Error())
+		return nil
 	}
 
 	if dto.Name == "" {
-		panic(response.BadRequest("Name is required"))
+		response.BadRequest(c, "Name is required")
+		return nil
 	}
 
 	if dto.ResourceId == "" {
-		panic(response.BadRequest("ResourceId is required"))
+		response.BadRequest(c, "ResourceId is required")
+		return nil
 	}
 
 	if len(dto.ActionIds) == 0 {
-		panic(response.BadRequest("At least one action ID is required"))
+		response.BadRequest(c, "At least one action ID is required")
+		return nil
 	}
 
 	req.Name = dto.Name
