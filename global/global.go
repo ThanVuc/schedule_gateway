@@ -1,8 +1,9 @@
 package global
 
 import (
-	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/pkg/settings"
+
+	"github.com/thanvuc/go-core-lib/log"
 )
 
 /*
@@ -12,5 +13,5 @@ import (
 */
 var (
 	Config settings.Config
-	Logger *loggers.LoggerZap
+	Logger log.Logger
 )

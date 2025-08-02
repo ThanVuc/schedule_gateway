@@ -3,14 +3,14 @@ package client
 import (
 	"context"
 	"schedule_gateway/internal/utils"
-	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thanvuc/go-core-lib/log"
 )
 
 type permissionClient struct {
-	logger           *loggers.LoggerZap
+	logger           log.Logger
 	permissionClient auth.PermissionServiceClient
 }
 
