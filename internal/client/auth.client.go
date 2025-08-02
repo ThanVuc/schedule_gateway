@@ -3,15 +3,15 @@ package client
 import (
 	"context"
 	"schedule_gateway/internal/utils"
-	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/proto/auth"
 	"schedule_gateway/proto/common"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thanvuc/go-core-lib/log"
 )
 
 type authClient struct {
-	logger     *loggers.LoggerZap
+	logger     log.Logger
 	authClient auth.AuthServiceClient
 }
 

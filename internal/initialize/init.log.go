@@ -1,12 +1,16 @@
 package initialize
 
 import (
+	"os"
 	"schedule_gateway/global"
-	"schedule_gateway/pkg/loggers"
+
+	"github.com/thanvuc/go-core-lib/log"
 )
 
 func InitLogger() {
-	global.Logger = loggers.NewLogger(
-		global.Config.Log,
-	)
+	env := os.Getenv("GO_ENV")
+	global.Logger = log.NewLogger(log.Config{
+		Env:   env,
+		Level: global.Config.Log.Level,
+	})
 }

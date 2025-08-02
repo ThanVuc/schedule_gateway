@@ -3,13 +3,13 @@ package controller
 import (
 	"schedule_gateway/global"
 	"schedule_gateway/internal/client"
-	"schedule_gateway/pkg/loggers"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thanvuc/go-core-lib/log"
 )
 
 type UserController struct {
-	logger     *loggers.LoggerZap
+	logger     log.Logger
 	userClient client.UserClient
 }
 
