@@ -33,7 +33,6 @@ func (uc *UserController) GetUserInfo(c *gin.Context) {
 func (uc *UserController) UpdateUserInfo(c *gin.Context) {
 	// This method should update user information based on the context
 	// For now, we will just return a placeholder response
-	uc.logger.InfoString("UpdateUserInfo called")
 	c.JSON(200, gin.H{
 		"user_id": "",
 		"name":    "resp.Name",

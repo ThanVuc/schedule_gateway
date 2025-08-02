@@ -28,11 +28,13 @@ func (rc *RoleController) GetRoles(c *gin.Context) {
 	req := rc.buildGetRolesRequest(c)
 	roles, err := rc.roleClient.GetRoles(c, req)
 	if err != nil {
-		panic(response.InternalServerError("Failed to get roles: " + err.Error()))
+		response.InternalServerError(c, "Failed to get roles: "+err.Error())
+		return
 	}
 
 	if roles != nil && roles.Error != nil {
-		panic(response.InternalServerError("Failed to get roles: " + roles.Error.Message))
+		response.InternalServerError(c, "Failed to get roles: "+roles.Error.Message)
+		return
 	}
 
 	response.Ok(c, "GetRoles called", dtos.Roles{
@@ -54,17 +56,20 @@ func (rc *RoleController) GetRoles(c *gin.Context) {
 func (rc *RoleController) GetRole(c *gin.Context) {
 	roleId := c.Param("id")
 	if roleId == "" {
-		panic(response.BadRequest("Role ID is required"))
+		response.BadRequest(c, "Role ID is required")
+		return
 	}
 
 	req := &auth.GetRoleRequest{RoleId: roleId}
 	role, err := rc.roleClient.GetRole(c, req)
 	if err != nil {
-		panic(response.InternalServerError("Failed to get role: " + err.Error()))
+		response.InternalServerError(c, "Failed to get role: "+err.Error())
+		return
 	}
 
 	if role != nil && role.Error != nil {
-		panic(response.InternalServerError("Failed to get role: " + role.Error.Message))
+		response.InternalServerError(c, "Failed to get role: "+role.Error.Message)
+		return
 	}
 
 	response.Ok(c, "GetRole called", role)
@@ -73,7 +78,8 @@ func (rc *RoleController) GetRole(c *gin.Context) {
 func (rc *RoleController) DeleteRole(c *gin.Context) {
 	roleId := c.Param("id")
 	if roleId == "" {
-		panic(response.BadRequest("Role ID is required"))
+		response.BadRequest(c, "Role ID is required")
+		return
 	}
 	println("Deleting role with ID:", roleId)
 
@@ -81,15 +87,18 @@ func (rc *RoleController) DeleteRole(c *gin.Context) {
 	resp, err := rc.roleClient.DeleteRole(c, req)
 
 	if !resp.Success {
-		panic(response.BadRequest("Failed to delete role: " + *resp.Message))
+		response.BadRequest(c, "Failed to delete role: "+*resp.Message)
+		return
 	}
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to delete role: " + err.Error()))
+		response.InternalServerError(c, "Failed to delete role: "+err.Error())
+		return
 	}
 
 	if resp != nil && resp.Error != nil {
-		panic(response.InternalServerError("Failed to delete role: " + resp.Error.Message))
+		response.InternalServerError(c, "Failed to delete role: "+resp.Error.Message)
+		return
 	}
 
 	response.Ok(c, "DeleteRole called", gin.H{"is_success": resp.Success})
@@ -98,22 +107,26 @@ func (rc *RoleController) DeleteRole(c *gin.Context) {
 func (rc *RoleController) DisableOrEnableRole(c *gin.Context) {
 	roleId := c.Param("id")
 	if roleId == "" {
-		panic(response.BadRequest("Role ID is required"))
+		response.BadRequest(c, "Role ID is required")
+		return
 	}
 
 	req := &auth.DisableOrEnableRoleRequest{RoleId: roleId}
 	resp, err := rc.roleClient.DisableOrEnableRole(c, req)
 
 	if !resp.Success {
-		panic(response.BadRequest("Failed to disable or enable role: " + *resp.Message))
+		response.BadRequest(c, "Failed to disable or enable role: "+*resp.Message)
+		return
 	}
 
 	if err != nil {
-		panic(response.InternalServerError("Failed to disable or enable role: " + err.Error()))
+		response.InternalServerError(c, "Failed to disable or enable role: "+err.Error())
+		return
 	}
 
 	if resp != nil && resp.Error != nil {
-		panic(response.InternalServerError("Failed to disable or enable role: " + resp.Error.Message))
+		response.InternalServerError(c, "Failed to disable or enable role: "+resp.Error.Message)
+		return
 	}
 
 	response.Ok(c, "DisableOrEnableRole called", gin.H{"is_success": resp.Success})
@@ -139,15 +152,18 @@ func (rc *RoleController) UpsertRole(c *gin.Context) {
 
 	resp, err := rc.roleClient.UpsertRole(c, req)
 	if err != nil {
-		panic(response.InternalServerError("Failed to upsert role: " + err.Error()))
+		response.InternalServerError(c, "Failed to upsert role: "+err.Error())
+		return
 	}
 
 	if resp == nil || resp.Error != nil {
-		panic(response.InternalServerError("Failed to upsert role: " + resp.Error.Message))
+		response.InternalServerError(c, "Failed to upsert role: "+resp.Error.Message)
+		return
 	}
 
 	if !resp.IsSuccess {
-		panic(response.BadRequest("Failed to upsert role: " + resp.Message))
+		response.BadRequest(c, "Failed to upsert role: "+resp.Message)
+		return
 	}
 
 	response.Ok(c, "UpsertRole called", gin.H{
@@ -167,11 +183,13 @@ func (rc *RoleController) buildUpsertRoleRequest(c *gin.Context) *auth.UpsertRol
 	c.ShouldBindJSON(&dto)
 
 	if dto.Name == "" {
-		panic(response.BadRequest("Role name is required"))
+		response.BadRequest(c, "Role name is required")
+		return nil
 	}
 
 	if dto.Description == "" {
-		panic(response.BadRequest("Role description is required"))
+		response.BadRequest(c, "Role description is required")
+		return nil
 	}
 
 	req.RoleId = dto.RoleId

@@ -1,12 +1,15 @@
+### check health
+GET http://localhost:8080/api/v1/health
+
 ### Create Permission
 POST http://localhost:8080/api/v1/permissions
 Content-Type: application/json
 
 {
-  "name": "ViewRoles",
+  "name123": "ViewRoles",
   "description": "Allows viewing user data",
   "resource_id": "3",
-  "actions_ids": ["31", "32"]
+  "actions_ids": ["311", "321"]
 }
 
 ###

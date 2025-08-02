@@ -2,8 +2,11 @@ package client
 
 import (
 	"context"
+	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/loggers"
 	"schedule_gateway/proto/auth"
+
+	"github.com/gin-gonic/gin"
 )
 
 type roleClient struct {
@@ -11,7 +14,10 @@ type roleClient struct {
 	roleClient auth.RoleServiceClient
 }
 
-func (r *roleClient) GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error) {
+func (r *roleClient) GetRoles(c *gin.Context, req *auth.GetRolesRequest) (*auth.GetRolesResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := r.roleClient.GetRoles(ctx, req)
 	if err != nil {
 		return nil, err
@@ -19,7 +25,10 @@ func (r *roleClient) GetRoles(ctx context.Context, req *auth.GetRolesRequest) (*
 	return resp, nil
 }
 
-func (r *roleClient) GetRole(ctx context.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error) {
+func (r *roleClient) GetRole(c *gin.Context, req *auth.GetRoleRequest) (*auth.GetRoleResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := r.roleClient.GetRole(ctx, req)
 	if err != nil {
 		return nil, err
@@ -27,7 +36,10 @@ func (r *roleClient) GetRole(ctx context.Context, req *auth.GetRoleRequest) (*au
 	return resp, nil
 }
 
-func (r *roleClient) DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error) {
+func (r *roleClient) DeleteRole(c *gin.Context, req *auth.DeleteRoleRequest) (*auth.DeleteRoleResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := r.roleClient.DeleteRole(ctx, req)
 	if err != nil {
 		return nil, err
@@ -35,7 +47,10 @@ func (r *roleClient) DeleteRole(ctx context.Context, req *auth.DeleteRoleRequest
 	return resp, nil
 }
 
-func (r *roleClient) DisableOrEnableRole(ctx context.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error) {
+func (r *roleClient) DisableOrEnableRole(c *gin.Context, req *auth.DisableOrEnableRoleRequest) (*auth.DisableOrEnableRoleResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := r.roleClient.DisableOrEnableRole(ctx, req)
 	if err != nil {
 		return nil, err
@@ -43,7 +58,10 @@ func (r *roleClient) DisableOrEnableRole(ctx context.Context, req *auth.DisableO
 	return resp, nil
 }
 
-func (r *roleClient) UpsertRole(ctx context.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error) {
+func (r *roleClient) UpsertRole(c *gin.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
 	resp, err := r.roleClient.UpsertRole(ctx, req)
 	if err != nil {
 		return nil, err

@@ -2,9 +2,9 @@ package middlewares
 
 import (
 	"net/http"
-	"runtime/debug"
 	"schedule_gateway/global"
 	"schedule_gateway/pkg/response"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,15 +25,19 @@ func ErrorHandler() gin.HandlerFunc {
 				case response.ErrorResponse:
 					// Needing more details ? -> add debug.Stack() to the logger
 					if e.StatusCode >= 500 {
-						logger.Error(e, requestId, debug.Stack())
+						logger.Error("Internal Server Error", requestId)
 					} else {
-						logger.Error(e, requestId, nil)
+						logger.Error("Internal Server Error", requestId)
 					}
 
 					c.JSON(e.StatusCode, e)
 				default:
-					logger.Error(response.InternalServerError("Unknown panic"), requestId, debug.Stack())
-					c.JSON(500, response.AnotherError(http.StatusInternalServerError, "Unknown panic"))
+					c.JSON(http.StatusInternalServerError, response.ErrorResponse{
+						StatusCode: http.StatusInternalServerError,
+						Message:    "Internal Server Error",
+						CodeReason: "INTERNAL_SERVER_ERROR",
+						CreatedAt:  time.Now().Format(time.RFC3339),
+					})
 				}
 			}
 
