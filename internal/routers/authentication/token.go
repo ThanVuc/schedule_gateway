@@ -4,6 +4,7 @@ import (
 	"schedule_gateway/internal/controller"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
+	constant "schedule_gateway/internal/routers/constant"
 	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,7 @@ func (tr *TokenRouter) InitTokenRouter(routerGroup *gin.RouterGroup) {
 
 	tokenRouterPrivate := routerGroup.Group("token")
 	{
-		tokenRouterPrivate.POST("revoke", middlewares.CheckPerm("token", "revoke"), tokenController.RevokeToken)
+		tokenRouterPrivate.POST("revoke", middlewares.CheckPerm(constant.TOKEN_RESOURCE, constant.REVOKE_TOKEN_ACTION), tokenController.RevokeToken)
 	}
 
 	tokenRouterPublic := routerGroup.Group("token")
@@ -35,11 +36,7 @@ func RegisterTokenRouterResource() {
 	register.AddResource(resoucePredefine.TokenResource, []*auth.Action{
 		{
 			Id:   register.GenerateActionId(),
-			Name: "revoke",
-		},
-		{
-			Id:   register.GenerateActionId(),
-			Name: "refresh",
+			Name: constant.REVOKE_TOKEN_ACTION,
 		},
 	})
 }

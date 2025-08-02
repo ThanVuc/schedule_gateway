@@ -1,6 +1,9 @@
 package helper
 
-import "schedule_gateway/proto/auth"
+import (
+	constant "schedule_gateway/internal/routers/constant"
+	"schedule_gateway/proto/auth"
+)
 
 type ResourcePredefine struct {
 	AuthResource       *auth.Resource
@@ -14,23 +17,23 @@ func InitResources() *ResourcePredefine {
 	r := &ResourcePredefine{
 		AuthResource: &auth.Resource{
 			Id:   "1",
-			Name: "auth",
+			Name: constant.AUTH_RESOURCE,
 		},
 		TokenResource: &auth.Resource{
 			Id:   "2",
-			Name: "token",
+			Name: constant.TOKEN_RESOURCE,
 		},
 		RoleResource: &auth.Resource{
 			Id:   "3",
-			Name: "roles",
+			Name: constant.ROLE_RESOURCE,
 		},
 		PermissionResource: &auth.Resource{
 			Id:   "4",
-			Name: "permissions",
+			Name: constant.PERMISSION_RESOURCE,
 		},
 		UserResource: &auth.Resource{
 			Id:   "5",
-			Name: "users",
+			Name: constant.USER_RESOURCE,
 		},
 	}
 	return r
