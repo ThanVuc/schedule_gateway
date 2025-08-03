@@ -1,9 +1,10 @@
 package user_route
 
 import (
-	"schedule_gateway/internal/controller"
+	controller "schedule_gateway/internal/controller/user"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
+	constant "schedule_gateway/internal/routers/constant"
 	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
@@ -12,14 +13,12 @@ import (
 type UserRouter struct{}
 
 func (p *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
-	// wire the controller
 	userController := controller.NewUserController()
 	// private router
-	permissionRouterPrivate := Router.Group("user-info")
+	permissionRouterPrivate := Router.Group("profile")
 	{
-		permissionRouterPrivate.GET("/:id", middlewares.CheckPerm("user-info", "readOne"), userController.GetUserInfo)
-
-		permissionRouterPrivate.PUT("/:id/update", middlewares.CheckPerm("user-info", "update"), userController.UpdateUserInfo)
+		permissionRouterPrivate.GET("/", middlewares.CheckPerm(constant.USER_RESOURCE, constant.READ_ONE_ACTION), userController.GetUserProfile)
+		permissionRouterPrivate.PUT("/update", middlewares.CheckPerm(constant.USER_RESOURCE, constant.UPDATE_ACTION), userController.UpdateUserInfo)
 	}
 	RegisterPermissionRouterResource()
 }
@@ -32,11 +31,11 @@ func RegisterPermissionRouterResource() {
 	register.AddResource(resoucePredefine.UserResource, []*auth.Action{
 		{
 			Id:   register.GenerateActionId(),
-			Name: "readOne",
+			Name: constant.READ_ONE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: "update",
+			Name: constant.UPDATE_ACTION,
 		},
 	})
 }
