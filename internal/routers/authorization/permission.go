@@ -1,7 +1,7 @@
 package authorization
 
 import (
-	"schedule_gateway/internal/controller"
+	controller "schedule_gateway/internal/controller/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 	constant "schedule_gateway/internal/routers/constant"

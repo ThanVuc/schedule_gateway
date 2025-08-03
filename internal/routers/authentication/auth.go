@@ -1,7 +1,7 @@
 package authentication
 
 import (
-	"schedule_gateway/internal/controller"
+	controller "schedule_gateway/internal/controller/auth"
 
 	"github.com/gin-gonic/gin"
 )

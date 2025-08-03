@@ -3,7 +3,7 @@ package initialize
 import (
 	"context"
 	"schedule_gateway/global"
-	"schedule_gateway/internal/client"
+	client "schedule_gateway/internal/client/auth"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/proto/auth"
 	"time"
