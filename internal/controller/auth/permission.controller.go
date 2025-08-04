@@ -199,6 +199,8 @@ func (pc *PermissionController) buildUpsertPermissionRequest(c *gin.Context) *au
 
 	id := c.Param("id")
 	if id != "" {
+		req.PermissionId = nil
+	} else {
 		req.PermissionId = &id
 	}
 
