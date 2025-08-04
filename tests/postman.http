@@ -47,13 +47,12 @@ DELETE http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6
 PUT  http://localhost:8080/v1/api/roles/805450c8-c348-46eb-b37a-97436e8622a6/disable-or-enable
 
 ### Upsert Role (Create)
-POST http://localhost:8080/v1/api/roles
+POST http://localhost:8080/api/v1/roles
 Content-Type: application/json
 
 {
-  "name": "AdminRole",
-  "description": "Administrator role with full permissions",
-  "permission_ids": ["1ddb3e6c-61ae-4112-bf76-1e8166e8330a"]
+  "name": "AdminRole123",
+  "description": "Administrator role with full permissions"
 }
 
 ### Upsert Role (Update)
@@ -61,7 +60,7 @@ PUT http://localhost:8080/api/v1/roles/1ac1c869-0ae7-44dd-82d0-605b0ad14745
 Content-Type: application/json
 
 {
-  "name": "3124",
+  "name": "Hello World",
   "description": "Updated role description"
 }
 

@@ -182,6 +182,8 @@ func (rc *RoleController) buildUpsertRoleRequest(c *gin.Context) *auth.UpsertRol
 	roleId := c.Param("id")
 	if roleId == "" {
 		req.RoleId = nil
+	} else {
+		req.RoleId = &roleId
 	}
 
 	if err := c.ShouldBindJSON(&dto); err != nil {
@@ -199,7 +201,6 @@ func (rc *RoleController) buildUpsertRoleRequest(c *gin.Context) *auth.UpsertRol
 		return nil
 	}
 
-	req.RoleId = &roleId
 	req.Name = dto.Name
 	req.Description = dto.Description
 	req.PermissionIds = dto.PermissionIds
