@@ -150,6 +150,10 @@ func (rc *RoleController) buildGetRolesRequest(c *gin.Context) *auth.GetRolesReq
 func (rc *RoleController) UpsertRole(c *gin.Context) {
 	req := rc.buildUpsertRoleRequest(c)
 
+	if req == nil {
+		return
+	}
+
 	resp, err := rc.roleClient.UpsertRole(c, req)
 	if err != nil {
 		response.InternalServerError(c, "Failed to upsert role: "+err.Error())
@@ -180,7 +184,10 @@ func (rc *RoleController) buildUpsertRoleRequest(c *gin.Context) *auth.UpsertRol
 		req.RoleId = nil
 	}
 
-	c.ShouldBindJSON(&dto)
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		response.BadRequest(c, "Invalid JSON payload: "+err.Error())
+		return nil
+	}
 
 	if dto.Name == "" {
 		response.BadRequest(c, "Role name is required")
@@ -192,7 +199,7 @@ func (rc *RoleController) buildUpsertRoleRequest(c *gin.Context) *auth.UpsertRol
 		return nil
 	}
 
-	req.RoleId = dto.RoleId
+	req.RoleId = &roleId
 	req.Name = dto.Name
 	req.Description = dto.Description
 	req.PermissionIds = dto.PermissionIds
