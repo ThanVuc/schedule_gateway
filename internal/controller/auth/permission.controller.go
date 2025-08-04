@@ -198,7 +198,7 @@ func (pc *PermissionController) buildUpsertPermissionRequest(c *gin.Context) *au
 	var dto dtos.UpsertPermissionRequestDTO
 
 	id := c.Param("id")
-	if id != "" {
+	if id == "" {
 		req.PermissionId = nil
 	} else {
 		req.PermissionId = &id
