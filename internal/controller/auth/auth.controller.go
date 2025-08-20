@@ -4,6 +4,7 @@ import (
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/auth"
 	"schedule_gateway/pkg/response"
+	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanvuc/go-core-lib/log"
@@ -22,11 +23,25 @@ func NewAuthController() *AuthController {
 }
 
 func (ac *AuthController) LoginWithGoogle(c *gin.Context) {
+	var body gin.H
+	if err := c.ShouldBindJSON(&body); err != nil {
+		response.BadRequest(c, "Invalid request body")
+		return
+	}
 
-	ac.authClient.LoginWithGoogle(c, nil)
+	googleAccessToken, ok := body["google_access_token"].(string)
+	if !ok || googleAccessToken == "" {
+		response.BadRequest(c, "Google access token is required")
+		return
+	}
+
+	req := &auth.LoginWithGoogleRequest{
+		GoogleAccessToken: googleAccessToken,
+	}
+
+	ac.authClient.LoginWithGoogle(c, req)
 
 	response.Ok(c, "Login called", gin.H{
-		"access_token":  "",
-		"refresh_token": "",
+		"google_access_token": googleAccessToken,
 	})
 }
