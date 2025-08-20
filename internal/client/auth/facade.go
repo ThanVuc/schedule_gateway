@@ -7,7 +7,6 @@ import (
 	"schedule_gateway/pkg/settings"
 	"schedule_gateway/proto/auth"
 	"schedule_gateway/proto/common"
-	"schedule_gateway/proto/user"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -44,6 +43,7 @@ type (
 	}
 
 	UserClient interface {
+		AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUserRequest) (*common.EmptyResponse, error)
 	}
 )
 
@@ -112,9 +112,9 @@ func NewTokenClient() TokenClient {
 }
 
 func NewUserClient() UserClient {
-	conn := getConn(&global.Config.UserService)
+	conn := getConn(&global.Config.AuthService)
 
-	client := user.NewUserServiceClient(conn)
+	client := auth.NewUserServiceClient(conn)
 	if client == nil {
 		panic("Failed to create UserService client at " + fmt.Sprintf("%s:%d", global.Config.UserService.GetHost(), global.Config.UserService.GetPort()))
 	}
