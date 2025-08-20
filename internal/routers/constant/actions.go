@@ -22,3 +22,8 @@ const (
 	REFRESH_TOKEN_ACTION = "refresh_token"
 	REVOKE_TOKEN_ACTION  = "revoke_token"
 )
+
+// admin users actions
+const (
+	ASSIGN_ROLE_ACTION = "assign_role"
+)
