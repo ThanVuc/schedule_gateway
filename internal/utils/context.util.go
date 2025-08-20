@@ -7,7 +7,6 @@ import (
 )
 
 func WithRequestID(ctx context.Context, requestID string) context.Context {
-	println("Adding request ID to context:", requestID)
 	if requestID == "" {
 		return ctx
 	}

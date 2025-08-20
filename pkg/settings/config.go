@@ -10,10 +10,12 @@ package settings
 */
 
 type Config struct {
-	Server      Server      `mapstructure:"server" json:"server" yaml:"server"`
-	Log         Log         `mapstructure:"log" json:"log" yaml:"log"`
-	AuthService AuthService `mapstructure:"auth_service" json:"auth_service" yaml:"auth_service"`
-	UserService UserService `mapstructure:"user_service" json:"user_service" yaml:"user_service"`
+	Server        Server      `mapstructure:"server" json:"server" yaml:"server"`
+	Log           Log         `mapstructure:"log" json:"log" yaml:"log"`
+	AuthService   AuthService `mapstructure:"auth_service" json:"auth_service" yaml:"auth_service"`
+	UserService   UserService `mapstructure:"user_service" json:"user_service" yaml:"user_service"`
+	CsrfSecret    string      `mapstructure:"csrf_secret" json:"csrf_secret" yaml:"csrf_secret"`
+	SessionSecret string      `mapstructure:"session_secret" json:"session_secret" yaml:"session_secret"`
 }
 
 type Server struct {
