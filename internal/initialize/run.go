@@ -33,6 +33,7 @@ func Run() {
 	store := cookie.NewStore([]byte(global.Config.SessionSecret))
 	store.Options(sessions.Options{
 		Path:     "/",
+		Domain:   "",
 		MaxAge:   24 * 60 * 60,
 		HttpOnly: true,
 		Secure:   true,
@@ -52,7 +53,7 @@ func Run() {
 	InitRouter(r)
 
 	helper.WriteToJsonFile("resources")
-	// go InitResource()
+	go InitResource()
 
 	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
 }
