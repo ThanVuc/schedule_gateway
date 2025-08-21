@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"net/http"
 	"schedule_gateway/global"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
@@ -32,9 +33,10 @@ func Run() {
 	store := cookie.NewStore([]byte(global.Config.SessionSecret))
 	store.Options(sessions.Options{
 		Path:     "/",
+		MaxAge:   24 * 60 * 60,
 		HttpOnly: true,
 		Secure:   true,
-		MaxAge:   24 * 60 * 60,
+		SameSite: http.SameSiteNoneMode,
 	})
 	r.Use(sessions.Sessions("schdulr_session", store))
 	r.Use(csrf.Middleware(csrf.Options{
@@ -50,7 +52,7 @@ func Run() {
 	InitRouter(r)
 
 	helper.WriteToJsonFile("resources")
-	go InitResource()
+	// go InitResource()
 
 	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
 }
