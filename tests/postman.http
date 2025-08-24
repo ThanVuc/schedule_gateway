@@ -1,6 +1,34 @@
 ### check health
 GET http://localhost:8080/api/v1/health
 
+### logout
+POST http://localhost:8080/api/v1/auth/logout
+Content-Type: application/json
+X-CSRF-Token: vaUZmLaDmIIiAFthm8m-4cS0dB8=
+
+{
+  "github_access_token": ""
+}
+
+### register user
+POST http://localhost:8080/api/v1/auth/login-with-google
+Content-Type: application/json
+X-CSRF-Token: fT685LIJeUaGqAid5Ql7xP0guHs=
+
+{
+  "google_access_token": ""
+}
+
+### assign role to user
+POST http://localhost:8080/api/v1/users/assign-role
+Content-Type: application/json
+X-CSRF-Token: vaUZmLaDmIIiAFthm8m-4cS0dB8=
+
+{
+  "user_id": "1c1166c4-1c0e-4d69-ab5c-becd9de3fec5",
+  "role_ids": ["340fb180-f40b-4eb5-aad7-abb68f3b983b", "aad64c3d-9df0-4d67-ae95-d6db9e58b7f1"]
+}
+
 ### get csrf token
 GET http://localhost:8080/api/v1/auth/csrf-token
 
