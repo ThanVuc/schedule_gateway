@@ -20,6 +20,17 @@ func (uc *userClient) AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUse
 	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
 
 	resp, err := uc.userClient.AssignRoleToUser(ctx, req)
+		if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (p *userClient) GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.GetUsersResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := p.userClient.GetUsers(ctx, req)
 	if err != nil {
 		return nil, err
 	}

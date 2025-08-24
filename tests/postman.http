@@ -15,7 +15,9 @@ Content-Type: application/json
   "actions_ids": ["31", "33"]
 }
 
-###
+### Get List Users
+GET http://localhost:8081/api/v1/users?page=1&page_size=5
+
 
 ### Update Permission
 PUT http://localhost:8080/api/v1/permissions/7a69ff7
@@ -29,7 +31,7 @@ Content-Type: application/json
 }
 
 ### get all permissions
-GET http://localhost:8080/api/v1/permissions?page=1&page_size=5
+GET http://localhost:8081/api/v1/permissions?page=1&page_size=5
 
 ### get permission
 GET http://localhost:8080/api/v1/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330a
@@ -38,7 +40,7 @@ GET http://localhost:8080/api/v1/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330
 DELETE http://localhost:8080/v1/api/permissions/33f55597-be57-4b60-869d-b17ac3f6c81e
 
 ### get all roles
-GET http://localhost:8080/api/v1/roles?page=1&size=10
+GET http://localhost:8081/api/v1/roles?page=1&size=10
 
 ### get role
 GET http://localhost:8080/v1/api/roles/3475e00e-01bb-46c6-9ed4-01ad77b65e3b
