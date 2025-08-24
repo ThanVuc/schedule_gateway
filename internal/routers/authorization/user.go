@@ -18,6 +18,7 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userRouterPrivate := Router.Group("users")
 	{
 		userRouterPrivate.POST("assign-role", middlewares.CheckPerm(constant.ADMIN_USER_RESOURCE, constant.ASSIGN_ROLE_ACTION), userController.AssignRoleToUser)
+		userRouterPrivate.GET("", userController.GetUsers)
 	}
 	RegisterUserRouterResouce()
 }
