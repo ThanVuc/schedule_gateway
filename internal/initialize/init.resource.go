@@ -24,11 +24,7 @@ func InitResource() {
 			failAttempt++
 			logger.Error("Failed to save resources", "", zap.Error(err), zap.Int("attempt", failAttempt))
 			time.Sleep(sleep)
-			sleep *= 2
-			if sleep > 30*time.Second {
-				logger.Error("Max retry attempts reached, giving up on saving resources", "", zap.Int("attempt", failAttempt))
-				return
-			}
+			sleep = 5 * time.Second
 			continue
 		}
 

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/auth"
+	"schedule_gateway/internal/dtos"
+	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/auth"
 
@@ -81,4 +83,47 @@ func (uc *UserController) buildAssignRoleToUserRequest(c *gin.Context) (*auth.As
 	}
 
 	return req, nil
+}
+
+func (uc *UserController) GetUsers(c *gin.Context) {
+	req := uc.buildGetUserRequest(c)
+
+	if req == nil {
+		return
+	}
+
+	users, err := uc.userClient.GetUsers(c, req)
+
+	if err != nil {
+		response.InternalServerError(c, "Failed to get users")
+		return
+	}
+
+	if users != nil && users.Error != nil {
+		response.InternalServerError(c, "Failed to get users: "+users.Error.Message)
+		return
+	}
+
+	response.Ok(c, "Get User Successful", dtos.Users{
+		Items:      users.Users,
+		TotalUsers: users.TotalUsers,
+		PageSize:   users.PageInfo.PageSize,
+		Page:       users.PageInfo.Page,
+		HasPrev:    users.PageInfo.HasPrev,
+		HasNext:    users.PageInfo.HasNext,
+	})
+}
+
+func (pc *UserController) buildGetUserRequest(c *gin.Context) *auth.GetUsersRequest {
+	pageQuery := utils.ToPageQuery(c)
+	searchString := c.Query("search")
+
+	req := auth.GetUsersRequest{}
+	if searchString != "" {
+		req.Search = searchString
+	}
+
+	req.PageQuery = pageQuery
+
+	return &req
 }

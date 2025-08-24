@@ -44,6 +44,7 @@ type (
 
 	UserClient interface {
 		AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUserRequest) (*common.EmptyResponse, error)
+		GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.GetUsersResponse, error)
 	}
 )
 
@@ -116,7 +117,7 @@ func NewUserClient() UserClient {
 
 	client := auth.NewUserServiceClient(conn)
 	if client == nil {
-		panic("Failed to create UserService client at " + fmt.Sprintf("%s:%d", global.Config.UserService.GetHost(), global.Config.UserService.GetPort()))
+		panic("Failed to create UserService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
 	return &userClient{

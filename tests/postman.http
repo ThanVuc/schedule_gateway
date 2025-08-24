@@ -1,6 +1,34 @@
 ### check health
 GET http://localhost:8080/api/v1/health
 
+### logout
+POST http://localhost:8080/api/v1/auth/logout
+Content-Type: application/json
+X-CSRF-Token: vaUZmLaDmIIiAFthm8m-4cS0dB8=
+
+{
+  "github_access_token": ""
+}
+
+### register user
+POST http://localhost:8080/api/v1/auth/login-with-google
+Content-Type: application/json
+X-CSRF-Token: fT685LIJeUaGqAid5Ql7xP0guHs=
+
+{
+  "google_access_token": ""
+}
+
+### assign role to user
+POST http://localhost:8080/api/v1/users/assign-role
+Content-Type: application/json
+X-CSRF-Token: vaUZmLaDmIIiAFthm8m-4cS0dB8=
+
+{
+  "user_id": "1c1166c4-1c0e-4d69-ab5c-becd9de3fec5",
+  "role_ids": ["340fb180-f40b-4eb5-aad7-abb68f3b983b", "aad64c3d-9df0-4d67-ae95-d6db9e58b7f1"]
+}
+
 ### get csrf token
 GET http://localhost:8080/api/v1/auth/csrf-token
 
@@ -15,7 +43,9 @@ Content-Type: application/json
   "actions_ids": ["31", "33"]
 }
 
-###
+### Get List Users
+GET http://localhost:8081/api/v1/users?page=1&page_size=5
+
 
 ### Update Permission
 PUT http://localhost:8080/api/v1/permissions/7a69ff7
@@ -29,7 +59,7 @@ Content-Type: application/json
 }
 
 ### get all permissions
-GET http://localhost:8080/api/v1/permissions?page=1&page_size=5
+GET http://localhost:8081/api/v1/permissions?page=1&page_size=5
 
 ### get permission
 GET http://localhost:8080/api/v1/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330a
@@ -38,7 +68,7 @@ GET http://localhost:8080/api/v1/permissions/1ddb3e6c-61ae-4112-bf76-1e8166e8330
 DELETE http://localhost:8080/v1/api/permissions/33f55597-be57-4b60-869d-b17ac3f6c81e
 
 ### get all roles
-GET http://localhost:8080/api/v1/roles?page=1&size=10
+GET http://localhost:8081/api/v1/roles?page=1&size=10
 
 ### get role
 GET http://localhost:8080/v1/api/roles/3475e00e-01bb-46c6-9ed4-01ad77b65e3b
