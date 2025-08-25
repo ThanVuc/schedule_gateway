@@ -6,5 +6,4 @@ const (
 	USER_RESOURCE       = "user"
 	ADMIN_USER_RESOURCE = "admin-user"
 	AUTH_RESOURCE       = "auth"
-	TOKEN_RESOURCE      = "token"
 )
