@@ -63,10 +63,58 @@ func (ac *AuthController) LoginWithGoogle(c *gin.Context) {
 	})
 }
 
+func (ac *AuthController) RefreshToken(c *gin.Context) {
+
+	req := ac.buildRefreshTokenRequest(c)
+	if req == nil {
+		return
+	}
+
+	resp, err := ac.authClient.RefreshToken(c, req)
+	if err != nil {
+		response.InternalServerError(c, "Refresh token failed")
+		return
+	}
+
+	if resp == nil || resp.Error != nil {
+		response.BadRequest(c, "Refresh token fail: "+resp.Error.Message)
+		return
+	}
+
+	accessTokenCookie := utils.GetHttpOnlyCookie("access_token", resp.AccessToken)
+	refreshTokenCookie := utils.GetHttpOnlyCookie("refresh_token", resp.RefreshToken)
+
+	http.SetCookie(c.Writer, accessTokenCookie)
+	http.SetCookie(c.Writer, refreshTokenCookie)
+	response.Ok(c, "Refresh token", gin.H{
+		"status": "Refresh successful",
+	})
+}
+
+func (ac *AuthController) buildRefreshTokenRequest(c *gin.Context) *auth.RefreshTokenRequest {
+	accessToken, err := c.Cookie("access_token")
+	if err != nil {
+		response.BadRequest(c, "Access token cookie not found")
+		return nil
+	}
+
+	refreshToken, err := c.Cookie("refresh_token")
+	if err != nil {
+		response.BadRequest(c, "Refresh token cookie not found")
+		return nil
+	}
+
+	req := &auth.RefreshTokenRequest{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}
+	return req
+}
+
 func (ac *AuthController) Logout(c *gin.Context) {
-	req := &auth.LogoutRequest{
-		AccessToken:  "",
-		RefreshToken: "",
+	req := ac.buildLogoutRequest(c)
+	if req == nil {
+		return
 	}
 
 	resp, err := ac.authClient.Logout(c, req)
@@ -75,12 +123,40 @@ func (ac *AuthController) Logout(c *gin.Context) {
 		return
 	}
 
-	if !*resp.Success {
-		response.BadRequest(c, "Logout failed")
+	if resp == nil || resp.Error != nil {
+		response.BadRequest(c, "Logout failed: "+resp.Error.Message)
 		return
 	}
 
-	response.Ok(c, "Login with GitHub called", gin.H{
-		"message": "This endpoint is not implemented yet",
+	// Clear cookies
+	rmAccessTokenCookie := utils.ClearCookie("access_token")
+	rmRefreshTokenCookie := utils.ClearCookie("refresh_token")
+
+	http.SetCookie(c.Writer, rmAccessTokenCookie)
+	http.SetCookie(c.Writer, rmRefreshTokenCookie)
+
+	response.Ok(c, "Logout", gin.H{
+		"status": "logout successful",
 	})
+}
+
+func (ac *AuthController) buildLogoutRequest(c *gin.Context) *auth.LogoutRequest {
+	accessToken, err := c.Cookie("access_token")
+	if err != nil {
+		response.BadRequest(c, "Access token cookie not found")
+		return nil
+	}
+
+	refreshToken, err := c.Cookie("refresh_token")
+	if err != nil {
+		response.BadRequest(c, "Refresh token cookie not found")
+		return nil
+	}
+
+	req := &auth.LogoutRequest{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}
+
+	return req
 }
