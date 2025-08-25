@@ -44,10 +44,11 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 		authRouterPrivate.POST("refresh-token", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.REFRESH_TOKEN_ACTION), authController.RefreshToken)
 		authRouterPrivate.POST("logout", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.LOGOUT_ACTION), authController.Logout)
 	}
+
+	RegisterAuthRouterResource()
 }
 
 func RegisterAuthRouterResource() {
-	// Register the resources and their permissions
 	resoucePredefine := helper.InitResources()
 
 	register := helper.NewResourceRegiseter(resoucePredefine.AuthResource.Id)
