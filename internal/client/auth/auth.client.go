@@ -45,3 +45,14 @@ func (a *authClient) SaveRouteResource(ctx context.Context, req *auth.SaveRouteR
 	}
 	return resp, nil
 }
+
+func (a *authClient) RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.authClient.RefreshToken(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

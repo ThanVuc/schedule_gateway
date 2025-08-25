@@ -4,6 +4,10 @@ import (
 	"net/http"
 	"schedule_gateway/global"
 	controller "schedule_gateway/internal/controller/auth"
+	"schedule_gateway/internal/helper"
+	"schedule_gateway/internal/middlewares"
+	constant "schedule_gateway/internal/routers/constant"
+	"schedule_gateway/proto/auth"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -34,4 +38,27 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 			})
 		})
 	}
+
+	authRouterPrivate := routerGroup.Group("auth")
+	{
+		authRouterPrivate.POST("refresh-token", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.REFRESH_TOKEN_ACTION), authController.RefreshToken)
+		authRouterPrivate.POST("logout", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.LOGOUT_ACTION), authController.Logout)
+	}
+}
+
+func RegisterAuthRouterResource() {
+	// Register the resources and their permissions
+	resoucePredefine := helper.InitResources()
+
+	register := helper.NewResourceRegiseter(resoucePredefine.AuthResource.Id)
+	register.AddResource(resoucePredefine.AuthResource, []*auth.Action{
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.REFRESH_TOKEN_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.LOGOUT_ACTION,
+		},
+	})
 }

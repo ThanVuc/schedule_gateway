@@ -29,3 +29,18 @@ func GetHttpOnlyCookie(name, value string) *http.Cookie {
 
 	return cookie
 }
+
+func ClearCookie(name string) *http.Cookie {
+	cookie := &http.Cookie{
+		Name:     name,
+		Value:    "",
+		Path:     "/",
+		Domain:   "",
+		MaxAge:   -1,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteNoneMode,
+	}
+
+	return cookie
+}
