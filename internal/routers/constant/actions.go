@@ -27,3 +27,8 @@ const (
 const (
 	ASSIGN_ROLE_ACTION = "assign_role"
 )
+
+// auth resource actions
+const (
+	ME_ACTION = "me"
+)
