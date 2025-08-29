@@ -67,3 +67,14 @@ func (a *authClient) CheckPermission(c *gin.Context, req *auth.CheckPermissionRe
 	}
 	return resp, nil
 }
+
+func (a *authClient) GetUserActionsAndResources(c *gin.Context, req *auth.GetUserActionsAndResourcesRequest) (*auth.GetUserActionsAndResourcesResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.authClient.GetUserActionsAndResources(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

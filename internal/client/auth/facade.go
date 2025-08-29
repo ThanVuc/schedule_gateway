@@ -20,6 +20,7 @@ type (
 		SaveRouteResource(context context.Context, req *auth.SaveRouteResourceRequest) (*auth.SaveRouteResourceResponse, error)
 		RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
 		CheckPermission(c *gin.Context, req *auth.CheckPermissionRequest) (*auth.CheckPermissionResponse, error)
+		GetUserActionsAndResources(c *gin.Context, req *auth.GetUserActionsAndResourcesRequest) (*auth.GetUserActionsAndResourcesResponse, error)
 	}
 
 	PermissionClient interface {

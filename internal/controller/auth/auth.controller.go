@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/auth"
+	"schedule_gateway/internal/dtos"
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/auth"
@@ -159,4 +160,33 @@ func (ac *AuthController) buildLogoutRequest(c *gin.Context) *auth.LogoutRequest
 	}
 
 	return req
+}
+
+func (ac *AuthController) GetUserActionsAndResources(c *gin.Context) {
+	accessToken, err := c.Cookie("access_token")
+	if err != nil || accessToken == "" {
+		response.BadRequest(c, "Access token cookie not found")
+		return
+	}
+
+	req := &auth.GetUserActionsAndResourcesRequest{
+		AccessToken: accessToken,
+	}
+
+	resp, err := ac.authClient.GetUserActionsAndResources(c, req)
+	if err != nil {
+		response.InternalServerError(c, "Get user auth info failed")
+		return
+	}
+
+	if resp == nil || resp.Error != nil {
+		response.InternalServerError(c, "Get user auth info failed: "+resp.Error.Message)
+		return
+	}
+
+	response.Ok(c, "Get user auth info", dtos.UserAuthInfo{
+		UserId:      resp.UserId,
+		Email:       resp.Email,
+		Permissions: resp.Permissions,
+	})
 }
