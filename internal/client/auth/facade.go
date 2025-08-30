@@ -43,6 +43,8 @@ type (
 	UserClient interface {
 		AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUserRequest) (*common.EmptyResponse, error)
 		GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.GetUsersResponse, error)
+		GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.GetUserResponse, error)
+		LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest) (*common.EmptyResponse, error)
 	}
 )
 

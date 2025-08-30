@@ -127,3 +127,77 @@ func (pc *UserController) buildGetUserRequest(c *gin.Context) *auth.GetUsersRequ
 
 	return &req
 }
+
+func (pc *UserController) GetUser(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		response.BadRequest(c, "User ID is required")
+		return
+	}
+
+	req := &auth.GetUserRequest{
+		UserId: id,
+	}
+
+	resp, err := pc.userClient.GetUser(c, req)
+
+	if err != nil {
+		response.InternalServerError(c, "Failed to get user: "+err.Error())
+		return
+	}
+
+	if resp == nil || resp.Error != nil {
+		response.InternalServerError(c, "Failed to get user: "+resp.Error.Message)
+		return
+	}
+
+	response.Ok(c, "GetUser successful", resp.User)
+}
+
+func (pc *UserController) LockOrUnLockUser(c *gin.Context) {
+	req, err := pc.buildLockUserRequest(c)
+	if err != nil {
+		response.BadRequest(c, err.Error())
+		return
+	}
+
+	resp, err := pc.userClient.LockOrUnLockUser(c, req)
+	if err != nil {
+		pc.logger.Error("Failed to lock user", "", zap.Error(err))
+		response.InternalServerError(c, "Failed to lock user")
+		return
+	}
+
+	if resp == nil || resp.Error != nil {
+		msg := "Failed to lock user"
+		if resp != nil && resp.Error != nil {
+			msg = resp.Error.Message
+		}
+		response.InternalServerError(c, msg)
+		return
+	}
+
+	response.Ok(c, "LockUser successful", resp)
+}
+
+func (pc *UserController) buildLockUserRequest(c *gin.Context) (*auth.LockUserRequest, error) {
+	var body struct {
+		UserID     string  `json:"user_id"`
+		LockReason *string `json:"lock_reason"`
+	}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		return nil, fmt.Errorf("invalid request body")
+	}
+
+	if body.UserID == "" {
+		return nil, fmt.Errorf("user_id is required")
+	}
+
+	req := &auth.LockUserRequest{
+		UserId:     body.UserID,
+		LockReason: body.LockReason,
+	}
+
+	return req, nil
+}
