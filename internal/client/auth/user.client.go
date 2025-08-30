@@ -36,3 +36,28 @@ func (p *userClient) GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.
 	}
 	return resp, nil
 }
+
+
+func (p *userClient) GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.GetUserResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := p.userClient.GetUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (p *userClient) LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest) (*common.EmptyResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := p.userClient.LockOrUnLockUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+

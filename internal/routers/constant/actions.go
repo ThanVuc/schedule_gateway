@@ -25,7 +25,10 @@ const (
 
 // admin users actions
 const (
-	ASSIGN_ROLE_ACTION = "assign_role"
+	ASSIGN_ROLE_ACTION    = "assign_role"
+	READ_ALL_USERS_ACTION = "read_all"
+	READ_ONE_USER_ACTION  = "read_one"
+	LOCK_USER_ACTION      = "lock_user"
 )
 
 // auth resource actions
