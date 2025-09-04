@@ -62,9 +62,16 @@ func (uc *UserController) buildAssignRoleToUserRequest(c *gin.Context) (*auth.As
 	}
 
 	roleIDSInterface, ok := body["role_ids"].([]interface{})
-	if !ok || len(roleIDSInterface) == 0 {
+	if !ok {
 		response.BadRequest(c, "Role ID is required")
 		return nil, fmt.Errorf("role_id is required")
+	}
+
+	if len(roleIDSInterface) == 0 {
+		return &auth.AssignRoleToUserRequest{
+			UserId:  userID,
+			RoleIds: []string{},
+		}, nil
 	}
 
 	roleIDs := make([]string, 0)
