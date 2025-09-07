@@ -17,7 +17,7 @@ func (p *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	// private router
 	permissionRouterPrivate := Router.Group("profile")
 	{
-		permissionRouterPrivate.GET("/", middlewares.CheckPerm(constant.USER_RESOURCE, constant.READ_ONE_ACTION), userController.GetUserProfile)
+		permissionRouterPrivate.GET("", middlewares.CheckPerm(constant.USER_RESOURCE, constant.READ_ONE_ACTION), userController.GetUserProfile)
 		permissionRouterPrivate.PUT("/update", middlewares.CheckPerm(constant.USER_RESOURCE, constant.UPDATE_ACTION), userController.UpdateUserInfo)
 	}
 	RegisterPermissionRouterResource()
