@@ -53,6 +53,7 @@ func CheckPerm(resource string, action string) gin.HandlerFunc {
 			response.Forbidden(c, "Forbidden: unspecified permission")
 			return
 		case auth.PERMISSION_STATUS_ALLOWED:
+			c.Set("user_id", resp.UserId)
 			c.Next()
 		default:
 			response.InternalServerError(c, "Internal server error: unknown permission status")
