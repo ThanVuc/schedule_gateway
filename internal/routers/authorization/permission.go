@@ -20,6 +20,8 @@ func (p *PermissionRouter) InitPermissionRouter(Router *gin.RouterGroup) {
 	{
 		permissionRouterPrivate.GET("", middlewares.CheckPerm(constant.PERMISSION_RESOURCE, constant.READ_ALL_ACTION), permissionController.GetPermissions)
 
+		permissionRouterPrivate.GET("/assign", middlewares.CheckPerm(constant.PERMISSION_RESOURCE, constant.READ_ALL_ASSIGNED_ACTION), permissionController.GetPermissions)
+
 		permissionRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.PERMISSION_RESOURCE, constant.READ_ONE_ACTION), permissionController.GetPermission)
 
 		permissionRouterPrivate.POST("", middlewares.CheckPerm(constant.PERMISSION_RESOURCE, constant.CREATE_ACTION), permissionController.UpsertPermission)
@@ -68,6 +70,10 @@ func RegisterPermissionRouterResource() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.READ_ACTIONS_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ALL_ASSIGNED_ACTION,
 		},
 	})
 }
