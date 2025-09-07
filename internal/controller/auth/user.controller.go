@@ -184,7 +184,7 @@ func (pc *UserController) LockOrUnLockUser(c *gin.Context) {
 		return
 	}
 
-	response.Ok(c, "LockUser successful", resp)
+	response.Ok(c, "Lock/UnLock User successful", resp)
 }
 
 func (pc *UserController) buildLockUserRequest(c *gin.Context) (*auth.LockUserRequest, error) {

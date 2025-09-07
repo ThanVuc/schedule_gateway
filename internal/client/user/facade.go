@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"schedule_gateway/global"
 	"schedule_gateway/pkg/settings"
+	"schedule_gateway/proto/common"
 	"schedule_gateway/proto/user"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ import (
 type (
 	UserClient interface {
 		GetUserProfile(c *gin.Context, req *user.GetUserProfileRequest) (*user.GetUserProfileResponse, error)
+		UpdateUserProfile(c *gin.Context, req *user.UpdateUserProfileRequest) (*common.EmptyResponse, error)
 	}
 )
 
