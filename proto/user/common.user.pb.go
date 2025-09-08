@@ -22,21 +22,22 @@ const (
 )
 
 type UserProfileItem struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Fullname      string                 `protobuf:"bytes,2,opt,name=fullname,proto3" json:"fullname"`
-	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email"`
-	AvatarUrl     string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url"`
-	Bio           string                 `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio"`
-	Slug          string                 `protobuf:"bytes,6,opt,name=slug,proto3" json:"slug"`
-	DateOfBirth   int64                  `protobuf:"varint,7,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth"`
-	Gender        bool                   `protobuf:"varint,8,opt,name=gender,proto3" json:"gender"`
-	CreatedAt     int64                  `protobuf:"varint,9,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
-	UpdatedAt     int64                  `protobuf:"varint,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
-	Sentence      string                 `protobuf:"bytes,11,opt,name=sentence,proto3" json:"sentence"`
-	Author        string                 `protobuf:"bytes,12,opt,name=author,proto3" json:"author"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                      protoimpl.MessageState `protogen:"open.v1"`
+	Id                         string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Fullname                   string                 `protobuf:"bytes,2,opt,name=fullname,proto3" json:"fullname"`
+	Email                      string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email"`
+	AvatarUrl                  string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url"`
+	Bio                        string                 `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio"`
+	Slug                       string                 `protobuf:"bytes,6,opt,name=slug,proto3" json:"slug"`
+	DateOfBirth                int64                  `protobuf:"varint,7,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth"`
+	Gender                     bool                   `protobuf:"varint,8,opt,name=gender,proto3" json:"gender"`
+	CreatedAt                  int64                  `protobuf:"varint,9,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt                  int64                  `protobuf:"varint,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	Sentence                   string                 `protobuf:"bytes,11,opt,name=sentence,proto3" json:"sentence"`
+	Author                     string                 `protobuf:"bytes,12,opt,name=author,proto3" json:"author"`
+	ProfileCompletedPercentage int32                  `protobuf:"varint,13,opt,name=profile_completed_percentage,json=profileCompletedPercentage,proto3" json:"profile_completed_percentage"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
 }
 
 func (x *UserProfileItem) Reset() {
@@ -153,11 +154,18 @@ func (x *UserProfileItem) GetAuthor() string {
 	return ""
 }
 
+func (x *UserProfileItem) GetProfileCompletedPercentage() int32 {
+	if x != nil {
+		return x.ProfileCompletedPercentage
+	}
+	return 0
+}
+
 var File_user_service_common_user_proto protoreflect.FileDescriptor
 
 const file_user_service_common_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1euser_service/common.user.proto\x12\x04user\"\xc6\x02\n" +
+	"\x1euser_service/common.user.proto\x12\x04user\"\x88\x03\n" +
 	"\x0fUserProfileItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\bfullname\x18\x02 \x01(\tR\bfullname\x12\x14\n" +
@@ -174,7 +182,8 @@ const file_user_service_common_user_proto_rawDesc = "" +
 	"updated_at\x18\n" +
 	" \x01(\x03R\tupdatedAt\x12\x1a\n" +
 	"\bsentence\x18\v \x01(\tR\bsentence\x12\x16\n" +
-	"\x06author\x18\f \x01(\tR\x06authorB\fZ\n" +
+	"\x06author\x18\f \x01(\tR\x06author\x12@\n" +
+	"\x1cprofile_completed_percentage\x18\r \x01(\x05R\x1aprofileCompletedPercentageB\fZ\n" +
 	"proto/userb\x06proto3"
 
 var (
