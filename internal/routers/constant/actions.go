@@ -8,7 +8,6 @@ const (
 	CREATE_ACTION             = "create"
 	DELETE_ACTION             = "delete"
 	ENABLE_AND_DISABLE_ACTION = "enable_and_disable"
-	READ_ALL_ASSIGNED_ACTION  = "read_all_assigned"
 )
 
 // action and resource constants
