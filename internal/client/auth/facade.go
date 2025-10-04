@@ -21,6 +21,7 @@ type (
 		RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
 		CheckPermission(c *gin.Context, req *auth.CheckPermissionRequest) (*auth.CheckPermissionResponse, error)
 		GetUserActionsAndResources(c *gin.Context, req *auth.GetUserActionsAndResourcesRequest) (*auth.GetUserActionsAndResourcesResponse, error)
+		SyncDatabase(c *gin.Context, req *common.SyncDatabaseRequest) (*common.EmptyResponse, error)
 	}
 
 	PermissionClient interface {
@@ -64,9 +65,15 @@ func NewAuthClient() AuthClient {
 		panic("Failed to create AuthService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
+	commonClient := common.NewSyncDatabaseServiceClient(conn)
+	if commonClient == nil {
+		panic("Failed to create SyncDatabaseService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
+	}
+
 	return &authClient{
-		logger:     global.Logger,
-		authClient: client,
+		logger:             global.Logger,
+		authClient:         client,
+		syncDatabaseClient: commonClient,
 	}
 }
 
