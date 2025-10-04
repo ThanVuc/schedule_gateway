@@ -6,21 +6,19 @@ require (
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.10.1
 	github.com/google/uuid v1.6.0
-	github.com/thanvuc/go-core-lib v1.0.2
+	github.com/thanvuc/go-core-lib v1.1.2
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.73.0
 )
 
 require (
 	github.com/dchest/uniuri v0.0.0-20160212164326-8902c56451e9 // indirect
-	github.com/gin-contrib/cors v1.7.6 // indirect
 	github.com/gin-contrib/sessions v1.0.4 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gorilla/sessions v1.4.0 // indirect
-	github.com/thanvuc/go-core-lib v1.0.2 // indirect
-	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca // indirect
 	github.com/spf13/viper v1.20.1 // indirect
+	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
 )
 
