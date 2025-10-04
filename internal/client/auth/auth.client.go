@@ -11,8 +11,9 @@ import (
 )
 
 type authClient struct {
-	logger     log.Logger
-	authClient auth.AuthServiceClient
+	logger             log.Logger
+	authClient         auth.AuthServiceClient
+	syncDatabaseClient common.SyncDatabaseServiceClient
 }
 
 func (a *authClient) LoginWithGoogle(c *gin.Context, req *auth.LoginWithGoogleRequest) (*auth.LoginWithGoogleResponse, error) {
@@ -76,5 +77,17 @@ func (a *authClient) GetUserActionsAndResources(c *gin.Context, req *auth.GetUse
 	if err != nil {
 		return nil, err
 	}
+	return resp, nil
+}
+
+func (a *authClient) SyncDatabase(c *gin.Context, req *common.SyncDatabaseRequest) (*common.EmptyResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.syncDatabaseClient.SyncDatabase(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
 	return resp, nil
 }

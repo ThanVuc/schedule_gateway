@@ -44,6 +44,7 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 		authRouterPrivate.POST("refresh-token", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.REFRESH_TOKEN_ACTION), authController.RefreshToken)
 		authRouterPrivate.POST("logout", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.LOGOUT_ACTION), authController.Logout)
 		authRouterPrivate.GET("me", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.ME_ACTION), authController.GetUserActionsAndResources)
+		authRouterPrivate.POST("sync-database", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.SYNC_DATABASE_ACTION), authController.SyncDatabase)
 	}
 
 	RegisterAuthRouterResource()
@@ -65,6 +66,10 @@ func RegisterAuthRouterResource() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.ME_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.SYNC_DATABASE_ACTION,
 		},
 	})
 }

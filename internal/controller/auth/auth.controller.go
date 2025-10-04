@@ -8,6 +8,7 @@ import (
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/auth"
+	"schedule_gateway/proto/common"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanvuc/go-core-lib/log"
@@ -188,5 +189,24 @@ func (ac *AuthController) GetUserActionsAndResources(c *gin.Context) {
 		UserId:      resp.UserId,
 		Email:       resp.Email,
 		Permissions: resp.Permissions,
+	})
+}
+
+func (ac *AuthController) SyncDatabase(c *gin.Context) {
+	req := &common.SyncDatabaseRequest{}
+
+	resp, err := ac.authClient.SyncDatabase(c, req)
+	if err != nil {
+		response.InternalServerError(c, "Sync database failed")
+		return
+	}
+
+	if resp == nil || resp.Error != nil {
+		response.InternalServerError(c, "Sync database failed: "+resp.Error.Message)
+		return
+	}
+
+	response.Ok(c, "Sync database", gin.H{
+		"status": "Sync database successful",
 	})
 }

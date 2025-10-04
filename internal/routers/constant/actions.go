@@ -21,6 +21,7 @@ const (
 	LOGOUT_ACTION        = "logout"
 	REFRESH_TOKEN_ACTION = "refresh_token"
 	REVOKE_TOKEN_ACTION  = "revoke_token"
+	SYNC_DATABASE_ACTION = "sync_database"
 )
 
 // admin users actions
