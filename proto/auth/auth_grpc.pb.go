@@ -20,9 +20,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_LoginWithGoogle_FullMethodName   = "/auth.AuthService/LoginWithGoogle"
-	AuthService_Logout_FullMethodName            = "/auth.AuthService/Logout"
-	AuthService_SaveRouteResource_FullMethodName = "/auth.AuthService/SaveRouteResource"
+	AuthService_LoginWithGoogle_FullMethodName            = "/auth.AuthService/LoginWithGoogle"
+	AuthService_RefreshToken_FullMethodName               = "/auth.AuthService/RefreshToken"
+	AuthService_Logout_FullMethodName                     = "/auth.AuthService/Logout"
+	AuthService_SaveRouteResource_FullMethodName          = "/auth.AuthService/SaveRouteResource"
+	AuthService_CheckPermission_FullMethodName            = "/auth.AuthService/CheckPermission"
+	AuthService_GetUserActionsAndResources_FullMethodName = "/auth.AuthService/GetUserActionsAndResources"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -30,8 +33,11 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	LoginWithGoogle(ctx context.Context, in *LoginWithGoogleRequest, opts ...grpc.CallOption) (*LoginWithGoogleResponse, error)
+	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
 	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*common.EmptyResponse, error)
 	SaveRouteResource(ctx context.Context, in *SaveRouteResourceRequest, opts ...grpc.CallOption) (*SaveRouteResourceResponse, error)
+	CheckPermission(ctx context.Context, in *CheckPermissionRequest, opts ...grpc.CallOption) (*CheckPermissionResponse, error)
+	GetUserActionsAndResources(ctx context.Context, in *GetUserActionsAndResourcesRequest, opts ...grpc.CallOption) (*GetUserActionsAndResourcesResponse, error)
 }
 
 type authServiceClient struct {
@@ -46,6 +52,16 @@ func (c *authServiceClient) LoginWithGoogle(ctx context.Context, in *LoginWithGo
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LoginWithGoogleResponse)
 	err := c.cc.Invoke(ctx, AuthService_LoginWithGoogle_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefreshTokenResponse)
+	err := c.cc.Invoke(ctx, AuthService_RefreshToken_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -72,13 +88,36 @@ func (c *authServiceClient) SaveRouteResource(ctx context.Context, in *SaveRoute
 	return out, nil
 }
 
+func (c *authServiceClient) CheckPermission(ctx context.Context, in *CheckPermissionRequest, opts ...grpc.CallOption) (*CheckPermissionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CheckPermissionResponse)
+	err := c.cc.Invoke(ctx, AuthService_CheckPermission_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetUserActionsAndResources(ctx context.Context, in *GetUserActionsAndResourcesRequest, opts ...grpc.CallOption) (*GetUserActionsAndResourcesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserActionsAndResourcesResponse)
+	err := c.cc.Invoke(ctx, AuthService_GetUserActionsAndResources_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility.
 type AuthServiceServer interface {
 	LoginWithGoogle(context.Context, *LoginWithGoogleRequest) (*LoginWithGoogleResponse, error)
+	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
 	Logout(context.Context, *LogoutRequest) (*common.EmptyResponse, error)
 	SaveRouteResource(context.Context, *SaveRouteResourceRequest) (*SaveRouteResourceResponse, error)
+	CheckPermission(context.Context, *CheckPermissionRequest) (*CheckPermissionResponse, error)
+	GetUserActionsAndResources(context.Context, *GetUserActionsAndResourcesRequest) (*GetUserActionsAndResourcesResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -92,11 +131,20 @@ type UnimplementedAuthServiceServer struct{}
 func (UnimplementedAuthServiceServer) LoginWithGoogle(context.Context, *LoginWithGoogleRequest) (*LoginWithGoogleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginWithGoogle not implemented")
 }
+func (UnimplementedAuthServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
+}
 func (UnimplementedAuthServiceServer) Logout(context.Context, *LogoutRequest) (*common.EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
 func (UnimplementedAuthServiceServer) SaveRouteResource(context.Context, *SaveRouteResourceRequest) (*SaveRouteResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveRouteResource not implemented")
+}
+func (UnimplementedAuthServiceServer) CheckPermission(context.Context, *CheckPermissionRequest) (*CheckPermissionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckPermission not implemented")
+}
+func (UnimplementedAuthServiceServer) GetUserActionsAndResources(context.Context, *GetUserActionsAndResourcesRequest) (*GetUserActionsAndResourcesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserActionsAndResources not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 func (UnimplementedAuthServiceServer) testEmbeddedByValue()                     {}
@@ -137,6 +185,24 @@ func _AuthService_LoginWithGoogle_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).RefreshToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_RefreshToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).RefreshToken(ctx, req.(*RefreshTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LogoutRequest)
 	if err := dec(in); err != nil {
@@ -173,6 +239,42 @@ func _AuthService_SaveRouteResource_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_CheckPermission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckPermissionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).CheckPermission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_CheckPermission_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).CheckPermission(ctx, req.(*CheckPermissionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetUserActionsAndResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserActionsAndResourcesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetUserActionsAndResources(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetUserActionsAndResources_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetUserActionsAndResources(ctx, req.(*GetUserActionsAndResourcesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -185,12 +287,24 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_LoginWithGoogle_Handler,
 		},
 		{
+			MethodName: "RefreshToken",
+			Handler:    _AuthService_RefreshToken_Handler,
+		},
+		{
 			MethodName: "Logout",
 			Handler:    _AuthService_Logout_Handler,
 		},
 		{
 			MethodName: "SaveRouteResource",
 			Handler:    _AuthService_SaveRouteResource_Handler,
+		},
+		{
+			MethodName: "CheckPermission",
+			Handler:    _AuthService_CheckPermission_Handler,
+		},
+		{
+			MethodName: "GetUserActionsAndResources",
+			Handler:    _AuthService_GetUserActionsAndResources_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

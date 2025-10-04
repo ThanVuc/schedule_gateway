@@ -21,9 +21,18 @@ const (
 	LOGOUT_ACTION        = "logout"
 	REFRESH_TOKEN_ACTION = "refresh_token"
 	REVOKE_TOKEN_ACTION  = "revoke_token"
+	SYNC_DATABASE_ACTION = "sync_database"
 )
 
 // admin users actions
 const (
-	ASSIGN_ROLE_ACTION = "assign_role"
+	ASSIGN_ROLE_ACTION    = "assign_role"
+	READ_ALL_USERS_ACTION = "read_all"
+	READ_ONE_USER_ACTION  = "read_one"
+	LOCK_USER_ACTION      = "lock_user"
+)
+
+// auth resource actions
+const (
+	ME_ACTION = "me"
 )

@@ -11,8 +11,9 @@ import (
 )
 
 type authClient struct {
-	logger     log.Logger
-	authClient auth.AuthServiceClient
+	logger             log.Logger
+	authClient         auth.AuthServiceClient
+	syncDatabaseClient common.SyncDatabaseServiceClient
 }
 
 func (a *authClient) LoginWithGoogle(c *gin.Context, req *auth.LoginWithGoogleRequest) (*auth.LoginWithGoogleResponse, error) {
@@ -43,5 +44,50 @@ func (a *authClient) SaveRouteResource(ctx context.Context, req *auth.SaveRouteR
 	if err != nil {
 		return nil, err
 	}
+	return resp, nil
+}
+
+func (a *authClient) RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.authClient.RefreshToken(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (a *authClient) CheckPermission(c *gin.Context, req *auth.CheckPermissionRequest) (*auth.CheckPermissionResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.authClient.CheckPermission(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (a *authClient) GetUserActionsAndResources(c *gin.Context, req *auth.GetUserActionsAndResourcesRequest) (*auth.GetUserActionsAndResourcesResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.authClient.GetUserActionsAndResources(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (a *authClient) SyncDatabase(c *gin.Context, req *common.SyncDatabaseRequest) (*common.EmptyResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+
+	resp, err := a.syncDatabaseClient.SyncDatabase(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
 	return resp, nil
 }

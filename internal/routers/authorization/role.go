@@ -20,6 +20,8 @@ func (r *RoleRouter) InitRoleRouter(Router *gin.RouterGroup) {
 	{
 		roleRouterPrivate.GET("", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.READ_ALL_ACTION), roleController.GetRoles)
 
+		roleRouterPrivate.GET("/assign", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.READ_ONE_ACTION), roleController.GetRoles)
+
 		roleRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.READ_ONE_ACTION), roleController.GetRole)
 
 		roleRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.ROLE_RESOURCE, constant.DELETE_ACTION), roleController.DeleteRole)
@@ -64,6 +66,10 @@ func RegisterRoleRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.ENABLE_AND_DISABLE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ONE_ACTION,
 		},
 	})
 }

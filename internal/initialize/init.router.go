@@ -13,7 +13,6 @@ func InitRouter(r *gin.Engine) {
 
 	permRouter := routers.RouterGroupApp.AuthorizationRouterEnter.PermissionRouter
 	roleRouter := routers.RouterGroupApp.AuthorizationRouterEnter.RoleRouter
-	tokenRouter := routers.RouterGroupApp.AuthenticationRouterEnter.TokenRouter
 	authRouter := routers.RouterGroupApp.AuthenticationRouterEnter.AuthRouter
 	authUserRouter := routers.RouterGroupApp.AuthorizationRouterEnter.UserRouter
 	userRouter := routers.RouterGroupApp.UserRouterEnter.UserRouter
@@ -30,7 +29,6 @@ func InitRouter(r *gin.Engine) {
 	{
 		permRouter.InitPermissionRouter(MainGroup)
 		roleRouter.InitRoleRouter(MainGroup)
-		tokenRouter.InitTokenRouter(MainGroup)
 		authRouter.InitAuthRouter(MainGroup)
 		userRouter.InitUserRouter(MainGroup)
 		authUserRouter.InitUserRouter(MainGroup)

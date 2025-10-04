@@ -18,6 +18,10 @@ type (
 		LoginWithGoogle(c *gin.Context, req *auth.LoginWithGoogleRequest) (*auth.LoginWithGoogleResponse, error)
 		Logout(c *gin.Context, req *auth.LogoutRequest) (*common.EmptyResponse, error)
 		SaveRouteResource(context context.Context, req *auth.SaveRouteResourceRequest) (*auth.SaveRouteResourceResponse, error)
+		RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
+		CheckPermission(c *gin.Context, req *auth.CheckPermissionRequest) (*auth.CheckPermissionResponse, error)
+		GetUserActionsAndResources(c *gin.Context, req *auth.GetUserActionsAndResourcesRequest) (*auth.GetUserActionsAndResourcesResponse, error)
+		SyncDatabase(c *gin.Context, req *common.SyncDatabaseRequest) (*common.EmptyResponse, error)
 	}
 
 	PermissionClient interface {
@@ -37,14 +41,11 @@ type (
 		UpsertRole(c *gin.Context, req *auth.UpsertRoleRequest) (*auth.UpsertRoleResponse, error)
 	}
 
-	TokenClient interface {
-		RefreshToken(c *gin.Context, req *auth.RefreshTokenRequest) (*auth.RefreshTokenResponse, error)
-		RevokeToken(c *gin.Context, req *auth.RevokeTokenRequest) (*auth.RevokeTokenResponse, error)
-	}
-
 	UserClient interface {
 		AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUserRequest) (*common.EmptyResponse, error)
 		GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.GetUsersResponse, error)
+		GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.GetUserResponse, error)
+		LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest) (*common.EmptyResponse, error)
 	}
 )
 
@@ -64,9 +65,15 @@ func NewAuthClient() AuthClient {
 		panic("Failed to create AuthService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
 	}
 
+	commonClient := common.NewSyncDatabaseServiceClient(conn)
+	if commonClient == nil {
+		panic("Failed to create SyncDatabaseService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
+	}
+
 	return &authClient{
-		logger:     global.Logger,
-		authClient: client,
+		logger:             global.Logger,
+		authClient:         client,
+		syncDatabaseClient: commonClient,
 	}
 }
 
@@ -95,20 +102,6 @@ func NewRoleClient() RoleClient {
 	return &roleClient{
 		logger:     global.Logger,
 		roleClient: client,
-	}
-}
-
-func NewTokenClient() TokenClient {
-	conn := getConn(&global.Config.AuthService)
-
-	client := auth.NewTokenServiceClient(conn)
-	if client == nil {
-		panic("Failed to create TokenService client at " + fmt.Sprintf("%s:%d", global.Config.AuthService.GetHost(), global.Config.AuthService.GetPort()))
-	}
-
-	return &tokenClient{
-		logger:      global.Logger,
-		tokenClient: client,
 	}
 }
 
