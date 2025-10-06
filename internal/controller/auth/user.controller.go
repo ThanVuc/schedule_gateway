@@ -114,6 +114,7 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 	response.Ok(c, "Get User Successful", dtos.Users{
 		Items:      users.Users,
 		TotalUsers: users.TotalUsers,
+		TotalPages: users.PageInfo.TotalPages,
 		PageSize:   users.PageInfo.PageSize,
 		Page:       users.PageInfo.Page,
 		HasPrev:    users.PageInfo.HasPrev,

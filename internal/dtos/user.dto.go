@@ -8,5 +8,6 @@ type Users struct {
 	PageSize          int32            `json:"page_size"`
 	Page              int32            `json:"page"`
 	HasPrev           bool             `json:"has_prev"`
+	TotalPages        int32                  `json:"total_pages"`
 	HasNext           bool             `json:"has_next"`
 }
