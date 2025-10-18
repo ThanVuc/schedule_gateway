@@ -20,3 +20,11 @@ func (us *UserService) GetHost() string {
 func (us *UserService) GetPort() int {
 	return us.Port
 }
+
+func (ps *PersonalScheduleService) GetHost() string {
+	return ps.Host
+}
+
+func (ps *PersonalScheduleService) GetPort() int {
+	return ps.Port
+}
