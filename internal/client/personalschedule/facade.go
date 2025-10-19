@@ -15,6 +15,7 @@ import (
 type (
 	LabelClient interface {
 		GetLabelPerTypes(c *gin.Context, req *common.EmptyRequest) (*personal_schedule.GetLabelPerTypesResponse, error)
+		GetLabelsByTypeIDs(c *gin.Context, req *common.IDRequest) (*personal_schedule.GetLabelsByTypeIDsResponse, error)
 	}
 )
 
