@@ -40,4 +40,5 @@ const (
 // label resource actions
 const (
 	READ_ALL_LABEL_PER_TYPES_ACTION = "read_all_label_per_types"
+	READ_LABELS_BY_TYPE_ACTION      = "read_labels_by_type"
 )

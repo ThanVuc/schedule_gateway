@@ -37,6 +37,35 @@ func (lc *LabelController) GetLabelPerTypes(ctx *gin.Context) {
 	if resp != nil && resp.Error != nil {
 		if resp.Error != nil && resp.Error.ErrorCode != nil {
 			response.InternalServerError(ctx, utils.Int32PtrToString(resp.Error.ErrorCode))
+			return
+		}
+		response.InternalServerError(ctx, resp.Error.Message)
+		return
+	}
+
+	response.Ok(ctx, "Ok", resp)
+}
+
+func (lc *LabelController) GetLabelsByTypeIDs(ctx *gin.Context) {
+	var req common.IDRequest
+	req.Id = ctx.Param("type_id")
+	if req.Id == "" {
+		response.BadRequest(ctx, "type_id is required")
+		return
+	}
+
+	resp, err := lc.client.GetLabelsByTypeIDs(ctx, &req)
+	if err != nil {
+		lc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Error connecting to grpc service")
+		return
+	}
+
+	if resp != nil && resp.Error != nil {
+		if resp.Error != nil && resp.Error.ErrorCode != nil {
+			println(utils.Int32PtrToString(resp.Error.ErrorCode))
+			response.InternalServerError(ctx, utils.Int32PtrToString(resp.Error.ErrorCode))
+			return
 		}
 		response.InternalServerError(ctx, resp.Error.Message)
 		return
