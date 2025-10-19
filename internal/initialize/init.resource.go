@@ -22,7 +22,7 @@ func InitResource() {
 
 		if err != nil || resp == nil || !resp.Success {
 			failAttempt++
-			logger.Error("Failed to save resources", "", zap.Error(err), zap.Int("attempt", failAttempt))
+			logger.Warn("Failed to save resources", "", zap.Error(err), zap.Int("attempt", failAttempt))
 			time.Sleep(sleep)
 			sleep = 5 * time.Second
 			continue
