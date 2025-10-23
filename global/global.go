@@ -4,6 +4,7 @@ import (
 	"schedule_gateway/pkg/settings"
 
 	"github.com/thanvuc/go-core-lib/log"
+	"github.com/thanvuc/go-core-lib/storage"
 )
 
 /*
@@ -14,4 +15,5 @@ import (
 var (
 	Config settings.Config
 	Logger log.Logger
+	R2Client  *storage.R2Client
 )

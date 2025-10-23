@@ -17,6 +17,7 @@ type Config struct {
 	CsrfSecret              string                  `mapstructure:"csrf_secret" json:"csrf_secret" yaml:"csrf_secret"`
 	SessionSecret           string                  `mapstructure:"session_secret" json:"session_secret" yaml:"session_secret"`
 	PersonalScheduleService PersonalScheduleService `mapstructure:"personal_schedule_service" json:"personal_schedule_service" yaml:"personal_schedule_service"`
+	R2                      R2                      `mapstructure:"r2" json:"r2" yaml:"r2"`
 }
 
 type Server struct {
@@ -42,4 +43,14 @@ type UserService struct {
 type PersonalScheduleService struct {
 	Host string `mapstructure:"host" json:"host" yaml:"host"`
 	Port int    `mapstructure:"port" json:"port" yaml:"port"`
+}
+
+type R2 struct {
+	AccountID       string `mapstructure:"account_id" json:"account_id" yaml:"account_id"`
+	Endpoint        string `mapstructure:"endpoint" json:"endpoint" yaml:"endpoint"`
+	AccessKeyID     string `mapstructure:"access_key_id" json:"access_key_id" yaml:"access_key_id"`
+	SecrecAccessKey string `mapstructure:"secret_access_key" json:"secret_access_key" yaml:"secret_access_key"`
+	BucketName      string `mapstructure:"bucket" json:"bucket" yaml:"bucket"`
+	UseSSL          bool   `mapstructure:"use_ssl" json:"use_ssl" yaml:"use_ssl"`
+	PublicURL       string `mapstructure:"public_url" json:"public_url" yaml:"public_url"`
 }
