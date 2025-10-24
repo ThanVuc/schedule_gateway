@@ -20,7 +20,8 @@ func (u *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouterPrivate.POST("assign-role", middlewares.CheckPerm(constant.ADMIN_USER_RESOURCE, constant.ASSIGN_ROLE_ACTION), userController.AssignRoleToUser)
 		userRouterPrivate.GET("", middlewares.CheckPerm(constant.ADMIN_USER_RESOURCE, constant.READ_ALL_USERS_ACTION), userController.GetUsers)
 		userRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.ADMIN_USER_RESOURCE, constant.READ_ONE_USER_ACTION), userController.GetUser)
-		userRouterPrivate.PUT("lock-user", middlewares.CheckPerm(constant.ADMIN_USER_RESOURCE, constant.LOCK_USER_ACTION),  userController.LockOrUnLockUser)
+		userRouterPrivate.PUT("lock-user", middlewares.CheckPerm(constant.ADMIN_USER_RESOURCE, constant.LOCK_USER_ACTION), userController.LockOrUnLockUser)
+		userRouterPrivate.POST("avatar-presigned-url", middlewares.CheckPerm(constant.USER_RESOURCE, constant.UPDATE_ACTION), userController.PresignUrlForAvatarUpsert)
 	}
 	RegisterUserRouterResouce()
 }
@@ -46,6 +47,10 @@ func RegisterUserRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.LOCK_USER_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.UPDATE_ACTION,
 		},
 	})
 }
