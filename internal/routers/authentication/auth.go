@@ -37,11 +37,11 @@ func (ar *AuthRouter) InitAuthRouter(routerGroup *gin.RouterGroup) {
 				"csrf_token": csrf.GetToken(ctx),
 			})
 		})
+		authRouterPublic.POST("refresh-token", authController.RefreshToken)
 	}
 
 	authRouterPrivate := routerGroup.Group("auth")
 	{
-		authRouterPrivate.POST("refresh-token", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.REFRESH_TOKEN_ACTION), authController.RefreshToken)
 		authRouterPrivate.POST("logout", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.LOGOUT_ACTION), authController.Logout)
 		authRouterPrivate.GET("me", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.ME_ACTION), authController.GetUserActionsAndResources)
 		authRouterPrivate.POST("sync-database", middlewares.CheckPerm(constant.AUTH_RESOURCE, constant.SYNC_DATABASE_ACTION), authController.SyncDatabase)
@@ -55,10 +55,6 @@ func RegisterAuthRouterResource() {
 
 	register := helper.NewResourceRegiseter(resoucePredefine.AuthResource.Id)
 	register.AddResource(resoucePredefine.AuthResource, []*auth.Action{
-		{
-			Id:   register.GenerateActionId(),
-			Name: constant.REFRESH_TOKEN_ACTION,
-		},
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.LOGOUT_ACTION,
