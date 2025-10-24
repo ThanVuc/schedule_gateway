@@ -119,19 +119,21 @@ func (x *GetUserProfileResponse) GetError() *common.Error {
 }
 
 type UpdateUserProfileRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Fullname      string                 `protobuf:"bytes,2,opt,name=fullname,proto3" json:"fullname"`
-	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email"`
-	AvatarUrl     string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url"`
-	Bio           string                 `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio"`
-	Slug          string                 `protobuf:"bytes,6,opt,name=slug,proto3" json:"slug"`
-	DateOfBirth   int64                  `protobuf:"varint,7,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth"`
-	Gender        bool                   `protobuf:"varint,8,opt,name=gender,proto3" json:"gender"`
-	Sentence      string                 `protobuf:"bytes,9,opt,name=sentence,proto3" json:"sentence"`
-	Author        string                 `protobuf:"bytes,10,opt,name=author,proto3" json:"author"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Fullname       string                 `protobuf:"bytes,2,opt,name=fullname,proto3" json:"fullname"`
+	Email          string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email"`
+	AvatarUrl      string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url"`
+	Bio            string                 `protobuf:"bytes,5,opt,name=bio,proto3" json:"bio"`
+	Slug           string                 `protobuf:"bytes,6,opt,name=slug,proto3" json:"slug"`
+	DateOfBirth    int64                  `protobuf:"varint,7,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth"`
+	Gender         bool                   `protobuf:"varint,8,opt,name=gender,proto3" json:"gender"`
+	Sentence       string                 `protobuf:"bytes,9,opt,name=sentence,proto3" json:"sentence"`
+	Author         string                 `protobuf:"bytes,10,opt,name=author,proto3" json:"author"`
+	AvatarFileData []byte                 `protobuf:"bytes,11,opt,name=avatar_file_data,json=avatarFileData,proto3,oneof" json:"avatar_file_data"`
+	AvatarFileName *string                `protobuf:"bytes,12,opt,name=avatar_file_name,json=avatarFileName,proto3,oneof" json:"avatar_file_name"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *UpdateUserProfileRequest) Reset() {
@@ -234,6 +236,20 @@ func (x *UpdateUserProfileRequest) GetAuthor() string {
 	return ""
 }
 
+func (x *UpdateUserProfileRequest) GetAvatarFileData() []byte {
+	if x != nil {
+		return x.AvatarFileData
+	}
+	return nil
+}
+
+func (x *UpdateUserProfileRequest) GetAvatarFileName() string {
+	if x != nil && x.AvatarFileName != nil {
+		return *x.AvatarFileName
+	}
+	return ""
+}
+
 var File_user_service_user_proto protoreflect.FileDescriptor
 
 const file_user_service_user_proto_rawDesc = "" +
@@ -244,7 +260,7 @@ const file_user_service_user_proto_rawDesc = "" +
 	"\x16GetUserProfileResponse\x121\n" +
 	"\bprofiles\x18\x01 \x01(\v2\x15.user.UserProfileItemR\bprofiles\x12(\n" +
 	"\x05error\x18\x02 \x01(\v2\r.common.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x91\x02\n" +
+	"\x06_error\"\x99\x03\n" +
 	"\x18UpdateUserProfileRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\bfullname\x18\x02 \x01(\tR\bfullname\x12\x14\n" +
@@ -257,7 +273,11 @@ const file_user_service_user_proto_rawDesc = "" +
 	"\x06gender\x18\b \x01(\bR\x06gender\x12\x1a\n" +
 	"\bsentence\x18\t \x01(\tR\bsentence\x12\x16\n" +
 	"\x06author\x18\n" +
-	" \x01(\tR\x06author2\xa6\x01\n" +
+	" \x01(\tR\x06author\x12-\n" +
+	"\x10avatar_file_data\x18\v \x01(\fH\x00R\x0eavatarFileData\x88\x01\x01\x12-\n" +
+	"\x10avatar_file_name\x18\f \x01(\tH\x01R\x0eavatarFileName\x88\x01\x01B\x13\n" +
+	"\x11_avatar_file_dataB\x13\n" +
+	"\x11_avatar_file_name2\xa6\x01\n" +
 	"\vUserService\x12K\n" +
 	"\x0eGetUserProfile\x12\x1b.user.GetUserProfileRequest\x1a\x1c.user.GetUserProfileResponse\x12J\n" +
 	"\x11UpdateUserProfile\x12\x1e.user.UpdateUserProfileRequest\x1a\x15.common.EmptyResponseB\fZ\n" +
@@ -305,6 +325,7 @@ func file_user_service_user_proto_init() {
 	}
 	file_user_service_common_user_proto_init()
 	file_user_service_user_proto_msgTypes[1].OneofWrappers = []any{}
+	file_user_service_user_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

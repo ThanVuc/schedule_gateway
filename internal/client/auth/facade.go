@@ -46,6 +46,7 @@ type (
 		GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.GetUsersResponse, error)
 		GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.GetUserResponse, error)
 		LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest) (*common.EmptyResponse, error)
+		PresignUrlForAvatarUpsert(c *gin.Context, req *auth.PresignUrlRequest) (*auth.PresignRequestUrlForAvatarUpsertResponse, error)
 	}
 )
 

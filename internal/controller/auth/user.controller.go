@@ -209,3 +209,54 @@ func (pc *UserController) buildLockUserRequest(c *gin.Context) (*auth.LockUserRe
 
 	return req, nil
 }
+
+func (uc *UserController) PresignUrlForAvatarUpsert(c *gin.Context) {
+	id := c.GetString("user_id")
+	if id == "" {
+		response.BadRequest(c, "User ID is required")
+		return
+	}
+
+	var body struct {
+		ObjectKey *string `json:"object_key"`
+		IsDelete  *bool   `json:"is_delete"`
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		if err.Error() != "EOF" {
+			response.BadRequest(c, "Invalid request body!")
+			return
+		}
+	}
+
+	var req *auth.PresignUrlRequest
+	if body.IsDelete != nil && *body.IsDelete {
+		req = &auth.PresignUrlRequest{
+			Id:        id,
+			IsDelete:  body.IsDelete,
+			ObjectKey: body.ObjectKey,
+		}
+	} else {
+		if body.ObjectKey == nil {
+			req = &auth.PresignUrlRequest{
+				Id: id,
+			}
+		} else {
+			req = &auth.PresignUrlRequest{
+				Id:        id,
+				ObjectKey: body.ObjectKey,
+			}
+		}
+	}
+
+	resp, err := uc.userClient.PresignUrlForAvatarUpsert(c, req)
+	if err != nil {
+		response.InternalServerError(c, "Failed to get pre-signed URL! ")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(c, "Failed to get pre-signed URL!")
+		return
+	}
+	response.Ok(c, "PresignUrlForAvatarUpsert successful", resp)
+}

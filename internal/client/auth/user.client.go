@@ -20,7 +20,7 @@ func (uc *userClient) AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUse
 	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
 
 	resp, err := uc.userClient.AssignRoleToUser(ctx, req)
-		if err != nil {
+	if err != nil {
 		return nil, err
 	}
 	return resp, nil
@@ -36,7 +36,6 @@ func (p *userClient) GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.
 	}
 	return resp, nil
 }
-
 
 func (p *userClient) GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.GetUserResponse, error) {
 	ctx := context.Background()
@@ -60,4 +59,13 @@ func (p *userClient) LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest)
 	return resp, nil
 }
 
+func (p *userClient) PresignUrlForAvatarUpsert(c *gin.Context, req *auth.PresignUrlRequest) (*auth.PresignRequestUrlForAvatarUpsertResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
 
+	resp, err := p.userClient.PresignUrlForAvatarUpsert(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
