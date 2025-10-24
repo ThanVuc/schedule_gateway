@@ -44,6 +44,11 @@ func Run() {
 		Secret:        global.Config.CsrfSecret,
 		IgnoreMethods: []string{"GET", "HEAD", "OPTIONS"},
 		ErrorFunc: func(c *gin.Context) {
+			if c.Request.URL.Path == "/api/v1/auth/refresh-token" {
+				c.Next()
+				return
+			}
+
 			response.Forbidden(c, "CSRF token mismatch")
 			c.Abort()
 		},
