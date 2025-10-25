@@ -218,7 +218,7 @@ func (uc *UserController) PresignUrlForAvatarUpsert(c *gin.Context) {
 	}
 
 	var body struct {
-		ObjectKey *string `json:"object_key"`
+		PublicUrl  *string `json:"public_url"`
 		IsDelete  *bool   `json:"is_delete"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -233,17 +233,17 @@ func (uc *UserController) PresignUrlForAvatarUpsert(c *gin.Context) {
 		req = &auth.PresignUrlRequest{
 			Id:        id,
 			IsDelete:  body.IsDelete,
-			ObjectKey: body.ObjectKey,
+			PublicUrl: body.PublicUrl,
 		}
 	} else {
-		if body.ObjectKey == nil {
+		if body.PublicUrl == nil {
 			req = &auth.PresignUrlRequest{
 				Id: id,
 			}
 		} else {
 			req = &auth.PresignUrlRequest{
 				Id:        id,
-				ObjectKey: body.ObjectKey,
+				PublicUrl: body.PublicUrl,
 			}
 		}
 	}
