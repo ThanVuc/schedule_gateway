@@ -17,6 +17,10 @@ type (
 		GetLabelPerTypes(c *gin.Context, req *common.EmptyRequest) (*personal_schedule.GetLabelPerTypesResponse, error)
 		GetLabelsByTypeIDs(c *gin.Context, req *common.IDRequest) (*personal_schedule.GetLabelsByTypeIDsResponse, error)
 	}
+
+	GoalClient interface {
+		GetGoals(c *gin.Context, req *personal_schedule.GetGoalsRequest) (*personal_schedule.GetGoalsResponse, error)
+	}
 )
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {
@@ -38,5 +42,19 @@ func NewLabelClient() LabelClient {
 	return &labelClient{
 		logger:      global.Logger,
 		labelClient: client,
+	}
+}
+
+func NewGoalClient() GoalClient {
+	conn := getConn(&global.Config.PersonalScheduleService)
+
+	client := personal_schedule.NewGoalServiceClient(conn)
+	if client == nil {
+		panic("Failed to create GoalService client at " + fmt.Sprintf("%s:%d", global.Config.PersonalScheduleService.GetHost(), global.Config.PersonalScheduleService.GetPort()))
+	}
+
+	return &goalClient{
+		logger:     global.Logger,
+		goalClient: client,
 	}
 }
