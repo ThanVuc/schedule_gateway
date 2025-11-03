@@ -7,5 +7,6 @@ const (
 	ADMIN_USER_RESOURCE   = "admin-user"
 	AUTH_RESOURCE         = "auth"
 	LABEL_RESOURCE        = "label"
+	GOAL_RESOURCE         = "goal"
 	NOTIFICATION_RESOURCE = "notification"
 )
