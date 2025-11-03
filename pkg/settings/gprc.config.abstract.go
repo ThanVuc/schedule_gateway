@@ -28,3 +28,11 @@ func (ps *PersonalScheduleService) GetHost() string {
 func (ps *PersonalScheduleService) GetPort() int {
 	return ps.Port
 }
+
+func (ns *NotificationService) GetHost() string {
+	return ns.Host
+}
+
+func (ns *NotificationService) GetPort() int {
+	return ns.Port
+}
