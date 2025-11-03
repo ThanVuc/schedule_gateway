@@ -234,6 +234,58 @@ func (x *UpdateUserProfileRequest) GetAuthor() string {
 	return ""
 }
 
+type GetPresignedAvatarURLResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url"`
+	Error         *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPresignedAvatarURLResponse) Reset() {
+	*x = GetPresignedAvatarURLResponse{}
+	mi := &file_user_service_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPresignedAvatarURLResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPresignedAvatarURLResponse) ProtoMessage() {}
+
+func (x *GetPresignedAvatarURLResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPresignedAvatarURLResponse.ProtoReflect.Descriptor instead.
+func (*GetPresignedAvatarURLResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetPresignedAvatarURLResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *GetPresignedAvatarURLResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_user_service_user_proto protoreflect.FileDescriptor
 
 const file_user_service_user_proto_rawDesc = "" +
@@ -257,10 +309,15 @@ const file_user_service_user_proto_rawDesc = "" +
 	"\x06gender\x18\b \x01(\bR\x06gender\x12\x1a\n" +
 	"\bsentence\x18\t \x01(\tR\bsentence\x12\x16\n" +
 	"\x06author\x18\n" +
-	" \x01(\tR\x06author2\xa6\x01\n" +
+	" \x01(\tR\x06author\"e\n" +
+	"\x1dGetPresignedAvatarURLResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12(\n" +
+	"\x05error\x18\x02 \x01(\v2\r.common.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xfa\x01\n" +
 	"\vUserService\x12K\n" +
 	"\x0eGetUserProfile\x12\x1b.user.GetUserProfileRequest\x1a\x1c.user.GetUserProfileResponse\x12J\n" +
-	"\x11UpdateUserProfile\x12\x1e.user.UpdateUserProfileRequest\x1a\x15.common.EmptyResponseB\fZ\n" +
+	"\x11UpdateUserProfile\x12\x1e.user.UpdateUserProfileRequest\x1a\x15.common.EmptyResponse\x12R\n" +
+	"\x15GetPresignedAvatarURL\x12\x14.common.EmptyRequest\x1a#.user.GetPresignedAvatarURLResponseB\fZ\n" +
 	"proto/userb\x06proto3"
 
 var (
@@ -275,27 +332,32 @@ func file_user_service_user_proto_rawDescGZIP() []byte {
 	return file_user_service_user_proto_rawDescData
 }
 
-var file_user_service_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_user_service_user_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_user_service_user_proto_goTypes = []any{
-	(*GetUserProfileRequest)(nil),    // 0: user.GetUserProfileRequest
-	(*GetUserProfileResponse)(nil),   // 1: user.GetUserProfileResponse
-	(*UpdateUserProfileRequest)(nil), // 2: user.UpdateUserProfileRequest
-	(*UserProfileItem)(nil),          // 3: user.UserProfileItem
-	(*common.Error)(nil),             // 4: common.Error
-	(*common.EmptyResponse)(nil),     // 5: common.EmptyResponse
+	(*GetUserProfileRequest)(nil),         // 0: user.GetUserProfileRequest
+	(*GetUserProfileResponse)(nil),        // 1: user.GetUserProfileResponse
+	(*UpdateUserProfileRequest)(nil),      // 2: user.UpdateUserProfileRequest
+	(*GetPresignedAvatarURLResponse)(nil), // 3: user.GetPresignedAvatarURLResponse
+	(*UserProfileItem)(nil),               // 4: user.UserProfileItem
+	(*common.Error)(nil),                  // 5: common.Error
+	(*common.EmptyRequest)(nil),           // 6: common.EmptyRequest
+	(*common.EmptyResponse)(nil),          // 7: common.EmptyResponse
 }
 var file_user_service_user_proto_depIdxs = []int32{
-	3, // 0: user.GetUserProfileResponse.profiles:type_name -> user.UserProfileItem
-	4, // 1: user.GetUserProfileResponse.error:type_name -> common.Error
-	0, // 2: user.UserService.GetUserProfile:input_type -> user.GetUserProfileRequest
-	2, // 3: user.UserService.UpdateUserProfile:input_type -> user.UpdateUserProfileRequest
-	1, // 4: user.UserService.GetUserProfile:output_type -> user.GetUserProfileResponse
-	5, // 5: user.UserService.UpdateUserProfile:output_type -> common.EmptyResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	4, // 0: user.GetUserProfileResponse.profiles:type_name -> user.UserProfileItem
+	5, // 1: user.GetUserProfileResponse.error:type_name -> common.Error
+	5, // 2: user.GetPresignedAvatarURLResponse.error:type_name -> common.Error
+	0, // 3: user.UserService.GetUserProfile:input_type -> user.GetUserProfileRequest
+	2, // 4: user.UserService.UpdateUserProfile:input_type -> user.UpdateUserProfileRequest
+	6, // 5: user.UserService.GetPresignedAvatarURL:input_type -> common.EmptyRequest
+	1, // 6: user.UserService.GetUserProfile:output_type -> user.GetUserProfileResponse
+	7, // 7: user.UserService.UpdateUserProfile:output_type -> common.EmptyResponse
+	3, // 8: user.UserService.GetPresignedAvatarURL:output_type -> user.GetPresignedAvatarURLResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_user_service_user_proto_init() }
@@ -305,13 +367,14 @@ func file_user_service_user_proto_init() {
 	}
 	file_user_service_common_user_proto_init()
 	file_user_service_user_proto_msgTypes[1].OneofWrappers = []any{}
+	file_user_service_user_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_user_proto_rawDesc), len(file_user_service_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

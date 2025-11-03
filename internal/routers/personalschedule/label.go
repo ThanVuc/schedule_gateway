@@ -21,10 +21,10 @@ func (r *LabelRouter) InitLabelRouter(Router *gin.RouterGroup) {
 		labelRouterPrivate.GET("label-per-types", middlewares.CheckPerm(constant.LABEL_RESOURCE, constant.READ_ALL_LABEL_PER_TYPES_ACTION), labelController.GetLabelPerTypes)
 		labelRouterPrivate.GET("/types/:type_id", middlewares.CheckPerm(constant.LABEL_RESOURCE, constant.READ_LABELS_BY_TYPE_ACTION), labelController.GetLabelsByTypeIDs)
 	}
-	RegisterRoleRouterResouce()
+	RegisterLabelRouterResouce()
 }
 
-func RegisterRoleRouterResouce() {
+func RegisterLabelRouterResouce() {
 	// Register the resources and their permissions
 	resoucePredefine := helper.InitResources()
 

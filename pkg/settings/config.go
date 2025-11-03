@@ -18,6 +18,7 @@ type Config struct {
 	SessionSecret           string                  `mapstructure:"session_secret" json:"session_secret" yaml:"session_secret"`
 	PersonalScheduleService PersonalScheduleService `mapstructure:"personal_schedule_service" json:"personal_schedule_service" yaml:"personal_schedule_service"`
 	R2                      R2                      `mapstructure:"r2" json:"r2" yaml:"r2"`
+	NotificationService     NotificationService     `mapstructure:"notification_service" json:"notification_service" yaml:"notification_service"`
 }
 
 type Server struct {
@@ -53,4 +54,9 @@ type R2 struct {
 	BucketName      string `mapstructure:"bucket" json:"bucket" yaml:"bucket"`
 	UseSSL          bool   `mapstructure:"use_ssl" json:"use_ssl" yaml:"use_ssl"`
 	PublicURL       string `mapstructure:"public_url" json:"public_url" yaml:"public_url"`
+}
+
+type NotificationService struct {
+	Host string `mapstructure:"host" json:"host" yaml:"host"`
+	Port int    `mapstructure:"port" json:"port" yaml:"port"`
 }
