@@ -12,6 +12,7 @@ type ResourcePredefine struct {
 	UserResource       *auth.Resource
 	AdminUserResource  *auth.Resource
 	LabelResource      *auth.Resource
+	GoalResource       *auth.Resource
 }
 
 func InitResources() *ResourcePredefine {
@@ -39,6 +40,10 @@ func InitResources() *ResourcePredefine {
 		LabelResource: &auth.Resource{
 			Id:   "6",
 			Name: constant.LABEL_RESOURCE,
+		},
+		GoalResource: &auth.Resource{
+			Id:   "7",
+			Name: constant.GOAL_RESOURCE,
 		},
 	}
 	return r

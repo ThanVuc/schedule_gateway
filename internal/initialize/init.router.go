@@ -17,6 +17,7 @@ func InitRouter(r *gin.Engine) {
 	authUserRouter := routers.RouterGroupApp.AuthorizationRouterEnter.UserRouter
 	userRouter := routers.RouterGroupApp.UserRouterEnter.UserRouter
 	labelRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.LabelRouter
+	goalRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.GoalRouter
 
 	MainGroup := r.Group("api/v1/")
 	{
@@ -34,5 +35,6 @@ func InitRouter(r *gin.Engine) {
 		userRouter.InitUserRouter(MainGroup)
 		authUserRouter.InitUserRouter(MainGroup)
 		labelRouter.InitLabelRouter(MainGroup)
+		goalRouter.InitGoalRouter(MainGroup)
 	}
 }
