@@ -23,3 +23,13 @@ func (gc *goalClient) GetGoals(c *gin.Context, req *personal_schedule.GetGoalsRe
 	}
 	return resp, nil
 }
+
+func (gc *goalClient) UpsertGoals(c *gin.Context, req *personal_schedule.UpsertGoalRequest) (*personal_schedule.UpsertGoalResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := gc.goalClient.UpsertGoal(ctx, req)	
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
