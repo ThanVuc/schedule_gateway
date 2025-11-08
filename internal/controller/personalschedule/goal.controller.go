@@ -1,6 +1,7 @@
 package personalschedule_controller
 
 import (
+	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/personalschedule"
 	dtos "schedule_gateway/internal/dtos/persional_schedule"
@@ -73,5 +74,85 @@ func (gc *GoalController) buildGetGoalsRequest(c *gin.Context) *personal_schedul
 		Search:    searchString,
 		StatusId:  statusID,
 	}
+	return &req
+}
+
+func (gc *GoalController) UpsertGoal(c *gin.Context) {
+	req := gc.buildUpsertGoalRequest(c)
+	if req == nil {
+		return
+	}
+	upsertResp, err := gc.client.UpsertGoals(c, req)
+
+	if err != nil {
+		gc.logger.Error("Connection error: ", "", zap.Error(err))
+	}
+	if upsertResp != nil && upsertResp.Error != nil {
+		response.InternalServerError(c, utils.Int32PtrToString(upsertResp.Error.ErrorCode))
+		return
+	}
+	if upsertResp == nil {
+		response.InternalServerError(c, "Empty response from service")
+		return
+	}
+
+	if !upsertResp.IsSuccess {
+		response.InternalServerError(c, "Upsert Goal Failed")
+		return
+	}
+
+	response.Ok(c, "Upsert Goal Successful", gin.H{
+		"is_success": upsertResp.IsSuccess,
+	})
+
+}
+
+func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_schedule.UpsertGoalRequest {
+	var req personal_schedule.UpsertGoalRequest
+	var dto dtos.UpsertGoalDTO
+
+	userID := c.GetString("user_id")
+	if userID == "" {
+		response.BadRequest(c, "user_id is required")
+		return nil
+	}
+
+	id := c.Param("id")
+	if id == "" {
+		req.Id = nil
+	} else {
+		req.Id = &id
+	}
+
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		response.BadRequest(c, "Invalid request body: "+err.Error())
+		fmt.Println("Error binding JSON:", err)
+		return nil
+	}
+
+	req.UserId = userID
+	req.Id = &id
+	req.Name = dto.Name
+	req.DetailedDescription = dto.DetailedDescription
+	req.StatusId = dto.StatusID
+	req.DifficultyId = dto.DifficultyID
+	req.PriorityId = dto.PriorityID
+	req.ShortDescriptions = dto.ShortDescriptions
+	req.StartDate = dto.StartDate
+	req.EndDate = dto.EndDate
+	req.Tasks = make([]*personal_schedule.GoalTaskPayload, len(dto.Tasks))
+
+	for i, taskDTO := range dto.Tasks {
+		var taskID string
+		if taskDTO.ID != nil {
+			taskID = *taskDTO.ID
+		}
+		req.Tasks[i] = &personal_schedule.GoalTaskPayload{
+			Id:          &taskID,
+			Name:        taskDTO.Name,
+			IsCompleted: taskDTO.IsCompleted,
+		}
+	}
+
 	return &req
 }

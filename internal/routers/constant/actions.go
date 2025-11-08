@@ -45,4 +45,6 @@ const (
 // goal resource actions
 const (
 	READ_GOALS_ACTION = "read_all_goals"
+	CREATE_GOAL_ACTION = "create_goal"
+	UPDATE_GOAL_ACTION = "update_goal"
 )

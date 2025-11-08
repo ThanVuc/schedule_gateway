@@ -19,7 +19,8 @@ func (r *GoalRouter) InitGoalRouter(Router *gin.RouterGroup) {
 	goalRouterPrivate := Router.Group("goals")
 	{
 		goalRouterPrivate.GET("list-goals", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.READ_GOALS_ACTION), goalController.GetGoals)
-
+		goalRouterPrivate.POST("", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.CREATE_GOAL_ACTION), goalController.UpsertGoal)
+		goalRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.UPDATE_GOAL_ACTION), goalController.UpsertGoal)
 	}
 	RegisterGoalRouterResouce()
 
@@ -35,6 +36,14 @@ func RegisterGoalRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.READ_GOALS_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.CREATE_GOAL_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.UPDATE_GOAL_ACTION,
 		},
 	})
 }
