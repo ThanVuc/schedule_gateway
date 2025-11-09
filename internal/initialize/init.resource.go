@@ -20,11 +20,16 @@ func InitResource() {
 			Items: helper.GetResources(),
 		})
 
+		if failAttempt >= 10 {
+			logger.Error("Exceeded maximum retry attempts to save resources", "")
+			return
+		}
+
 		if err != nil || resp == nil || !resp.Success {
 			failAttempt++
 			logger.Warn("Failed to save resources", "", zap.Error(err), zap.Int("attempt", failAttempt))
 			time.Sleep(sleep)
-			sleep = 5 * time.Second
+			sleep = sleep * 2
 			continue
 		}
 

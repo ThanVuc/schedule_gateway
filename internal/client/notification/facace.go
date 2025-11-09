@@ -16,6 +16,10 @@ type (
 	NotificationClient interface {
 		GetNotifications(c *gin.Context, req *common.IDRequest) (*notification_service.GetNotificationsResponse, error)
 	}
+
+	UserNotificationClient interface {
+		UpsertUserFCMToken(c *gin.Context, req *notification_service.UpsertUserFCMTokenRequest) (*common.EmptyResponse, error)
+	}
 )
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {
@@ -37,5 +41,19 @@ func NewNotificationClient() NotificationClient {
 	return &notificationClient{
 		logger:             global.Logger,
 		notificationClient: client,
+	}
+}
+
+func NewUserNotificationClient() UserNotificationClient {
+	conn := getConn(&global.Config.NotificationService)
+
+	client := notification_service.NewUserNotificationServiceClient(conn)
+	if client == nil {
+		panic("Failed to create NotificationService client at " + fmt.Sprintf("%s:%d", global.Config.PersonalScheduleService.GetHost(), global.Config.PersonalScheduleService.GetPort()))
+	}
+
+	return &userNotificationClient{
+		logger:                 global.Logger,
+		userNotificationClient: client,
 	}
 }
