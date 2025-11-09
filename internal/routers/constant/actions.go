@@ -48,3 +48,8 @@ const (
 	CREATE_GOAL_ACTION = "create_goal"
 	UPDATE_GOAL_ACTION = "update_goal"
 )
+
+// notification resource actions
+const (
+	SAVE_FCM_TOKEN_ACTION = "save_token"
+)
