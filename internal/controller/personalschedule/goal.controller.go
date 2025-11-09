@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/personalschedule"
-	dtos "schedule_gateway/internal/dtos/persional_schedule"
+	dtos "schedule_gateway/internal/dtos/personal_schedule"
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/personal_schedule"
