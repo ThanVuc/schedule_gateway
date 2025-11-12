@@ -45,8 +45,10 @@ const (
 // goal resource actions
 const (
 	READ_GOALS_ACTION = "read_all_goals"
+	READ_ONE_GOAL_ACTION = "read_one_goal"
 	CREATE_GOAL_ACTION = "create_goal"
 	UPDATE_GOAL_ACTION = "update_goal"
+	DELETE_GOAL_ACTION = "delete_goal"
 )
 
 // notification resource actions
