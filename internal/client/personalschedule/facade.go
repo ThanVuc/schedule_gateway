@@ -21,6 +21,8 @@ type (
 	GoalClient interface {
 		GetGoals(c *gin.Context, req *personal_schedule.GetGoalsRequest) (*personal_schedule.GetGoalsResponse, error)
 		UpsertGoals(c *gin.Context, req *personal_schedule.UpsertGoalRequest) (*personal_schedule.UpsertGoalResponse, error)
+		GetGoal(c *gin.Context, req *personal_schedule.GetGoalRequest) (*personal_schedule.GetGoalResponse, error)
+		DeleteGoal(c *gin.Context, req *personal_schedule.DeleteGoalRequest) (*personal_schedule.DeleteGoalResponse, error)
 	}
 )
 
