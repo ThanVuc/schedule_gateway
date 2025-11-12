@@ -138,6 +138,7 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	req.DifficultyId = dto.DifficultyID
 	req.PriorityId = dto.PriorityID
 	req.ShortDescriptions = dto.ShortDescriptions
+	req.WorkTypeId = dto.WorkTypeID
 	req.StartDate = dto.StartDate
 	req.EndDate = dto.EndDate
 	req.Tasks = make([]*personal_schedule.GoalTaskPayload, len(dto.Tasks))
@@ -155,4 +156,73 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	}
 
 	return &req
+}
+
+func (gc *GoalController) GetGoal(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		response.BadRequest(c, "Goal ID is required")
+		return
+	}
+
+	userID := c.GetString("user_id")
+	if userID == "" {
+		response.BadRequest(c, "User ID is required")
+		return
+	}
+
+	req := &personal_schedule.GetGoalRequest{
+		GoalId: id,
+		UserId: userID,
+	}
+
+	goalResp, err := gc.client.GetGoal(c, req)
+	if err != nil {
+		gc.logger.Error("Connection error: ", "", zap.Error(err))
+	}
+	if goalResp != nil && goalResp.Error != nil {
+		response.InternalServerError(c, utils.Int32PtrToString(goalResp.Error.ErrorCode))
+		return
+	}
+	if goalResp == nil {
+		response.InternalServerError(c, "Empty response from service")
+		return
+	}
+	response.Ok(c, "Get Goal Successful", goalResp.Goal)
+}
+
+func (gc *GoalController) DeleteGoal(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		response.BadRequest(c, "Goal ID is required")
+		return
+	}
+	userID := c.GetString("user_id")
+	if userID == "" {
+		response.BadRequest(c, "User ID is required")
+		return
+	}
+
+	req := &personal_schedule.DeleteGoalRequest{
+		GoalId: id,
+		UserId: userID,
+	}
+
+	deleteRes, err := gc.client.DeleteGoal(c, req)
+	if err != nil {
+		gc.logger.Error("Connection error: ", "", zap.Error(err))
+	}
+	if deleteRes != nil && deleteRes.Error != nil {
+		response.InternalServerError(c, utils.Int32PtrToString(deleteRes.Error.ErrorCode))
+		return
+	}
+	if deleteRes == nil {
+		response.InternalServerError(c, "Empty response from service")
+		return
+	}
+
+	response.Ok(c, "Delete Goal Successful", gin.H{
+		"is_success": deleteRes.Success,
+	})
+
 }
