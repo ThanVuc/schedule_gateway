@@ -22,7 +22,7 @@ type UpsertGoalDTO struct {
 	StatusID            string          `json:"status_id" binding:"required"`
 	DifficultyID        string          `json:"difficulty_id" binding:"required"`
 	PriorityID          string          `json:"priority_id" binding:"required"`
-	WorkTypeID          string          `json:"work_type_id" binding:"required"`
+	CategoryID          string          `json:"category_id" binding:"required"`
 	Tasks               []UpsertTaskDTO `json:"tasks"`
 }
 type UpsertTaskDTO struct {

@@ -138,7 +138,7 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	req.DifficultyId = dto.DifficultyID
 	req.PriorityId = dto.PriorityID
 	req.ShortDescriptions = dto.ShortDescriptions
-	req.WorkTypeId = dto.WorkTypeID
+	req.CategoryId = dto.CategoryID
 	req.StartDate = dto.StartDate
 	req.EndDate = dto.EndDate
 	req.Tasks = make([]*personal_schedule.GoalTaskPayload, len(dto.Tasks))
