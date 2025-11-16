@@ -9,4 +9,5 @@ const (
 	LABEL_RESOURCE        = "label"
 	GOAL_RESOURCE         = "goal"
 	NOTIFICATION_RESOURCE = "notification"
+	WORK_RESOURCE         = "work"
 )
