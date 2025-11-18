@@ -19,6 +19,7 @@ func InitRouter(r *gin.Engine) {
 	labelRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.LabelRouter
 	goalRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.GoalRouter
 	notificationRouter := routers.RouterGroupApp.NotificationRouterEnter.NotificationRouter
+	workRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.WorkRouter
 
 	MainGroup := r.Group("api/v1/")
 	{
@@ -38,5 +39,6 @@ func InitRouter(r *gin.Engine) {
 		labelRouter.InitLabelRouter(MainGroup)
 		goalRouter.InitGoalRouter(MainGroup)
 		notificationRouter.InitNotificationRouter(MainGroup)
+		workRouter.InitWorkRouter(MainGroup)
 	}
 }
