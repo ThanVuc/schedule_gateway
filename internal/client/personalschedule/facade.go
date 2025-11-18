@@ -24,6 +24,10 @@ type (
 		GetGoal(c *gin.Context, req *personal_schedule.GetGoalRequest) (*personal_schedule.GetGoalResponse, error)
 		DeleteGoal(c *gin.Context, req *personal_schedule.DeleteGoalRequest) (*personal_schedule.DeleteGoalResponse, error)
 	}
+
+	WorkClient interface {
+		UpsertWork(c *gin.Context, req *personal_schedule.UpsertWorkRequest) (*personal_schedule.UpsertWorkResponse, error)
+	}
 )
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {
@@ -59,5 +63,19 @@ func NewGoalClient() GoalClient {
 	return &goalClient{
 		logger:     global.Logger,
 		goalClient: client,
+	}
+}
+
+func NewWorkClient() WorkClient {
+	conn := getConn(&global.Config.PersonalScheduleService)
+
+	client := personal_schedule.NewWorkServiceClient(conn)
+	if client == nil {
+		panic("Failed to create WorkService client at " + fmt.Sprintf("%s:%d", global.Config.PersonalScheduleService.GetHost(), global.Config.PersonalScheduleService.GetPort()))
+	}
+
+	return &workClient{
+		logger:     global.Logger,
+		workClient: client,
 	}
 }

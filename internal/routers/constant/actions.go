@@ -55,3 +55,9 @@ const (
 const (
 	SAVE_FCM_TOKEN_ACTION = "save_token"
 )
+
+// work resource actions
+const (
+	CREATE_WORK_ACTION = "create_work"
+	UPDATE_WORK_ACTION = "update_work"
+)
