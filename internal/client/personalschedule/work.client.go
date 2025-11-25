@@ -23,3 +23,23 @@ func (wc *workClient) UpsertWork(c *gin.Context, req *personal_schedule.UpsertWo
 	}
 	return resp, nil
 }
+
+func (wc *workClient) GetWorks(c *gin.Context, req *personal_schedule.GetWorksRequest) (*personal_schedule.GetWorksResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.GetWorks(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (wc *workClient) GetWork(c *gin.Context, req *personal_schedule.GetWorkRequest) (*personal_schedule.GetWorkResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.GetWork(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

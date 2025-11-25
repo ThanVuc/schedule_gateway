@@ -40,15 +40,16 @@ const (
 const (
 	READ_ALL_LABEL_PER_TYPES_ACTION = "read_all_label_per_types"
 	READ_LABELS_BY_TYPE_ACTION      = "read_labels_by_type"
+	READ_DEFAULT_LABEL_ACTION       = "read_default_label"
 )
 
 // goal resource actions
 const (
-	READ_GOALS_ACTION = "read_all_goals"
+	READ_GOALS_ACTION    = "read_all_goals"
 	READ_ONE_GOAL_ACTION = "read_one_goal"
-	CREATE_GOAL_ACTION = "create_goal"
-	UPDATE_GOAL_ACTION = "update_goal"
-	DELETE_GOAL_ACTION = "delete_goal"
+	CREATE_GOAL_ACTION   = "create_goal"
+	UPDATE_GOAL_ACTION   = "update_goal"
+	DELETE_GOAL_ACTION   = "delete_goal"
 )
 
 // notification resource actions
@@ -60,4 +61,6 @@ const (
 const (
 	CREATE_WORK_ACTION = "create_work"
 	UPDATE_WORK_ACTION = "update_work"
+	READ_WORKS_ACTION  = "read_works"
+	READ_WORK_ACTION   = "read_work"
 )

@@ -35,3 +35,13 @@ func (lc *labelClient) GetLabelsByTypeIDs(c *gin.Context, req *common.IDRequest)
 	}
 	return resp, nil
 }
+
+func (lc *labelClient) GetDefaultLabel(c* gin.Context, req *common.EmptyRequest) (*personal_schedule.GetDefaultLabelResponse, error){
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := lc.labelClient.GetDefaultLabel(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

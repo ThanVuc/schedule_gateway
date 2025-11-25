@@ -143,6 +143,13 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	req.EndDate = dto.EndDate
 	req.Tasks = make([]*personal_schedule.GoalTaskPayload, len(dto.Tasks))
 
+	if req.StartDate != nil {
+		if *req.StartDate > *req.EndDate {
+			response.BadRequest(c, "start_date must be before end_date")
+			return nil
+		}
+	}
+
 	for i, taskDTO := range dto.Tasks {
 		var taskID string
 		if taskDTO.ID != nil {
