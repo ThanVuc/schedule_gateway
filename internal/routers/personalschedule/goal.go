@@ -18,11 +18,11 @@ func (r *GoalRouter) InitGoalRouter(Router *gin.RouterGroup) {
 	// private router
 	goalRouterPrivate := Router.Group("goals")
 	{
-		goalRouterPrivate.GET("", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.READ_GOALS_ACTION), goalController.GetGoals)
-		goalRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.READ_ONE_GOAL_ACTION), goalController.GetGoal)
-		goalRouterPrivate.POST("", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.CREATE_GOAL_ACTION), goalController.UpsertGoal)
-		goalRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.UPDATE_GOAL_ACTION), goalController.UpsertGoal)
-		goalRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.DELETE_GOAL_ACTION), goalController.DeleteGoal)
+		goalRouterPrivate.GET("", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.READ_ALL_ACTION), goalController.GetGoals)
+		goalRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.READ_ONE_ACTION), goalController.GetGoal)
+		goalRouterPrivate.POST("", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.CREATE_ACTION), goalController.UpsertGoal)
+		goalRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.UPDATE_ACTION), goalController.UpsertGoal)
+		goalRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.DELETE_ACTION), goalController.DeleteGoal)
 	}
 	RegisterGoalRouterResouce()
 
@@ -37,23 +37,23 @@ func RegisterGoalRouterResouce() {
 	register.AddResource(resoucePredefine.GoalResource, []*auth.Action{
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.READ_GOALS_ACTION,
+			Name: constant.READ_ALL_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.READ_ONE_GOAL_ACTION,
+			Name: constant.READ_ONE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.CREATE_GOAL_ACTION,
+			Name: constant.CREATE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.UPDATE_GOAL_ACTION,
+			Name: constant.UPDATE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.DELETE_GOAL_ACTION,
+			Name: constant.DELETE_ACTION,
 		},
 	})
 }
