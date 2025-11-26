@@ -22,6 +22,7 @@ func (r WorkRouter) InitWorkRouter(Router *gin.RouterGroup) {
 		workRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.UPDATE_ACTION), workController.UpsertWork)
 		workRouterPrivate.GET("", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.READ_ALL_ACTION), workController.GetWorks)
 		workRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.READ_ONE_ACTION), workController.GetWork)
+		workRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.DELETE_ACTION), workController.DeleteWork)
 	}
 	RegisterWorkRouterResouce()
 
@@ -49,6 +50,10 @@ func RegisterWorkRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.READ_ONE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.DELETE_ACTION,
 		},
 	})
 }
