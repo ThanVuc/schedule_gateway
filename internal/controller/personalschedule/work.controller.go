@@ -1,7 +1,6 @@
 package personalschedule_controller
 
 import (
-	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/personalschedule"
 	dtos "schedule_gateway/internal/dtos/personal_schedule"
@@ -141,8 +140,14 @@ func (wc *WorkController) GetWorks(c *gin.Context) {
 		Evening:   []*personal_schedule.Work{},
 		Night:     []*personal_schedule.Work{},
 	}
+
+	loc, err := time.LoadLocation("Asia/Ho_Chi_Minh")
+	if err != nil {
+		loc = time.FixedZone("GMT+7", 7*3600)
+	}
+
 	for _, work := range resp.Works {
-		h := utils.HourOf(work.GetStartDate())
+		h := time.Unix(work.GetStartDate(), 0).In(loc).Hour()
 		switch {
 		case h >= 6 && h < 10:
 			result.Morning = append(result.Morning, work)
@@ -176,37 +181,41 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 	startDateStr := c.Query("start_date")
 	endDateStr := c.Query("end_date")
 
-	var startDate, endDate *int64
-	STARTDATE, ENDDATE := utils.StartAngEndOfDayTimestamp(time.Now())
+	var startDate, endDate int64
+	now := time.Now()
 	if startDateStr != "" {
-		startDateInt, err := utils.ParseStringToInt64(startDateStr)
+		parsed, err := utils.ParseStringToInt64(startDateStr)
 		if err != nil {
 			response.BadRequest(c, "Invalid start_date format")
 			return nil
 		}
-		startDate = &startDateInt
+		startDate = parsed
 	} else {
-		startDate = &STARTDATE
+		startDate, _ = utils.StartAndEndOfDayTimestamp(now)
 	}
+
 	if endDateStr != "" {
-		endDateInt, err := utils.ParseStringToInt64(endDateStr)
+		parsed, err := utils.ParseStringToInt64(endDateStr)
 		if err != nil {
 			response.BadRequest(c, "Invalid end_date format")
 			return nil
 		}
-		endDate = &endDateInt
+		endDate = parsed
 	} else {
-		endDate = &ENDDATE
+		t := time.Unix(startDate, 0)
+		_, endDate = utils.StartAndEndOfDayTimestamp(t)
 	}
 
-	fmt.Println("startDate:", &startDate)
-	fmt.Println("endDate:", &endDate)
+	if startDate > endDate {
+		response.BadRequest(c, "start_date must be before end_date")
+		return nil
+	}
 
 	req := &personal_schedule.GetWorksRequest{
 		UserId:       userID,
 		Search:       &search,
-		FromDate:     startDate,
-		ToDate:       endDate,
+		FromDate:     &startDate,
+		ToDate:       &endDate,
 		StatusId:     &statusID,
 		DifficultyId: &difficultyID,
 		PriorityId:   &priorityID,

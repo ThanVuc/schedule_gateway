@@ -16,7 +16,7 @@ func ParseStringToInt64(s string) (int64, error) {
 	return strconv.ParseInt(s, 10, 64)
 }
 
-func StartAngEndOfDayTimestamp(t time.Time) (int64, int64) {
+func StartAndEndOfDayTimestamp(t time.Time) (int64, int64) {
 	startOfDay := time.Date(
 		t.Year(), t.Month(), t.Day(),
 		0, 0, 0, 0,
@@ -28,8 +28,4 @@ func StartAngEndOfDayTimestamp(t time.Time) (int64, int64) {
 		t.Location(),
 	)
 	return startOfDay.Unix(), endOfDay.Unix()
-}
-
-func HourOf(ts int64) int {
-	return time.Unix(ts, 0).Hour()
 }
