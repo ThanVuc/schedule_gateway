@@ -20,6 +20,7 @@ func (r *LabelRouter) InitLabelRouter(Router *gin.RouterGroup) {
 	{
 		labelRouterPrivate.GET("label-per-types", middlewares.CheckPerm(constant.LABEL_RESOURCE, constant.READ_ALL_LABEL_PER_TYPES_ACTION), labelController.GetLabelPerTypes)
 		labelRouterPrivate.GET("/types/:type_id", middlewares.CheckPerm(constant.LABEL_RESOURCE, constant.READ_LABELS_BY_TYPE_ACTION), labelController.GetLabelsByTypeIDs)
+		labelRouterPrivate.GET("/default", middlewares.CheckPerm(constant.LABEL_RESOURCE, constant.READ_DEFAULT_LABEL_ACTION), labelController.GetDefaultLabel)
 	}
 	RegisterLabelRouterResouce()
 }
@@ -38,6 +39,10 @@ func RegisterLabelRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.READ_LABELS_BY_TYPE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_DEFAULT_LABEL_ACTION,
 		},
 	})
 }

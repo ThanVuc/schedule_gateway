@@ -40,24 +40,10 @@ const (
 const (
 	READ_ALL_LABEL_PER_TYPES_ACTION = "read_all_label_per_types"
 	READ_LABELS_BY_TYPE_ACTION      = "read_labels_by_type"
-)
-
-// goal resource actions
-const (
-	READ_GOALS_ACTION = "read_all_goals"
-	READ_ONE_GOAL_ACTION = "read_one_goal"
-	CREATE_GOAL_ACTION = "create_goal"
-	UPDATE_GOAL_ACTION = "update_goal"
-	DELETE_GOAL_ACTION = "delete_goal"
+	READ_DEFAULT_LABEL_ACTION       = "read_default_label"
 )
 
 // notification resource actions
 const (
 	SAVE_FCM_TOKEN_ACTION = "save_token"
-)
-
-// work resource actions
-const (
-	CREATE_WORK_ACTION = "create_work"
-	UPDATE_WORK_ACTION = "update_work"
 )

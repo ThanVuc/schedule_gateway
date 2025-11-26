@@ -73,3 +73,21 @@ func (lc *LabelController) GetLabelsByTypeIDs(ctx *gin.Context) {
 
 	response.Ok(ctx, "Ok", resp)
 }
+
+func (lc *LabelController) GetDefaultLabel(ctx *gin.Context) {
+	req := &common.EmptyRequest{}
+
+	resp, err := lc.client.GetDefaultLabel(ctx, req)
+	if err != nil {
+		lc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Error connecting to grpc service")
+		return
+	}
+	if resp != nil && resp.Error != nil {
+		if resp.Error != nil && resp.Error.ErrorCode != nil {
+			response.InternalServerError(ctx, utils.Int32PtrToString(resp.Error.ErrorCode))
+			return
+		}
+	}
+	response.Ok(ctx, "Ok", resp)
+}
