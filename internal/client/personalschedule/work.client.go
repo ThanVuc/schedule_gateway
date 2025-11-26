@@ -43,3 +43,13 @@ func (wc *workClient) GetWork(c *gin.Context, req *personal_schedule.GetWorkRequ
 	}
 	return resp, nil
 }
+
+func (wc *workClient) DeleteWork(c *gin.Context, req *personal_schedule.DeleteWorkRequest) (*personal_schedule.DeleteWorkResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.DeleteWork(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

@@ -258,3 +258,39 @@ func (wc *WorkController) GetWork(c *gin.Context) {
 	}
 	response.Ok(c, "Get Work Successful", wworkResp.Work)
 }
+
+func (wc *WorkController) DeleteWork(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		response.BadRequest(c, "Work ID is required")
+		return
+	}
+
+	userID := c.GetString("user_id")
+	if userID == "" {
+		response.BadRequest(c, "user_id is required")
+		return
+	}
+
+	req := &personal_schedule.DeleteWorkRequest{
+		UserId: userID,
+		WorkId: id,
+	}
+	deleteResp, err := wc.client.DeleteWork(c, req)
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+	}
+
+	if deleteResp != nil && deleteResp.Error != nil {
+		response.InternalServerError(c, utils.Int32PtrToString(deleteResp.Error.ErrorCode))
+		return
+	}
+	if deleteResp == nil {
+		response.InternalServerError(c, "Empty response from service")
+		return
+	}
+	response.Ok(c, "Delete Work Successful", gin.H{
+		"is_success": deleteResp.Success,
+		"error":      deleteResp.Error,
+	})
+}
