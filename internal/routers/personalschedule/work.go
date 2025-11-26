@@ -18,8 +18,10 @@ func (r WorkRouter) InitWorkRouter(Router *gin.RouterGroup) {
 	// private router
 	workRouterPrivate := Router.Group("works")
 	{
-		workRouterPrivate.POST("", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.CREATE_WORK_ACTION), workController.UpsertWork)
-		workRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.UPDATE_WORK_ACTION), workController.UpsertWork)
+		workRouterPrivate.POST("", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.CREATE_ACTION), workController.UpsertWork)
+		workRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.UPDATE_ACTION), workController.UpsertWork)
+		workRouterPrivate.GET("", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.READ_ALL_ACTION), workController.GetWorks)
+		workRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.READ_ONE_ACTION), workController.GetWork)
 	}
 	RegisterWorkRouterResouce()
 
@@ -34,11 +36,19 @@ func RegisterWorkRouterResouce() {
 	register.AddResource(resoucePredefine.WorkResource, []*auth.Action{
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.CREATE_WORK_ACTION,
+			Name: constant.CREATE_ACTION,
 		},
 		{
 			Id:   register.GenerateActionId(),
-			Name: constant.UPDATE_WORK_ACTION,
+			Name: constant.UPDATE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ALL_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ONE_ACTION,
 		},
 	})
 }

@@ -16,6 +16,7 @@ type (
 	LabelClient interface {
 		GetLabelPerTypes(c *gin.Context, req *common.EmptyRequest) (*personal_schedule.GetLabelPerTypesResponse, error)
 		GetLabelsByTypeIDs(c *gin.Context, req *common.IDRequest) (*personal_schedule.GetLabelsByTypeIDsResponse, error)
+		GetDefaultLabel(c *gin.Context, req *common.EmptyRequest) (*personal_schedule.GetDefaultLabelResponse, error)
 	}
 
 	GoalClient interface {
@@ -27,6 +28,8 @@ type (
 
 	WorkClient interface {
 		UpsertWork(c *gin.Context, req *personal_schedule.UpsertWorkRequest) (*personal_schedule.UpsertWorkResponse, error)
+		GetWorks(c *gin.Context, req *personal_schedule.GetWorksRequest) (*personal_schedule.GetWorksResponse, error)
+		GetWork(c *gin.Context, req *personal_schedule.GetWorkRequest) (*personal_schedule.GetWorkResponse, error)
 	}
 )
 
