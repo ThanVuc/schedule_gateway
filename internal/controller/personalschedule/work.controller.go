@@ -137,28 +137,23 @@ func (wc *WorkController) GetWorks(c *gin.Context) {
 		Morning:   []*personal_schedule.Work{},
 		Noon:      []*personal_schedule.Work{},
 		Afternoon: []*personal_schedule.Work{},
-		Evening:   []*personal_schedule.Work{},
 		Night:     []*personal_schedule.Work{},
-	}
-
-	loc, err := time.LoadLocation("Asia/Ho_Chi_Minh")
-	if err != nil {
-		loc = time.FixedZone("GMT+7", 7*3600)
+		Evernight: []*personal_schedule.Work{},
 	}
 
 	for _, work := range resp.Works {
-		h := time.Unix(work.GetStartDate(), 0).In(loc).Hour()
+		h := time.Unix(work.GetStartDate(), 0).Hour()
 		switch {
-		case h >= 6 && h < 10:
+		case h >= 0 && h < 10:
 			result.Morning = append(result.Morning, work)
 		case h >= 10 && h < 14:
 			result.Noon = append(result.Noon, work)
 		case h >= 14 && h < 18:
 			result.Afternoon = append(result.Afternoon, work)
 		case h >= 18 && h < 22:
-			result.Evening = append(result.Evening, work)
-		default:
 			result.Night = append(result.Night, work)
+		default:
+			result.Evernight = append(result.Evernight, work)
 		}
 	}
 
@@ -293,4 +288,23 @@ func (wc *WorkController) DeleteWork(c *gin.Context) {
 		"is_success": deleteResp.Success,
 		"error":      deleteResp.Error,
 	})
+}
+
+func (gc *GoalController) GetGoalsForDialog(c *gin.Context) {
+	userID := c.GetString("user_id")
+	if userID == "" {
+		response.BadRequest(c, "user_id is required")
+		return
+	}
+
+	resp, err := gc.client.GetGoalForDiaglog(c, &personal_schedule.GetGoalsForDialogRequest{
+		UserId: userID,
+	})
+
+	if err != nil {
+        response.NotFound(c, "Error connecting to grpc service: " + err.Error())
+		return
+	}
+
+	response.Ok(c, "Ok", resp.Goals)
 }
