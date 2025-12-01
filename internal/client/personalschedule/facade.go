@@ -24,6 +24,7 @@ type (
 		UpsertGoals(c *gin.Context, req *personal_schedule.UpsertGoalRequest) (*personal_schedule.UpsertGoalResponse, error)
 		GetGoal(c *gin.Context, req *personal_schedule.GetGoalRequest) (*personal_schedule.GetGoalResponse, error)
 		DeleteGoal(c *gin.Context, req *personal_schedule.DeleteGoalRequest) (*personal_schedule.DeleteGoalResponse, error)
+		GetGoalForDiaglog(c *gin.Context, req *personal_schedule.GetGoalsForDialogRequest) (*personal_schedule.GetGoalForDialogResponse, error)
 	}
 
 	WorkClient interface {

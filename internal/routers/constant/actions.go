@@ -43,6 +43,11 @@ const (
 	READ_DEFAULT_LABEL_ACTION       = "read_default_label"
 )
 
+// goal for dialog actions
+const (
+	READ_GOALS_FOR_DIALOG_ACTION = "read_goals_for_dialog"
+)
+
 // notification resource actions
 const (
 	SAVE_FCM_TOKEN_ACTION = "save_token"
