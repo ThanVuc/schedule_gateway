@@ -17,15 +17,15 @@ func ParseStringToInt64(s string) (int64, error) {
 }
 
 func StartAndEndOfDayTimestamp(t time.Time) (int64, int64) {
-	startOfDay := time.Date(
-		t.Year(), t.Month(), t.Day(),
-		0, 0, 0, 0,
-		t.Location(),
-	)
-	endOfDay := time.Date(
-		t.Year(), t.Month(), t.Day(),
-		23, 59, 59, 999999999,
-		t.Location(),
-	)
-	return startOfDay.Unix(), endOfDay.Unix()
+    startOfDay := time.Date(
+        t.Year(), t.Month(), t.Day(),
+        0, 0, 0, 0,
+        t.Location(),
+    )
+    endOfDay := time.Date(
+        t.Year(), t.Month(), t.Day(),
+        23, 59, 59, 999999999,
+        t.Location(),
+    )
+    return startOfDay.UnixMilli(), endOfDay.UnixMilli()
 }

@@ -23,6 +23,7 @@ func (r *GoalRouter) InitGoalRouter(Router *gin.RouterGroup) {
 		goalRouterPrivate.POST("", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.CREATE_ACTION), goalController.UpsertGoal)
 		goalRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.UPDATE_ACTION), goalController.UpsertGoal)
 		goalRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.DELETE_ACTION), goalController.DeleteGoal)
+		goalRouterPrivate.GET("/dialog/list", middlewares.CheckPerm(constant.GOAL_RESOURCE, constant.READ_GOALS_FOR_DIALOG_ACTION), goalController.GetGoalsForDialog)
 	}
 	RegisterGoalRouterResouce()
 
@@ -54,6 +55,10 @@ func RegisterGoalRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.DELETE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_GOALS_FOR_DIALOG_ACTION,
 		},
 	})
 }

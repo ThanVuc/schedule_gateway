@@ -53,3 +53,13 @@ func (gc *goalClient) DeleteGoal(c *gin.Context, req *personal_schedule.DeleteGo
 	}
 	return resp, nil
 }
+
+func (gc *goalClient) GetGoalForDiaglog(c *gin.Context, req *personal_schedule.GetGoalsForDialogRequest) (*personal_schedule.GetGoalForDialogResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))	
+	resp, err := gc.goalClient.GetGoalForDiaglog(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
