@@ -87,14 +87,21 @@ func (wc *WorkController) buildUpsertWorkRequest(c *gin.Context) *personal_sched
 	req.TypeId = dto.TypeID
 	req.CategoryId = dto.CategoryID
 	req.GoalId = dto.GoalID
-	req.NotificationIds = dto.NotificationIds
-
-	if req.StartDate != nil {
-		if *req.StartDate > req.EndDate {
-			response.BadRequest(c, "start_date must be before end_date")
-			return nil
+	notifications := make([]*personal_schedule.WorkNotification, len(dto.Notifications))
+	for i, notificationDto := range dto.Notifications {
+		var notificationID string
+		if notificationDto.ID != nil {
+			notificationID = *notificationDto.ID
+		}
+		notifications[i] = &personal_schedule.WorkNotification{
+			Id:          &notificationID,
+			TriggerAt:   notificationDto.TriggerAt,
+			IsEmailSent: notificationDto.IsEmailSent,
+			IsActive:    notificationDto.IsActive,
+			Link:        notificationDto.Link,
 		}
 	}
+	req.Notifications = notifications
 
 	req.SubTasks = make([]*personal_schedule.SubTaskPayload, len(dto.SubTasks))
 	for i, subTaskDto := range dto.SubTasks {
@@ -302,7 +309,7 @@ func (gc *GoalController) GetGoalsForDialog(c *gin.Context) {
 	})
 
 	if err != nil {
-        response.NotFound(c, "Error connecting to grpc service: " + err.Error())
+		response.NotFound(c, "Error connecting to grpc service: "+err.Error())
 		return
 	}
 

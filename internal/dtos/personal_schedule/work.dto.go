@@ -21,8 +21,16 @@ type UpsertWorkDTO struct {
 	CategoryID          string  `json:"category_id" binding:"required,mongodb"`
 	GoalID              *string `json:"goal_id"`
 
-	SubTasks        []SubTaskPayloadDTO `json:"sub_tasks"`
-	NotificationIds []string            `json:"notification_ids" binding:"omitempty,dive,mongodb"`
+	SubTasks      []SubTaskPayloadDTO      `json:"sub_tasks"`
+	Notifications []NotificationPayloadDTO `json:"notifications"`
+}
+
+type NotificationPayloadDTO struct {
+	ID          *string `json:"id" binding:"omitempty,mongodb"`
+	TriggerAt   int64   `json:"trigger_at" binding:"required"` // Unix timestamp
+	IsEmailSent bool    `json:"is_email_sent"`
+	IsActive    bool    `json:"is_active"`
+	Link        *string `json:"link"`
 }
 
 type WorksBySessionDTO struct {
