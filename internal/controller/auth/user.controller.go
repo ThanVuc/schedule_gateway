@@ -218,7 +218,7 @@ func (uc *UserController) PresignUrlForAvatarUpsert(c *gin.Context) {
 	}
 
 	var body struct {
-		PublicUrl  *string `json:"public_url"`
+		PublicUrl *string `json:"public_url"`
 		IsDelete  *bool   `json:"is_delete"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -250,11 +250,13 @@ func (uc *UserController) PresignUrlForAvatarUpsert(c *gin.Context) {
 
 	resp, err := uc.userClient.PresignUrlForAvatarUpsert(c, req)
 	if err != nil {
+		uc.logger.Error("Failed to get pre-signed URL", "", zap.Error(err))
 		response.InternalServerError(c, "Failed to get pre-signed URL! ")
 		return
 	}
 
 	if resp == nil {
+		uc.logger.Error("Failed to get pre-signed URL", "", zap.Error(err))
 		response.InternalServerError(c, "Failed to get pre-signed URL!")
 		return
 	}
