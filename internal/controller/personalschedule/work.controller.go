@@ -140,31 +140,62 @@ func (wc *WorkController) GetWorks(c *gin.Context) {
 		return
 	}
 
-	result := dtos.WorksBySessionDTO{
-		Morning:   []*personal_schedule.Work{},
-		Noon:      []*personal_schedule.Work{},
-		Afternoon: []*personal_schedule.Work{},
-		Night:     []*personal_schedule.Work{},
-		Evernight: []*personal_schedule.Work{},
-	}
-
-	for _, work := range resp.Works {
-		h := time.Unix(work.GetStartDate(), 0).Hour()
-		switch {
-		case h >= 0 && h < 10:
-			result.Morning = append(result.Morning, work)
-		case h >= 10 && h < 14:
-			result.Noon = append(result.Noon, work)
-		case h >= 14 && h < 18:
-			result.Afternoon = append(result.Afternoon, work)
-		case h >= 18 && h < 22:
-			result.Night = append(result.Night, work)
-		default:
-			result.Evernight = append(result.Evernight, work)
+	result := make([]dtos.WorksResponseDTO, 0)
+	if resp != nil && resp.Works != nil {
+		for _, w := range resp.Works {
+			result = append(result, wc.mapProtoToDTO(w))
 		}
 	}
 
-	response.Ok(c, "Ok", result)
+	response.Ok(c, "Get Works Successful", gin.H{
+		"works": result,
+	})
+}
+
+func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksResponseDTO {
+	mapLabel := func(l *personal_schedule.LabelInfo) *dtos.LabelInfoDTO {
+		if l == nil {
+			return nil
+		}
+		return &dtos.LabelInfoDTO{
+			ID:        l.Id,
+			Name:      l.Name,
+			Key:       l.Key,
+			Color:     l.Color,
+			LabelType: l.LabelType,
+		}
+	}
+	var goalName *string
+	if p.Goal != nil {
+		// Chỉ lấy Name
+		name := p.Goal.Name
+		goalName = &name
+	}
+	sd := ""
+	if p.ShortDescriptions != nil {
+		sd = *p.ShortDescriptions
+	}
+	dd := ""
+	if p.DetailedDescription != nil {
+		dd = *p.DetailedDescription
+	}
+
+	return dtos.WorksResponseDTO{
+		ID:                  p.Id,
+		Name:                p.Name,
+		ShortDescriptions:   sd,
+		DetailedDescription: dd,
+		StartDate:           p.StartDate,
+		EndDate:             p.EndDate,
+		Goal:                goalName,
+		Category:            mapLabel(p.Category),
+		Labels: dtos.WorkLabelsDTO{
+			Status:     mapLabel(p.Labels.Status),
+			Difficulty: mapLabel(p.Labels.Difficulty),
+			Priority:   mapLabel(p.Labels.Priority),
+			Type:       mapLabel(p.Labels.Type),
+		},
+	}
 }
 
 func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedule.GetWorksRequest {
