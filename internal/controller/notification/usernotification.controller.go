@@ -40,6 +40,7 @@ func (uc *UserNotificationController) UpsertUserFCMToken(c *gin.Context) {
 		UserId:   userId,
 		FcmToken: requestDto.FCMToken,
 		DeviceId: requestDto.DeviceID,
+		Email:    requestDto.Email,
 	}
 	resp, err := uc.client.UpsertUserFCMToken(c, request)
 	if err != nil {
