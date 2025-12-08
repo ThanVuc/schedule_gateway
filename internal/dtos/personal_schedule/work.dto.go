@@ -9,11 +9,11 @@ type LabelInfoDTO struct {
 }
 
 type NotificationPayloadDTO struct {
-	ID          *string `json:"id" binding:"omitempty,mongodb"`
-	TriggerAt   int64   `json:"trigger_at" binding:"required"` // Unix timestamp
-	IsEmailSent bool    `json:"is_email_sent"`
-	IsActive    bool    `json:"is_active"`
-	Link        *string `json:"link"`
+	ID         *string `json:"id" binding:"omitempty,mongodb"`
+	TriggerAt  int64   `json:"trigger_at" binding:"required"` // Unix timestamp
+	IsSendMail bool    `json:"is_send_mail"`
+	IsActive   bool    `json:"is_active"`
+	Link       *string `json:"link"`
 }
 
 type GoalInfoDTO struct {
