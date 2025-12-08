@@ -94,11 +94,11 @@ func (wc *WorkController) buildUpsertWorkRequest(c *gin.Context) *personal_sched
 			notificationID = *notificationDto.ID
 		}
 		notifications[i] = &personal_schedule.WorkNotification{
-			Id:          &notificationID,
-			TriggerAt:   notificationDto.TriggerAt,
-			IsEmailSent: notificationDto.IsEmailSent,
-			IsActive:    notificationDto.IsActive,
-			Link:        notificationDto.Link,
+			Id:         &notificationID,
+			TriggerAt:  notificationDto.TriggerAt,
+			IsSendMail: notificationDto.IsSendMail,
+			IsActive:   notificationDto.IsActive,
+			Link:       notificationDto.Link,
 		}
 	}
 	req.Notifications = notifications
