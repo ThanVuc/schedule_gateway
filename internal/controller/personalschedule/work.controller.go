@@ -1,6 +1,7 @@
 package personalschedule_controller
 
 import (
+	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/personalschedule"
 	dtos "schedule_gateway/internal/dtos/personal_schedule"
@@ -215,7 +216,8 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 	endDateStr := c.Query("end_date")
 
 	var startDate, endDate int64
-	now := time.Now()
+	now := time.Now().UTC()
+	fmt.Println("Current time UTC:", now)
 	if startDateStr != "" {
 		parsed, err := utils.ParseStringToInt64(startDateStr)
 		if err != nil {
@@ -345,4 +347,39 @@ func (gc *GoalController) GetGoalsForDialog(c *gin.Context) {
 	}
 
 	response.Ok(c, "Ok", resp.Goals)
+}
+
+func (wc *WorkController) GetRecoveryWorks(c *gin.Context) {
+	userID := c.GetString("user_id")
+	if userID == "" {
+		response.BadRequest(c, "user_id is required")
+		return
+	}
+	var dto dtos.RecoveryWorksDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
+		response.BadRequest(c, "Invalid request body: "+err.Error())
+		return
+	}
+
+	targetDate := dto.TargetDate
+	var sourceDate int64
+	if dto.SourceDate != nil && *dto.SourceDate != 0 {
+		sourceDate = *dto.SourceDate
+	} else {
+		t := time.Unix(targetDate, 0).AddDate(0, 0, -1)
+		sourceDate, _ = utils.StartAndEndOfDayTimestamp(t)
+	}
+	req := &personal_schedule.GetRecoveryWorksRequest{
+		UserId:     userID,
+		TargetDate: targetDate,
+		SourceDate: sourceDate,
+	}
+	resp, err := wc.client.GetRecoveryWorks(c, req)
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to grpc service")
+		return
+	}
+	response.Ok(c, "Get Recovery Works Successful", resp.Works)
 }

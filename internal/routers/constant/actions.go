@@ -52,3 +52,8 @@ const (
 const (
 	SAVE_FCM_TOKEN_ACTION = "save_token"
 )
+
+// work resource actions
+const(
+	RECOVER_WORKS_ACTION = "recover_works"
+)

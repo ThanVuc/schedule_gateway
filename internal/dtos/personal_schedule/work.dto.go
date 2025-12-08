@@ -16,30 +16,12 @@ type NotificationPayloadDTO struct {
 	Link       *string `json:"link"`
 }
 
-type GoalInfoDTO struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-type SubTaskResponseDTO struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	IsCompleted bool   `json:"is_completed"`
-}
 
 type WorkLabelsDTO struct {
 	Status     *LabelInfoDTO `json:"status"`
 	Difficulty *LabelInfoDTO `json:"difficulty"`
 	Priority   *LabelInfoDTO `json:"priority"`
 	Type       *LabelInfoDTO `json:"type"`
-}
-
-type WorkLabelsDetailDTO struct {
-	Status     *LabelInfoDTO `json:"status"`
-	Difficulty *LabelInfoDTO `json:"difficulty"`
-	Priority   *LabelInfoDTO `json:"priority"`
-	Type       *LabelInfoDTO `json:"type"`
-	Category   *LabelInfoDTO `json:"category"`
 }
 
 type WorksResponseDTO struct {
@@ -54,15 +36,7 @@ type WorksResponseDTO struct {
 	Category            *LabelInfoDTO `json:"category"`
 }
 
-type WorksDetailDTO struct {
-	ID                  string               `json:"id"`
-	Name                string               `json:"name"`
-	ShortDescriptions   string               `json:"short_descriptions"`
-	DetailedDescription string               `json:"detailed_description"`
-	StartDate           int64                `json:"start_date"`
-	EndDate             int64                `json:"end_date"`
-	Goal                *string              `json:"goal"`
-	Labels              WorkLabelsDetailDTO  `json:"labels"`
-	Category            *LabelInfoDTO        `json:"category"`
-	SubTasks            []SubTaskResponseDTO `json:"sub_tasks"`
+type RecoveryWorksDTO struct {
+	TargetDate int64               `json:"target_date"`
+	SourceDate *int64               `json:"source_date"`
 }
