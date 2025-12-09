@@ -168,7 +168,6 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 	}
 	var goalName *string
 	if p.Goal != nil {
-		// Chỉ lấy Name
 		name := p.Goal.Name
 		goalName = &name
 	}
@@ -181,6 +180,23 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		dd = *p.DetailedDescription
 	}
 
+	labels := make([]*dtos.LabelInfoDTO, 0)
+	if p.Labels != nil {
+		if p.Labels.Status != nil {
+			labels = append(labels, mapLabel(p.Labels.Status))
+		}
+		if p.Labels.Difficulty != nil {
+			labels = append(labels, mapLabel(p.Labels.Difficulty))
+		}
+		if p.Labels.Priority != nil {
+			labels = append(labels, mapLabel(p.Labels.Priority))
+		}
+		if p.Labels.Type != nil {
+			labels = append(labels, mapLabel(p.Labels.Type))
+		}
+
+	}
+
 	return dtos.WorksResponseDTO{
 		ID:                  p.Id,
 		Name:                p.Name,
@@ -190,12 +206,7 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		EndDate:             p.EndDate,
 		Goal:                goalName,
 		Category:            mapLabel(p.Category),
-		Labels: dtos.WorkLabelsDTO{
-			Status:     mapLabel(p.Labels.Status),
-			Difficulty: mapLabel(p.Labels.Difficulty),
-			Priority:   mapLabel(p.Labels.Priority),
-			Type:       mapLabel(p.Labels.Type),
-		},
+		Labels:              labels,
 	}
 }
 

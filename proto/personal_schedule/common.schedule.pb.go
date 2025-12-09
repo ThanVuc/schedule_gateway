@@ -305,8 +305,8 @@ type Goal struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
 	Id                  string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	Name                string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
-	ShortDescriptions   string                 `protobuf:"bytes,3,opt,name=short_descriptions,json=shortDescriptions,proto3" json:"short_descriptions"`
-	DetailedDescription string                 `protobuf:"bytes,4,opt,name=detailed_description,json=detailedDescription,proto3" json:"detailed_description"`
+	ShortDescriptions   *string                `protobuf:"bytes,3,opt,name=short_descriptions,json=shortDescriptions,proto3,oneof" json:"short_descriptions"`
+	DetailedDescription *string                `protobuf:"bytes,4,opt,name=detailed_description,json=detailedDescription,proto3,oneof" json:"detailed_description"`
 	StartDate           int64                  `protobuf:"varint,5,opt,name=start_date,json=startDate,proto3" json:"start_date"`
 	EndDate             int64                  `protobuf:"varint,6,opt,name=end_date,json=endDate,proto3" json:"end_date"`
 	GoalLabels          *GoalLabels            `protobuf:"bytes,7,opt,name=goalLabels,proto3" json:"goalLabels"`
@@ -360,15 +360,15 @@ func (x *Goal) GetName() string {
 }
 
 func (x *Goal) GetShortDescriptions() string {
-	if x != nil {
-		return x.ShortDescriptions
+	if x != nil && x.ShortDescriptions != nil {
+		return *x.ShortDescriptions
 	}
 	return ""
 }
 
 func (x *Goal) GetDetailedDescription() string {
-	if x != nil {
-		return x.DetailedDescription
+	if x != nil && x.DetailedDescription != nil {
+		return *x.DetailedDescription
 	}
 	return ""
 }
@@ -1267,19 +1267,21 @@ const file_personal_schedule_service_common_schedule_proto_rawDesc = "" +
 	"\n" +
 	"difficulty\x18\x02 \x01(\v2\x1c.personal_schedule.LabelInfoR\n" +
 	"difficulty\x128\n" +
-	"\bpriority\x18\x03 \x01(\v2\x1c.personal_schedule.LabelInfoR\bpriority\"\xbf\x02\n" +
+	"\bpriority\x18\x03 \x01(\v2\x1c.personal_schedule.LabelInfoR\bpriority\"\xf9\x02\n" +
 	"\x04Goal\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12-\n" +
-	"\x12short_descriptions\x18\x03 \x01(\tR\x11shortDescriptions\x121\n" +
-	"\x14detailed_description\x18\x04 \x01(\tR\x13detailedDescription\x12\x1d\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x122\n" +
+	"\x12short_descriptions\x18\x03 \x01(\tH\x00R\x11shortDescriptions\x88\x01\x01\x126\n" +
+	"\x14detailed_description\x18\x04 \x01(\tH\x01R\x13detailedDescription\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"start_date\x18\x05 \x01(\x03R\tstartDate\x12\x19\n" +
 	"\bend_date\x18\x06 \x01(\x03R\aendDate\x12=\n" +
 	"\n" +
 	"goalLabels\x18\a \x01(\v2\x1d.personal_schedule.GoalLabelsR\n" +
 	"goalLabels\x128\n" +
-	"\bcategory\x18\b \x01(\v2\x1c.personal_schedule.LabelInfoR\bcategory\"d\n" +
+	"\bcategory\x18\b \x01(\v2\x1c.personal_schedule.LabelInfoR\bcategoryB\x15\n" +
+	"\x13_short_descriptionsB\x17\n" +
+	"\x15_detailed_description\"d\n" +
 	"\x0fGoalTaskPayload\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
@@ -1445,6 +1447,7 @@ func file_personal_schedule_service_common_schedule_proto_init() {
 	if File_personal_schedule_service_common_schedule_proto != nil {
 		return
 	}
+	file_personal_schedule_service_common_schedule_proto_msgTypes[4].OneofWrappers = []any{}
 	file_personal_schedule_service_common_schedule_proto_msgTypes[5].OneofWrappers = []any{}
 	file_personal_schedule_service_common_schedule_proto_msgTypes[8].OneofWrappers = []any{}
 	file_personal_schedule_service_common_schedule_proto_msgTypes[11].OneofWrappers = []any{}
