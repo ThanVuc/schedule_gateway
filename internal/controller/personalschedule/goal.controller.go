@@ -45,9 +45,13 @@ func (gc *GoalController) GetGoals(ctx *gin.Context) {
 		response.InternalServerError(ctx, "Empty response from service")
 		return
 	}
+	items := make([]dtos.GoalItemDTO, 0, len(goalsResp.Goals))
+	for _, g := range goalsResp.Goals {
+		items = append(items, gc.mapProtoToDTO(g))
+	}
 
 	response.Ok(ctx, "Get Goals Successful", dtos.Goals{
-		Items:      goalsResp.Goals,
+		Items:      items,
 		TotalGoals: goalsResp.TotalGoals,
 		TotalPages: goalsResp.PageInfo.TotalPages,
 		PageSize:   goalsResp.PageInfo.PageSize,
@@ -55,6 +59,54 @@ func (gc *GoalController) GetGoals(ctx *gin.Context) {
 		HasPrev:    goalsResp.PageInfo.HasPrev,
 		HasNext:    goalsResp.PageInfo.HasNext,
 	})
+}
+
+func (gc *GoalController) mapProtoToDTO(p *personal_schedule.Goal) dtos.GoalItemDTO {
+	mapLabel := func(l *personal_schedule.LabelInfo) *dtos.LabelInfoDTO {
+		if l == nil {
+			return nil
+		}
+		return &dtos.LabelInfoDTO{
+			ID:        l.Id,
+			Name:      l.Name,
+			Key:       l.Key,
+			Color:     l.Color,
+			LabelType: l.LabelType,
+		}
+	}
+	sd := ""
+	if p.ShortDescriptions != nil {
+		sd = *p.ShortDescriptions
+	}
+	dd := ""
+	if p.DetailedDescription != nil {
+		dd = *p.DetailedDescription
+	}
+
+	labels := make([]*dtos.LabelInfoDTO, 0)
+	if p.GoalLabels != nil {
+		if p.GoalLabels.Status != nil {
+			labels = append(labels, mapLabel(p.GoalLabels.Status))
+		}
+		if p.GoalLabels.Difficulty != nil {
+			labels = append(labels, mapLabel(p.GoalLabels.Difficulty))
+		}
+		if p.GoalLabels.Priority != nil {
+			labels = append(labels, mapLabel(p.GoalLabels.Priority))
+		}
+
+	}
+
+	return dtos.GoalItemDTO{
+		ID:                  p.Id,
+		Name:                p.Name,
+		ShortDescriptions:   &sd,
+		DetailedDescription: &dd,
+		StartDate:           p.StartDate,
+		EndDate:             p.EndDate,
+		Category:            mapLabel(p.Category),
+		Labels:              labels,
+	}
 }
 
 func (gc *GoalController) buildGetGoalsRequest(c *gin.Context) *personal_schedule.GetGoalsRequest {

@@ -16,7 +16,6 @@ type NotificationPayloadDTO struct {
 	Link       *string `json:"link"`
 }
 
-
 type WorkLabelsDTO struct {
 	Status     *LabelInfoDTO `json:"status"`
 	Difficulty *LabelInfoDTO `json:"difficulty"`
@@ -25,18 +24,18 @@ type WorkLabelsDTO struct {
 }
 
 type WorksResponseDTO struct {
-	ID                  string        `json:"id"`
-	Name                string        `json:"name"`
-	ShortDescriptions   string        `json:"short_descriptions"`
-	DetailedDescription string        `json:"detailed_description"`
-	StartDate           int64         `json:"start_date"`
-	EndDate             int64         `json:"end_date"`
-	Goal                *string       `json:"goal"`
-	Labels              WorkLabelsDTO `json:"labels"`
-	Category            *LabelInfoDTO `json:"category"`
+	ID                  string          `json:"id"`
+	Name                string          `json:"name"`
+	ShortDescriptions   string          `json:"short_descriptions"`
+	DetailedDescription string          `json:"detailed_description"`
+	StartDate           int64           `json:"start_date"`
+	EndDate             int64           `json:"end_date"`
+	Goal                *string         `json:"goal"`
+	Labels              []*LabelInfoDTO `json:"labels"`
+	Category            *LabelInfoDTO   `json:"category"`
 }
 
 type RecoveryWorksDTO struct {
-	TargetDate int64               `json:"target_date"`
-	SourceDate *int64               `json:"source_date"`
+	TargetDate int64  `json:"target_date"`
+	SourceDate *int64 `json:"source_date"`
 }
