@@ -14,7 +14,9 @@ import (
 
 type (
 	NotificationClient interface {
-		GetNotifications(c *gin.Context, req *common.IDRequest) (*notification_service.GetNotificationsResponse, error)
+		GetNotificationsByRecipientId(c *gin.Context, req *common.IDRequest) (*notification_service.GetNotificationsByRecipientIdResponse, error)
+		MarkNotificationAsRead(c *gin.Context, req *common.IDsRequest) (*common.EmptyResponse, error)
+		DeleteNotificationById(c *gin.Context, req *common.IDRequest) (*common.EmptyResponse, error)
 	}
 
 	UserNotificationClient interface {

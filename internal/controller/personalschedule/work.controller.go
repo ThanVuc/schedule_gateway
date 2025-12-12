@@ -290,19 +290,19 @@ func (wc *WorkController) GetWork(c *gin.Context) {
 		WorkId: id,
 	}
 
-	wworkResp, err := wc.client.GetWork(c, req)
+	workResp, err := wc.client.GetWork(c, req)
 	if err != nil {
 		wc.logger.Error("Connection error: ", "", zap.Error(err))
 	}
-	if wworkResp != nil && wworkResp.Error != nil {
-		response.InternalServerError(c, utils.Int32PtrToString(wworkResp.Error.ErrorCode))
+	if workResp != nil && workResp.Error != nil {
+		response.InternalServerError(c, utils.Int32PtrToString(workResp.Error.ErrorCode))
 		return
 	}
-	if wworkResp == nil {
+	if workResp == nil {
 		response.InternalServerError(c, "Empty response from service")
 		return
 	}
-	response.Ok(c, "Get Work Successful", wworkResp.Work)
+	response.Ok(c, "Get Work Successful", workResp.Work)
 }
 
 func (wc *WorkController) DeleteWork(c *gin.Context) {
