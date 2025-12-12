@@ -39,3 +39,8 @@ type RecoveryWorksDTO struct {
 	TargetDate int64  `json:"target_date"`
 	SourceDate *int64 `json:"source_date"`
 }
+
+type UpdateWorkLabelDTO struct {
+	LabelType int32  `json:"label_type" binding:"required"`
+	LabelID   string `json:"label_id" binding:"required,mongodb"`
+}

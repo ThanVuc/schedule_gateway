@@ -24,6 +24,7 @@ func (r WorkRouter) InitWorkRouter(Router *gin.RouterGroup) {
 		workRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.READ_ONE_ACTION), workController.GetWork)
 		workRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.DELETE_ACTION), workController.DeleteWork)
 		workRouterPrivate.POST("/recovery", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.RECOVER_WORKS_ACTION), workController.GetRecoveryWorks)
+		workRouterPrivate.PATCH("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.UPDATE_ACTION), workController.UpdateWorkLabel)
 	}
 	RegisterWorkRouterResouce()
 

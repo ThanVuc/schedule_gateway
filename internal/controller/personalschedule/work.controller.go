@@ -37,6 +37,11 @@ func (wc *WorkController) UpsertWork(c *gin.Context) {
 		wc.logger.Error("Connection error: ", "", zap.Error(err))
 	}
 	if upsertResp != nil && upsertResp.Error != nil {
+		if upsertResp.Error != nil && upsertResp.Error.ErrorCode != nil {
+			response.ValidationError(c, upsertResp.Error.Message, utils.Int32PtrToString(upsertResp.Error.ErrorCode))
+			return
+		}
+		fmt.Println("Error Message:", upsertResp.Error.Message)
 		response.InternalServerError(c, upsertResp.Error.Message)
 		return
 	}
@@ -393,4 +398,36 @@ func (wc *WorkController) GetRecoveryWorks(c *gin.Context) {
 		return
 	}
 	response.Ok(c, "Get Recovery Works Successful", resp.Works)
+}
+
+func (wc *WorkController) UpdateWorkLabel(c *gin.Context) {
+	userID := c.GetString("user_id")
+	workID := c.Param("id")
+
+	var dto dtos.UpdateWorkLabelDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
+		response.BadRequest(c, "Invalid body")
+		return
+	}
+
+	req := &personal_schedule.UpdateWorkLabelRequest{
+		UserId:    userID,
+		WorkId:    workID,
+		LabelType: dto.LabelType,
+		LabelId:   dto.LabelID,
+	}
+
+	resp, err := wc.client.UpdateWorkLabel(c, req)
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to grpc service")
+		return
+	}
+	if resp != nil && resp.Error != nil {
+		response.InternalServerError(c, resp.Error.Message)
+		return
+	}
+
+	response.Ok(c, "Updated", gin.H{"is_success": true})
 }
