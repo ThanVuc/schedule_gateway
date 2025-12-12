@@ -39,3 +39,9 @@ type GoalItemDTO struct {
 	Labels              []*LabelInfoDTO `json:"labels"`
 	Category            *LabelInfoDTO   `json:"category"`
 }
+
+
+type UpdateGoalLabelDTO struct {
+	LabelType int32  `json:"label_type" binding:"required"`
+	LabelID   string `json:"label_id" binding:"required,mongodb"`
+}

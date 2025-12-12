@@ -285,3 +285,35 @@ func (gc *GoalController) DeleteGoal(c *gin.Context) {
 	})
 
 }
+
+func (gc *GoalController) UpdateGoalLabel(c *gin.Context) {
+	userID := c.GetString("user_id")
+	goalID := c.Param("id")
+
+	var dto dtos.UpdateGoalLabelDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		gc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
+		response.BadRequest(c, "Invalid body")
+		return
+	}
+
+	req := &personal_schedule.UpdateGoalLabelRequest{
+		UserId:    userID,
+		GoalId:    goalID,
+		LabelType: dto.LabelType,
+		LabelId:   dto.LabelID,
+	}
+
+	resp, err := gc.client.UpdateGoalLabel(c, req)
+	if err != nil {
+		gc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to grpc service")
+		return
+	}
+	if resp != nil && resp.Error != nil {
+		response.InternalServerError(c, resp.Error.Message)
+		return
+	}
+
+	response.Ok(c, "Updated", gin.H{"is_success": true})
+}
