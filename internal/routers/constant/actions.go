@@ -51,9 +51,10 @@ const (
 // notification resource actions
 const (
 	SAVE_FCM_TOKEN_ACTION = "save_token"
+	MARK_AS_READ_ACTION   = "mark_as_read"
 )
 
 // work resource actions
-const(
+const (
 	RECOVER_WORKS_ACTION = "recover_works"
 )
