@@ -24,18 +24,51 @@ func NewNotificationController() *NotificationController {
 	}
 }
 
-func (nc *NotificationController) GetNotifications(ctx *gin.Context) {
-	idReq := common.IDRequest{
-		Id: "Hello World",
+func (nc *NotificationController) GetNotificationsByRecipientId(c *gin.Context) {
+	userId := c.GetString("user_id")
+	idReq := &common.IDRequest{
+		Id: userId,
 	}
-	requestId, _ := ctx.Get("request-id")
-	resp, err := nc.client.GetNotifications(ctx, &idReq)
+	requestId, _ := c.Get("request-id")
+	resp, err := nc.client.GetNotificationsByRecipientId(c, idReq)
 
 	if err != nil {
 		nc.logger.Error("Failed to get notifications", requestId.(string))
-		ctx.JSON(500, gin.H{"error": "Failed to get notifications"})
+		c.JSON(500, gin.H{"error": "Failed to get notifications"})
 		return
 	}
 
-	response.Ok(ctx, "Get notifications successfully", resp)
+	response.Ok(c, "Get notifications successfully", resp)
+}
+
+func (nc *NotificationController) MarkNotificationsAsRead(c *gin.Context) {
+	idReq := &common.IDsRequest{}
+	if err := c.ShouldBindJSON(idReq); err != nil {
+		nc.logger.Error("Invalid request body", "")
+		c.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+	requestId, _ := c.Get("request-id")
+	_, err := nc.client.MarkNotificationAsRead(c, idReq)
+	if err != nil {
+		nc.logger.Error("Failed to mark notification as read", requestId.(string))
+		c.JSON(500, gin.H{"error": "Failed to mark notification as read"})
+		return
+	}
+	response.Ok(c, "Mark notification as read successfully", nil)
+}
+
+func (nc *NotificationController) DeleteNotificationById(c *gin.Context) {
+	notificationId := c.Param("id")
+	idReq := &common.IDRequest{
+		Id: notificationId,
+	}
+	requestId, _ := c.Get("request-id")
+	_, err := nc.client.DeleteNotificationById(c, idReq)
+	if err != nil {
+		nc.logger.Error("Failed to delete notification", requestId.(string))
+		c.JSON(500, gin.H{"error": "Failed to delete notification"})
+		return
+	}
+	response.Ok(c, "Delete notification successfully", nil)
 }
