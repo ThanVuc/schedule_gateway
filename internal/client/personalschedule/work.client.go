@@ -63,3 +63,13 @@ func (wc *workClient) GetRecoveryWorks(c *gin.Context, req *personal_schedule.Ge
 	}
 	return resp, nil
 }
+
+func (wc *workClient) UpdateWorkLabel(c *gin.Context, req *personal_schedule.UpdateWorkLabelRequest) (*personal_schedule.UpdateWorkLabelResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.UpdateWorkLabel(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
