@@ -44,3 +44,8 @@ type GoalSimpleDTO struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
+
+type UpdateGoalLabelDTO struct {
+	LabelType int32  `json:"label_type" binding:"required"`
+	LabelID   string `json:"label_id" binding:"required,mongodb"`
+}

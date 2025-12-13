@@ -14,10 +14,11 @@ import (
 
 // ErrorResponse is a struct that represents an error response
 type ErrorResponse struct {
-	StatusCode int    `json:"statusCode"`
-	Message    string `json:"message"`
-	CodeReason string `json:"reasonStatusCode"`
-	CreatedAt  string `json:"createdAt"`
+	StatusCode int     `json:"statusCode"`
+	Message    string  `json:"message"`
+	CodeReason string  `json:"reasonStatusCode"`
+	CreatedAt  string  `json:"createdAt"`
+	ErrorCode  *string `json:"errorCode,omitempty"`
 }
 
 // The method to return the error response in controller
@@ -127,6 +128,17 @@ func AnotherError(c *gin.Context, statusCode int, message string) {
 		Message:    message,
 		CodeReason: "UNKNOWN_ERROR",
 		CreatedAt:  time.Now().Format(time.RFC3339),
+	})
+	c.Abort()
+}
+
+func ValidationError(c *gin.Context, message string, errorCode string) {
+	c.JSON(int(BAD_REQUEST), ErrorResponse{
+		StatusCode: int(BAD_REQUEST),
+		Message:    message,
+		CodeReason: MSG[BAD_REQUEST],
+		CreatedAt:  time.Now().Format(time.RFC3339),
+		ErrorCode:  &errorCode,
 	})
 	c.Abort()
 }

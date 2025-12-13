@@ -70,3 +70,7 @@ type NotificationDTO struct {
 	IsActive   bool    `json:"is_active"`
 	Link       *string `json:"link"`
 }
+type UpdateWorkLabelDTO struct {
+	LabelType int32  `json:"label_type" binding:"required"`
+	LabelID   string `json:"label_id" binding:"required,mongodb"`
+}
