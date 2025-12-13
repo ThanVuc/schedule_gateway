@@ -3,10 +3,13 @@ package personalschedule_controller
 import (
 	"fmt"
 	"schedule_gateway/global"
+	notification_client "schedule_gateway/internal/client/notification"
 	client "schedule_gateway/internal/client/personalschedule"
 	dtos "schedule_gateway/internal/dtos/personal_schedule"
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
+	"schedule_gateway/proto/common"
+	"schedule_gateway/proto/notification_service"
 	"schedule_gateway/proto/personal_schedule"
 	"time"
 
@@ -16,14 +19,16 @@ import (
 )
 
 type WorkController struct {
-	logger log.Logger
-	client client.WorkClient
+	logger             log.Logger
+	client             client.WorkClient
+	notificationClient notification_client.NotificationClient
 }
 
 func NewWorkController() *WorkController {
 	return &WorkController{
-		logger: global.Logger,
-		client: client.NewWorkClient(),
+		logger:             global.Logger,
+		client:             client.NewWorkClient(),
+		notificationClient: notification_client.NewNotificationClient(),
 	}
 }
 
@@ -307,7 +312,59 @@ func (wc *WorkController) GetWork(c *gin.Context) {
 		response.InternalServerError(c, "Empty response from service")
 		return
 	}
-	response.Ok(c, "Get Work Successful", workResp.Work)
+
+	notificationsByWorkResp, err := wc.notificationClient.GetNotificationByWorkId(c, &common.IDRequest{
+		Id: id,
+	})
+
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to notification service")
+		return
+	}
+
+	if notificationsByWorkResp != nil && notificationsByWorkResp.Error != nil {
+		response.InternalServerError(c, notificationsByWorkResp.Error.Message)
+		return
+	}
+
+	workDetailDTO := wc.buildWorkDetailResponse(workResp.Work, notificationsByWorkResp.Notifications)
+
+	response.Ok(c, "Get Work Successful", workDetailDTO)
+}
+
+func (wc *WorkController) buildWorkDetailResponse(work *personal_schedule.WorkDetail, notifications []*notification_service.WorkNotification) *dtos.WorkDetailsResponseDTO {
+	var goalDTO *dtos.GoalSimpleDTO
+	if work.Goal != nil {
+		goalDTO = &dtos.GoalSimpleDTO{
+			ID:   work.Goal.Id,
+			Name: work.Goal.Name,
+		}
+	}
+
+	notificationsDTO := make([]*dtos.NotificationDTO, 0)
+	for _, n := range notifications {
+		notificationsDTO = append(notificationsDTO, &dtos.NotificationDTO{
+			ID:         n.Id,
+			TriggerAt:  n.TriggerAt,
+			IsSendMail: n.IsSendMail,
+			IsActive:   n.IsActive,
+			Link:       &n.Link,
+		})
+	}
+
+	workDTO := &dtos.WorkDetailsResponseDTO{
+		ID:                  work.Id,
+		Name:                work.Name,
+		ShortDescriptions:   utils.SafeString(work.ShortDescriptions),
+		DetailedDescription: utils.SafeString(work.DetailedDescription),
+		StartDate:           work.StartDate,
+		EndDate:             work.EndDate,
+		Goal:                goalDTO,
+		Notifications:       notificationsDTO,
+	}
+
+	return workDTO
 }
 
 func (wc *WorkController) DeleteWork(c *gin.Context) {
