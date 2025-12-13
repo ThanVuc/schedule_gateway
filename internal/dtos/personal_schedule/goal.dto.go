@@ -39,3 +39,8 @@ type GoalItemDTO struct {
 	Labels              []*LabelInfoDTO `json:"labels"`
 	Category            *LabelInfoDTO   `json:"category"`
 }
+
+type GoalSimpleDTO struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
