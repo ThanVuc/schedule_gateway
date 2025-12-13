@@ -47,3 +47,13 @@ func (nc *notificationClient) DeleteNotificationById(c *gin.Context, req *common
 	}
 	return resp, nil
 }
+
+func (nc *notificationClient) GetNotificationByWorkId(c *gin.Context, req *common.IDRequest) (*notification_service.GetNotificationsByWorkIdResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := nc.notificationClient.GetNotificationByWorkId(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
