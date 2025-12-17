@@ -238,7 +238,7 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 	endDateStr := c.Query("end_date")
 
 	var startDate, endDate int64
-	now := time.Now().UTC()
+	now := time.Now()
 	fmt.Println("Current time UTC:", now)
 	if startDateStr != "" {
 		parsed, err := utils.ParseStringToInt64(startDateStr)
