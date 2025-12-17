@@ -259,7 +259,7 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 		}
 		endDate = parsed
 	} else {
-		t := time.Unix(startDate, 0)
+		t := time.UnixMilli(startDate)
 		_, endDate = utils.StartAndEndOfDayTimestamp(t)
 	}
 
