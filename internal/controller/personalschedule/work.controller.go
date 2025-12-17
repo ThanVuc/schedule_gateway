@@ -110,6 +110,7 @@ func (wc *WorkController) buildUpsertWorkRequest(c *gin.Context) *personal_sched
 			IsSendMail: notificationDto.IsSendMail,
 			IsActive:   notificationDto.IsActive,
 			Link:       notificationDto.Link,
+			ImgUrl:     notificationDto.ImgUrl,
 		}
 	}
 	req.Notifications = notifications

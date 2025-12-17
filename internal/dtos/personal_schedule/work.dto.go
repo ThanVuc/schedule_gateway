@@ -16,6 +16,7 @@ type NotificationPayloadDTO struct {
 	IsSendMail bool    `json:"is_send_mail"`
 	IsActive   bool    `json:"is_active"`
 	Link       *string `json:"link"`
+	ImgUrl     *string `json:"img_url"`
 }
 
 type WorkLabelsDTO struct {
