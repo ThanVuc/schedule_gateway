@@ -123,8 +123,8 @@ func (gc *GoalController) buildGetGoalsRequest(c *gin.Context) *personal_schedul
 	req := personal_schedule.GetGoalsRequest{
 		UserId:    userID,
 		PageQuery: pageQuery,
-		Search:    searchString,
-		StatusId:  statusID,
+		Search:    &searchString,
+		StatusId:  &statusID,
 	}
 	return &req
 }
