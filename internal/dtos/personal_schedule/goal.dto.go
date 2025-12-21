@@ -38,6 +38,7 @@ type GoalItemDTO struct {
 	EndDate             int64           `json:"end_date"`
 	Labels              []*LabelInfoDTO `json:"labels"`
 	Category            *LabelInfoDTO   `json:"category"`
+	Overdue             *LabelInfoDTO   `json:"overdue"`
 }
 
 type GoalSimpleDTO struct {
