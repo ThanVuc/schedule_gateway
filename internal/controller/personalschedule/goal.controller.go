@@ -106,6 +106,7 @@ func (gc *GoalController) mapProtoToDTO(p *personal_schedule.Goal) dtos.GoalItem
 		EndDate:             p.EndDate,
 		Category:            mapLabel(p.Category),
 		Labels:              labels,
+		Overdue:             mapLabel(p.Overdue),
 	}
 }
 
@@ -182,6 +183,16 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 		return nil
 	}
 
+	if *req.StartDate < *req.EndDate {
+		response.BadRequest(c, "start_date must be before end_date")
+		return nil
+	}
+
+	if req.StartDate == req.EndDate {
+		response.BadRequest(c, "start_date must not be equal to end_date")
+		return nil
+	}
+
 	req.UserId = userID
 	req.Id = &id
 	req.Name = dto.Name
@@ -198,6 +209,11 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	if req.StartDate != nil {
 		if *req.StartDate > *req.EndDate {
 			response.BadRequest(c, "start_date must be before end_date")
+			return nil
+		}
+
+		if *req.StartDate == *req.EndDate {
+			response.BadRequest(c, "start_date must not be equal to end_date")
 			return nil
 		}
 	}
