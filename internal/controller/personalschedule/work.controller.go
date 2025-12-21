@@ -218,6 +218,7 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		Goal:                goalName,
 		Category:            mapLabel(p.Category),
 		Labels:              labels,
+		Overdue:             mapLabel(p.Overdue),
 	}
 }
 
@@ -363,6 +364,14 @@ func (wc *WorkController) buildWorkDetailResponse(work *personal_schedule.WorkDe
 		EndDate:             work.EndDate,
 		Goal:                goalDTO,
 		Notifications:       notificationsDTO,
+		Labels: &dtos.WorkLabelGroupDetail{
+			Status:     work.Labels.Status,
+			Difficulty: work.Labels.Difficulty,
+			Priority:   work.Labels.Priority,
+			Type:       work.Labels.Type,
+			Category:   work.Labels.Category,
+		},
+		SubTasks: work.SubTasks,
 	}
 
 	return workDTO
