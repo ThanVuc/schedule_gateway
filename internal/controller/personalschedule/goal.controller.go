@@ -1,7 +1,6 @@
 package personalschedule_controller
 
 import (
-	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/personalschedule"
 	dtos "schedule_gateway/internal/dtos/personal_schedule"
@@ -171,30 +170,19 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	}
 
 	id := c.Param("id")
-	if id == "" {
-		req.Id = nil
-	} else {
+	if id != "" {
 		req.Id = &id
+	} else {
+		req.Id = nil
 	}
 
 	if err := c.ShouldBindJSON(&dto); err != nil {
+		gc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
 		response.BadRequest(c, "Invalid request body: "+err.Error())
-		fmt.Println("Error binding JSON:", err)
-		return nil
-	}
-
-	if *req.StartDate < *req.EndDate {
-		response.BadRequest(c, "start_date must be before end_date")
-		return nil
-	}
-
-	if req.StartDate == req.EndDate {
-		response.BadRequest(c, "start_date must not be equal to end_date")
 		return nil
 	}
 
 	req.UserId = userID
-	req.Id = &id
 	req.Name = dto.Name
 	req.DetailedDescription = dto.DetailedDescription
 	req.StatusId = dto.StatusID
@@ -206,16 +194,14 @@ func (gc *GoalController) buildUpsertGoalRequest(c *gin.Context) *personal_sched
 	req.EndDate = dto.EndDate
 	req.Tasks = make([]*personal_schedule.GoalTaskPayload, len(dto.Tasks))
 
-	if req.StartDate != nil {
-		if *req.StartDate > *req.EndDate {
-			response.BadRequest(c, "start_date must be before end_date")
-			return nil
-		}
+	if *req.StartDate > *req.EndDate {
+		response.BadRequest(c, "start_date must be before end_date")
+		return nil
+	}
 
-		if *req.StartDate == *req.EndDate {
-			response.BadRequest(c, "start_date must not be equal to end_date")
-			return nil
-		}
+	if *req.StartDate == *req.EndDate {
+		response.BadRequest(c, "start_date must not be equal to end_date")
+		return nil
 	}
 
 	for i, taskDTO := range dto.Tasks {
