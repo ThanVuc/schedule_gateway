@@ -73,3 +73,13 @@ func (wc *workClient) UpdateWorkLabel(c *gin.Context, req *personal_schedule.Upd
 	}
 	return resp, nil
 }
+
+func (wc *workClient) CommitRecoveryDrafts(c *gin.Context, req *personal_schedule.CommitRecoveryDraftsRequest) (*personal_schedule.CommitRecoveryDraftsResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.CommitRecoveryDrafts(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

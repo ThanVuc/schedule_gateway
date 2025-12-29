@@ -37,6 +37,7 @@ type WorksResponseDTO struct {
 	Labels              []*LabelInfoDTO `json:"labels"`
 	Category            *LabelInfoDTO   `json:"category"`
 	Overdue             *LabelInfoDTO   `json:"overdue"`
+	IsConflict          *bool           `json:"is_conflict"`
 }
 
 type RecoveryWorksDTO struct {
@@ -53,6 +54,7 @@ type WorkDetailsResponseDTO struct {
 	EndDate             int64                               `json:"end_date"`
 	Goal                *GoalSimpleDTO                      `json:"goal"`
 	Labels              *WorkLabelGroupDetail               `json:"labels"`
+	Draft               *personal_schedule.LabelInfo        `json:"draft"`
 	SubTasks            []*personal_schedule.SubTaskPayload `json:"sub_tasks"`
 	Notifications       []*NotificationDTO                  `protobuf:"bytes,6,opt,name=notifications,proto3" json:"notifications"`
 }
@@ -72,7 +74,12 @@ type NotificationDTO struct {
 	IsActive   bool    `json:"is_active"`
 	Link       *string `json:"link"`
 }
+
 type UpdateWorkLabelDTO struct {
 	LabelType int32  `json:"label_type" binding:"required"`
 	LabelID   string `json:"label_id" binding:"required,mongodb"`
+}
+
+type CommitRecoveryDraftsDTO struct {
+	WorkIDs []string `json:"work_ids" binding:"required,dive,mongodb"`
 }

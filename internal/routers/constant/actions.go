@@ -56,5 +56,6 @@ const (
 
 // work resource actions
 const (
-	RECOVER_WORKS_ACTION = "recover_works"
+	RECOVER_WORKS_ACTION           = "recover_works"
+	ACCEPT_ALL_DRAFTS_WORKS_ACTION = "accept_all_drafts_works"
 )

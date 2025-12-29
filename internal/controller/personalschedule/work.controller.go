@@ -98,6 +98,7 @@ func (wc *WorkController) buildUpsertWorkRequest(c *gin.Context) *personal_sched
 	req.TypeId = dto.TypeID
 	req.CategoryId = dto.CategoryID
 	req.GoalId = dto.GoalID
+	req.DraftId = dto.DraftID
 	notifications := make([]*personal_schedule.WorkNotification, len(dto.Notifications))
 	for i, notificationDto := range dto.Notifications {
 		var notificationID string
@@ -158,10 +159,39 @@ func (wc *WorkController) GetWorks(c *gin.Context) {
 			result = append(result, wc.mapProtoToDTO(w))
 		}
 	}
+	detectConflicts(result)
 
 	response.Ok(c, "Get Works Successful", gin.H{
-		"works": result,
+		"works":       result,
+		"total_works": resp.TotalWorks,
 	})
+}
+func isOverlap(start1, end1, start2, end2 int64) bool {
+	return start1 < end2 && end1 > start2
+}
+
+func detectConflicts(works []dtos.WorksResponseDTO) {
+	n := len(works)
+
+	for i := 0; i < n; i++ {
+		conflict := false
+
+		for j := 0; j < n; j++ {
+			if i == j {
+				continue
+			}
+
+			if isOverlap(
+				works[i].StartDate, works[i].EndDate,
+				works[j].StartDate, works[j].EndDate,
+			) {
+				conflict = true
+				break
+			}
+		}
+
+		works[i].IsConflict = &conflict
+	}
 }
 
 func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksResponseDTO {
@@ -205,7 +235,9 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		if p.Labels.Type != nil {
 			labels = append(labels, mapLabel(p.Labels.Type))
 		}
-
+		if p.Labels.Draft != nil {
+			labels = append(labels, mapLabel(p.Labels.Draft))
+		}
 	}
 
 	return dtos.WorksResponseDTO{
@@ -239,8 +271,11 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 	endDateStr := c.Query("end_date")
 
 	var startDate, endDate int64
-	now := time.Now()
+	now := time.Now().UTC()
 	fmt.Println("Current time UTC:", now)
+
+	startDate, endDate = utils.StartAndEndOfDayTimestamp(now)
+
 	if startDateStr != "" {
 		parsed, err := utils.ParseStringToInt64(startDateStr)
 		if err != nil {
@@ -248,8 +283,6 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 			return nil
 		}
 		startDate = parsed
-	} else {
-		startDate, _ = utils.StartAndEndOfDayTimestamp(now)
 	}
 
 	if endDateStr != "" {
@@ -259,9 +292,6 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 			return nil
 		}
 		endDate = parsed
-	} else {
-		t := time.UnixMilli(startDate)
-		_, endDate = utils.StartAndEndOfDayTimestamp(t)
 	}
 
 	if startDate > endDate {
@@ -371,6 +401,7 @@ func (wc *WorkController) buildWorkDetailResponse(work *personal_schedule.WorkDe
 			Type:       work.Labels.Type,
 			Category:   work.Labels.Category,
 		},
+		Draft:    work.Draft,
 		SubTasks: work.SubTasks,
 	}
 
@@ -445,26 +476,41 @@ func (wc *WorkController) GetRecoveryWorks(c *gin.Context) {
 		return
 	}
 
+	if dto.TargetDate == 0 {
+		response.BadRequest(c, "target_date is required")
+		return
+	}
+
 	targetDate := dto.TargetDate
 	var sourceDate int64
 	if dto.SourceDate != nil && *dto.SourceDate != 0 {
 		sourceDate = *dto.SourceDate
 	} else {
-		t := time.Unix(targetDate, 0).AddDate(0, 0, -1)
+		t := time.UnixMilli(targetDate).UTC().AddDate(0, 0, -1)
 		sourceDate, _ = utils.StartAndEndOfDayTimestamp(t)
 	}
+
 	req := &personal_schedule.GetRecoveryWorksRequest{
 		UserId:     userID,
 		TargetDate: targetDate,
 		SourceDate: sourceDate,
 	}
+
 	resp, err := wc.client.GetRecoveryWorks(c, req)
 	if err != nil {
 		wc.logger.Error("Connection error: ", "", zap.Error(err))
 		response.InternalServerError(c, "Error connecting to grpc service")
 		return
 	}
-	response.Ok(c, "Get Recovery Works Successful", resp.Works)
+
+	if resp != nil && resp.Error != nil {
+		response.InternalServerError(c, resp.Error.Message)
+		return
+	}
+	response.Ok(c, "Get Recovery Works Successful", gin.H{
+		"is_success": resp.IsSuccess,
+	})
+
 }
 
 func (wc *WorkController) UpdateWorkLabel(c *gin.Context) {
@@ -497,4 +543,30 @@ func (wc *WorkController) UpdateWorkLabel(c *gin.Context) {
 	}
 
 	response.Ok(c, "Updated", gin.H{"is_success": true})
+}
+
+func (wc *WorkController) CommitRecoveryDrafts(c *gin.Context) {
+	userID := c.GetString("user_id")
+	var dto dtos.CommitRecoveryDraftsDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
+		response.BadRequest(c, "Invalid body")
+		return
+	}
+
+	req := &personal_schedule.CommitRecoveryDraftsRequest{
+		UserId:  userID,
+		WorkIds: dto.WorkIDs,
+	}
+	resp, err := wc.client.CommitRecoveryDrafts(c, req)
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to grpc service")
+		return
+	}
+	if resp != nil && resp.Error != nil {
+		response.InternalServerError(c, resp.Error.Message)
+		return
+	}
+	response.Ok(c, "Committed", gin.H{"is_success": resp.IsSuccess})
 }
