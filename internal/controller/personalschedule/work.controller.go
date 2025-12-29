@@ -235,9 +235,6 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		if p.Labels.Type != nil {
 			labels = append(labels, mapLabel(p.Labels.Type))
 		}
-		if p.Labels.Draft != nil {
-			labels = append(labels, mapLabel(p.Labels.Draft))
-		}
 	}
 
 	return dtos.WorksResponseDTO{
@@ -251,6 +248,7 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		Category:            mapLabel(p.Category),
 		Labels:              labels,
 		Overdue:             mapLabel(p.Overdue),
+		Draft:               mapLabel(p.Labels.Draft),
 	}
 }
 

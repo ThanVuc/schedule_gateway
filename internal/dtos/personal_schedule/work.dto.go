@@ -37,6 +37,7 @@ type WorksResponseDTO struct {
 	Labels              []*LabelInfoDTO `json:"labels"`
 	Category            *LabelInfoDTO   `json:"category"`
 	Overdue             *LabelInfoDTO   `json:"overdue"`
+	Draft               *LabelInfoDTO   `json:"draft"`
 	IsConflict          *bool           `json:"is_conflict"`
 }
 
