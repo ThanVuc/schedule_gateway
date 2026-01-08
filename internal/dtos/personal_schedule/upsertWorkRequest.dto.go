@@ -17,6 +17,7 @@ type UpsertWorkDTO struct {
 	PriorityID          string                   `json:"priority_id" binding:"required,mongodb"`
 	TypeID              string                   `json:"type_id" binding:"required,mongodb"`
 	CategoryID          string                   `json:"category_id" binding:"required,mongodb"`
+	DraftID             *string                  `json:"draft_id" binding:"omitempty,mongodb"`
 	GoalID              *string                  `json:"goal_id"`
 	SubTasks            []SubTaskPayloadDTO      `json:"sub_tasks"`
 	Notifications       []NotificationPayloadDTO `json:"notifications"`
