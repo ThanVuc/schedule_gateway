@@ -25,6 +25,7 @@ func (r WorkRouter) InitWorkRouter(Router *gin.RouterGroup) {
 		workRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.DELETE_ACTION), workController.DeleteWork)
 		workRouterPrivate.POST("/recovery", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.RECOVER_WORKS_ACTION), workController.GetRecoveryWorks)
 		workRouterPrivate.PATCH("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.UPDATE_ACTION), workController.UpdateWorkLabel)
+		workRouterPrivate.POST("/recovery/commit", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.ACCEPT_ALL_DRAFTS_WORKS_ACTION), workController.CommitRecoveryDrafts)
 	}
 	RegisterWorkRouterResouce()
 
@@ -60,6 +61,10 @@ func RegisterWorkRouterResouce() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.RECOVER_WORKS_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.ACCEPT_ALL_DRAFTS_WORKS_ACTION,
 		},
 	})
 }
