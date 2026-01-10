@@ -129,6 +129,10 @@ func (wc *WorkController) buildUpsertWorkRequest(c *gin.Context) *personal_sched
 		}
 	}
 
+	req.UpdateType = dto.UpdateType
+	req.RepeatStartDate = dto.RepeatStartDate
+	req.RepeatEndDate = dto.RepeatEndDate
+
 	return &req
 }
 
@@ -488,6 +492,11 @@ func (wc *WorkController) GetRecoveryWorks(c *gin.Context) {
 		sourceDate, _ = utils.StartAndEndOfDayTimestamp(t)
 	}
 
+	if sourceDate >= targetDate {
+		response.BadRequest(c, "source_date must be before target_date")
+		return
+	}
+
 	req := &personal_schedule.GetRecoveryWorksRequest{
 		UserId:     userID,
 		TargetDate: targetDate,
@@ -545,7 +554,7 @@ func (wc *WorkController) UpdateWorkLabel(c *gin.Context) {
 
 func (wc *WorkController) CommitRecoveryDrafts(c *gin.Context) {
 	userID := c.GetString("user_id")
-	var dto dtos.CommitRecoveryDraftsDTO
+	var dto dtos.WorksDraftIDDTO
 	if err := c.ShouldBindJSON(&dto); err != nil {
 		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
 		response.BadRequest(c, "Invalid body")
@@ -567,4 +576,31 @@ func (wc *WorkController) CommitRecoveryDrafts(c *gin.Context) {
 		return
 	}
 	response.Ok(c, "Committed", gin.H{"is_success": resp.IsSuccess})
+}
+
+func (wc *WorkController) DeleteAllDraftWorks(c *gin.Context) {
+	userID := c.GetString("user_id")
+	var dto dtos.WorksDraftIDDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
+		response.BadRequest(c, "Invalid body")
+		return
+	}
+
+	req := &personal_schedule.DeleteAllDraftWorksRequest{
+		UserId:  userID,
+		WorkIds: dto.WorkIDs,
+	}
+	resp, err := wc.client.DeleteAllDraftWorks(c, req)
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to grpc service")
+		return
+	}
+	if resp != nil && resp.Error != nil {
+		response.InternalServerError(c, resp.Error.Message)
+		return
+	}
+	response.Ok(c, "Deleted", gin.H{"is_success": resp.IsSuccess})
+
 }

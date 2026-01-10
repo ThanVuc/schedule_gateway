@@ -21,4 +21,7 @@ type UpsertWorkDTO struct {
 	GoalID              *string                  `json:"goal_id"`
 	SubTasks            []SubTaskPayloadDTO      `json:"sub_tasks"`
 	Notifications       []NotificationPayloadDTO `json:"notifications"`
+	UpdateType          *int32                   `json:"update_type" binding:"omitempty"`
+	RepeatStartDate     *int64                   `json:"repeat_start_date" binding:"omitempty"`
+	RepeatEndDate       *int64                   `json:"repeat_end_date" binding:"omitempty"`
 }

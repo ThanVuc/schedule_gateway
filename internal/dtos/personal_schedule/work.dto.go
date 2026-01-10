@@ -81,6 +81,6 @@ type UpdateWorkLabelDTO struct {
 	LabelID   string `json:"label_id" binding:"required,mongodb"`
 }
 
-type CommitRecoveryDraftsDTO struct {
+type WorksDraftIDDTO struct {
 	WorkIDs []string `json:"work_ids" binding:"required,dive,mongodb"`
 }

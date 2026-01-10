@@ -83,3 +83,13 @@ func (wc *workClient) CommitRecoveryDrafts(c *gin.Context, req *personal_schedul
 	}
 	return resp, nil
 }
+
+func (wc *workClient) DeleteAllDraftWorks(c *gin.Context, req *personal_schedule.DeleteAllDraftWorksRequest) (*personal_schedule.DeleteAllDraftWorksResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.DeleteAllDraftWorks(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
