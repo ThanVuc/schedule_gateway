@@ -6,8 +6,13 @@ import (
 	"schedule_gateway/internal/middlewares"
 	constant "schedule_gateway/internal/routers/constant"
 	"schedule_gateway/proto/auth"
+	"time"
 
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	AI_WORK_GENERATION_RATE_LIMIT_KEY = "ps.work.ai_work_generation."
 )
 
 type WorkRouter struct{}
@@ -27,9 +32,14 @@ func (r WorkRouter) InitWorkRouter(Router *gin.RouterGroup) {
 		workRouterPrivate.PATCH("/:id", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.UPDATE_ACTION), workController.UpdateWorkLabel)
 		workRouterPrivate.POST("/recovery/commit", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.ACCEPT_ALL_DRAFTS_WORKS_ACTION), workController.CommitRecoveryDrafts)
 		workRouterPrivate.DELETE("/drafts", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.DELETE_ACTION), workController.DeleteAllDraftWorks)
+		workRouterPrivate.POST(
+			"/generate-by-ai",
+			middlewares.CheckPerm(constant.WORK_RESOURCE, constant.CREATE_ACTION),
+			middlewares.RateLimiter(AI_WORK_GENERATION_RATE_LIMIT_KEY, 3, 12*time.Hour),
+			workController.GenerateWorksByAI,
+		)
 	}
 	RegisterWorkRouterResouce()
-
 }
 
 func RegisterWorkRouterResouce() {

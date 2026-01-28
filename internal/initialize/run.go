@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"fmt"
 	"net/http"
 	"schedule_gateway/global"
 	"schedule_gateway/internal/helper"
@@ -24,6 +23,7 @@ establishing database connections, and setting up the HTTP server with the speci
 func Run() {
 	LoadConfig()
 	InitLogger()
+	InitRedis()
 
 	var r *gin.Engine = gin.New()
 	r.Use(middlewares.LogResultMiddleware())
@@ -60,5 +60,7 @@ func Run() {
 	helper.WriteToJsonFile("resources")
 	go InitResource()
 
-	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
+	// r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
+	r.Run(":8081")
+
 }

@@ -604,3 +604,5 @@ func (wc *WorkController) DeleteAllDraftWorks(c *gin.Context) {
 	response.Ok(c, "Deleted", gin.H{"is_success": resp.IsSuccess})
 
 }
+
+func (wc *WorkController) GenerateWorksByAI(c *gin.Context) {}

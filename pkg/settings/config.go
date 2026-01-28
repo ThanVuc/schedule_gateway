@@ -19,6 +19,7 @@ type Config struct {
 	PersonalScheduleService PersonalScheduleService `mapstructure:"personal_schedule_service" json:"personal_schedule_service" yaml:"personal_schedule_service"`
 	R2                      R2                      `mapstructure:"r2" json:"r2" yaml:"r2"`
 	NotificationService     NotificationService     `mapstructure:"notification_service" json:"notification_service" yaml:"notification_service"`
+	Redis                   Redis                   `mapstructure:"redis" json:"redis" yaml:"redis"`
 }
 
 type Server struct {
@@ -59,4 +60,13 @@ type R2 struct {
 type NotificationService struct {
 	Host string `mapstructure:"host" json:"host" yaml:"host"`
 	Port int    `mapstructure:"port" json:"port" yaml:"port"`
+}
+
+type Redis struct {
+	Host     string `mapstructure:"host" json:"host" yaml:"host"`
+	Port     int    `mapstructure:"port" json:"port" yaml:"port"`
+	Password string `mapstructure:"password" json:"password" yaml:"password"`
+	DB       int    `mapstructure:"db" json:"db" yaml:"db"`
+	PoolSize int    `mapstructure:"pool_size" json:"pool_size" yaml:"pool_size"`
+	MinIdle  int    `mapstructure:"min_idle" json:"min_idle" yaml:"min_idle"`
 }
