@@ -3,6 +3,7 @@ package global
 import (
 	"schedule_gateway/pkg/settings"
 
+	"github.com/thanvuc/go-core-lib/cache"
 	"github.com/thanvuc/go-core-lib/log"
 	"github.com/thanvuc/go-core-lib/storage"
 )
@@ -13,7 +14,8 @@ import (
 @Description: This package defines global variables that are used throughout the application.
 */
 var (
-	Config settings.Config
-	Logger log.Logger
-	R2Client  *storage.R2Client
+	Config   settings.Config
+	Logger   log.Logger
+	R2Client *storage.R2Client
+	RedisDb  *cache.RedisCache
 )
