@@ -605,4 +605,39 @@ func (wc *WorkController) DeleteAllDraftWorks(c *gin.Context) {
 
 }
 
-func (wc *WorkController) GenerateWorksByAI(c *gin.Context) {}
+func (wc *WorkController) GenerateWorksByAI(c *gin.Context) {
+	userID := c.GetString("user_id")
+	var req personal_schedule.GenerateWorksByAIRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
+		response.BadRequest(c, "Invalid body")
+		return
+	}
+	req.UserId = userID
+
+	// validate required fields
+	if len(req.Prompts) == 0 {
+		response.BadRequest(c, "prompts is required")
+		return
+	}
+
+	if req.LocalDate == "" {
+		response.BadRequest(c, "local_date is required")
+		return
+	}
+
+	res, err := wc.client.GenerateWorksByAI(c, &req)
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to grpc service")
+		return
+	}
+
+	if res != nil && res.Error != nil {
+		wc.logger.Error("Service error: ", "", zap.String("message", *res.Message))
+		response.InternalServerError(c, *res.Message)
+		return
+	}
+
+	response.Ok(c, "AI Work Generation Started", nil)
+}

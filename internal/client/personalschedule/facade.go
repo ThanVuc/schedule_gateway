@@ -37,6 +37,7 @@ type (
 		UpdateWorkLabel(c *gin.Context, req *personal_schedule.UpdateWorkLabelRequest) (*personal_schedule.UpdateWorkLabelResponse, error)
 		CommitRecoveryDrafts(c *gin.Context, req *personal_schedule.CommitRecoveryDraftsRequest) (*personal_schedule.CommitRecoveryDraftsResponse, error)
 		DeleteAllDraftWorks(c *gin.Context, req *personal_schedule.DeleteAllDraftWorksRequest) (*personal_schedule.DeleteAllDraftWorksResponse, error)
+		GenerateWorksByAI(c *gin.Context, req *personal_schedule.GenerateWorksByAIRequest) (*common.EmptyResponse, error)
 	}
 )
 

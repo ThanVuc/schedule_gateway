@@ -33,9 +33,9 @@ func (r WorkRouter) InitWorkRouter(Router *gin.RouterGroup) {
 		workRouterPrivate.POST("/recovery/commit", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.ACCEPT_ALL_DRAFTS_WORKS_ACTION), workController.CommitRecoveryDrafts)
 		workRouterPrivate.DELETE("/drafts", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.DELETE_ACTION), workController.DeleteAllDraftWorks)
 		workRouterPrivate.POST(
-			"/generate-by-ai",
+			"/generation",
 			middlewares.CheckPerm(constant.WORK_RESOURCE, constant.CREATE_ACTION),
-			middlewares.RateLimiter(AI_WORK_GENERATION_RATE_LIMIT_KEY, 3, 12*time.Hour),
+			middlewares.RateLimiter(AI_WORK_GENERATION_RATE_LIMIT_KEY, 100, 12*time.Hour),
 			workController.GenerateWorksByAI,
 		)
 	}

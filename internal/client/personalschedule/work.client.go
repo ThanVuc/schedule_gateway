@@ -3,6 +3,7 @@ package personalschedule_client
 import (
 	"context"
 	"schedule_gateway/internal/utils"
+	"schedule_gateway/proto/common"
 	"schedule_gateway/proto/personal_schedule"
 
 	"github.com/gin-gonic/gin"
@@ -88,6 +89,16 @@ func (wc *workClient) DeleteAllDraftWorks(c *gin.Context, req *personal_schedule
 	ctx := context.Background()
 	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
 	resp, err := wc.workClient.DeleteAllDraftWorks(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (wc *workClient) GenerateWorksByAI(c *gin.Context, req *personal_schedule.GenerateWorksByAIRequest) (*common.EmptyResponse, error) {
+	ctx := context.Background()
+	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	resp, err := wc.workClient.GenerateWorksByAI(ctx, req)
 	if err != nil {
 		return nil, err
 	}
