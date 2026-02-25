@@ -75,10 +75,10 @@ func (wc *workClient) UpdateWorkLabel(c *gin.Context, req *personal_schedule.Upd
 	return resp, nil
 }
 
-func (wc *workClient) CommitRecoveryDrafts(c *gin.Context, req *personal_schedule.CommitRecoveryDraftsRequest) (*personal_schedule.CommitRecoveryDraftsResponse, error) {
+func (wc *workClient) AcceptRecoveryDrafts(c *gin.Context, req *personal_schedule.AcceptAllRecoveryDraftsRequest) (*personal_schedule.AcceptAllRecoveryDraftsResponse, error) {
 	ctx := context.Background()
 	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
-	resp, err := wc.workClient.CommitRecoveryDrafts(ctx, req)
+	resp, err := wc.workClient.AcceptRecoveryDrafts(ctx, req)
 	if err != nil {
 		return nil, err
 	}
