@@ -35,6 +35,7 @@ type WorksResponseDTO struct {
 	EndDate             int64           `json:"end_date"`
 	Goal                *string         `json:"goal"`
 	Labels              []*LabelInfoDTO `json:"labels"`
+	WorkType            *LabelInfoDTO   `json:"work_type"`
 	Category            *LabelInfoDTO   `json:"category"`
 	Overdue             *LabelInfoDTO   `json:"overdue"`
 	Draft               *LabelInfoDTO   `json:"draft"`
@@ -47,17 +48,19 @@ type RecoveryWorksDTO struct {
 }
 
 type WorkDetailsResponseDTO struct {
-	ID                  string                              `json:"id"`
-	Name                string                              `json:"name"`
-	ShortDescriptions   string                              `json:"short_descriptions"`
-	DetailedDescription string                              `json:"detailed_description"`
-	StartDate           int64                               `json:"start_date"`
-	EndDate             int64                               `json:"end_date"`
-	Goal                *GoalSimpleDTO                      `json:"goal"`
-	Labels              *WorkLabelGroupDetail               `json:"labels"`
-	Draft               *personal_schedule.LabelInfo        `json:"draft"`
-	SubTasks            []*personal_schedule.SubTaskPayload `json:"sub_tasks"`
-	Notifications       []*NotificationDTO                  `protobuf:"bytes,6,opt,name=notifications,proto3" json:"notifications"`
+	ID                    string                              `json:"id"`
+	Name                  string                              `json:"name"`
+	ShortDescriptions     string                              `json:"short_descriptions"`
+	DetailedDescription   string                              `json:"detailed_description"`
+	StartDate             int64                               `json:"start_date"`
+	EndDate               int64                               `json:"end_date"`
+	Goal                  *GoalSimpleDTO                      `json:"goal"`
+	Labels                *WorkLabelGroupDetail               `json:"labels"`
+	RepeatSeriesStartDate *int64                              `json:"repeat_series_start_date,omitempty"`
+	RepeatSeriesEndDate   *int64                              `json:"repeat_series_end_date,omitempty"`
+	Draft                 *personal_schedule.LabelInfo        `json:"draft"`
+	SubTasks              []*personal_schedule.SubTaskPayload `json:"sub_tasks"`
+	Notifications         []*NotificationDTO                  `protobuf:"bytes,6,opt,name=notifications,proto3" json:"notifications"`
 }
 
 type WorkLabelGroupDetail struct {
@@ -79,8 +82,4 @@ type NotificationDTO struct {
 type UpdateWorkLabelDTO struct {
 	LabelType int32  `json:"label_type" binding:"required"`
 	LabelID   string `json:"label_id" binding:"required,mongodb"`
-}
-
-type WorksDraftIDDTO struct {
-	WorkIDs []string `json:"work_ids" binding:"required,dive,mongodb"`
 }

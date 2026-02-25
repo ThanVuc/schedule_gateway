@@ -236,9 +236,6 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		if p.Labels.Priority != nil {
 			labels = append(labels, mapLabel(p.Labels.Priority))
 		}
-		if p.Labels.Type != nil {
-			labels = append(labels, mapLabel(p.Labels.Type))
-		}
 	}
 
 	return dtos.WorksResponseDTO{
@@ -249,6 +246,7 @@ func (wc *WorkController) mapProtoToDTO(p *personal_schedule.Work) dtos.WorksRes
 		StartDate:           p.StartDate,
 		EndDate:             p.EndDate,
 		Goal:                goalName,
+		WorkType:            mapLabel(p.Labels.Type),
 		Category:            mapLabel(p.Category),
 		Labels:              labels,
 		Overdue:             mapLabel(p.Overdue),
@@ -403,8 +401,10 @@ func (wc *WorkController) buildWorkDetailResponse(work *personal_schedule.WorkDe
 			Type:       work.Labels.Type,
 			Category:   work.Labels.Category,
 		},
-		Draft:    work.Draft,
-		SubTasks: work.SubTasks,
+		RepeatSeriesStartDate: work.RepeatSeriesStartDate,
+		RepeatSeriesEndDate:   work.RepeatSeriesEndDate,
+		Draft:                 work.Draft,
+		SubTasks:              work.SubTasks,
 	}
 
 	return workDTO
@@ -552,20 +552,13 @@ func (wc *WorkController) UpdateWorkLabel(c *gin.Context) {
 	response.Ok(c, "Updated", gin.H{"is_success": true})
 }
 
-func (wc *WorkController) CommitRecoveryDrafts(c *gin.Context) {
+func (wc *WorkController) AcceptRecoveryDrafts(c *gin.Context) {
 	userID := c.GetString("user_id")
-	var dto dtos.WorksDraftIDDTO
-	if err := c.ShouldBindJSON(&dto); err != nil {
-		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
-		response.BadRequest(c, "Invalid body")
-		return
-	}
 
-	req := &personal_schedule.CommitRecoveryDraftsRequest{
-		UserId:  userID,
-		WorkIds: dto.WorkIDs,
+	req := &personal_schedule.AcceptAllRecoveryDraftsRequest{
+		UserId: userID,
 	}
-	resp, err := wc.client.CommitRecoveryDrafts(c, req)
+	resp, err := wc.client.AcceptRecoveryDrafts(c, req)
 	if err != nil {
 		wc.logger.Error("Connection error: ", "", zap.Error(err))
 		response.InternalServerError(c, "Error connecting to grpc service")
@@ -580,16 +573,9 @@ func (wc *WorkController) CommitRecoveryDrafts(c *gin.Context) {
 
 func (wc *WorkController) DeleteAllDraftWorks(c *gin.Context) {
 	userID := c.GetString("user_id")
-	var dto dtos.WorksDraftIDDTO
-	if err := c.ShouldBindJSON(&dto); err != nil {
-		wc.logger.Error("Failed to bind JSON: ", "", zap.Error(err))
-		response.BadRequest(c, "Invalid body")
-		return
-	}
 
 	req := &personal_schedule.DeleteAllDraftWorksRequest{
-		UserId:  userID,
-		WorkIds: dto.WorkIDs,
+		UserId: userID,
 	}
 	resp, err := wc.client.DeleteAllDraftWorks(c, req)
 	if err != nil {
