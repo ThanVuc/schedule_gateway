@@ -349,11 +349,11 @@ func (wc *WorkController) GetWork(c *gin.Context) {
 		Id: id,
 	})
 
-	if err != nil {
-		wc.logger.Error("Connection error: ", "", zap.Error(err))
-		response.InternalServerError(c, "Error connecting to notification service")
-		return
-	}
+	// if err != nil {
+	// 	wc.logger.Error("Connection error: ", "", zap.Error(err))
+	// 	response.InternalServerError(c, "Error connecting to notification service")
+	// 	return
+	// }
 
 	if notificationsByWorkResp != nil && notificationsByWorkResp.Error != nil {
 		response.InternalServerError(c, notificationsByWorkResp.Error.Message)
@@ -552,13 +552,13 @@ func (wc *WorkController) UpdateWorkLabel(c *gin.Context) {
 	response.Ok(c, "Updated", gin.H{"is_success": true})
 }
 
-func (wc *WorkController) AcceptRecoveryDrafts(c *gin.Context) {
+func (wc *WorkController) SaveDraftAsRealWork(c *gin.Context) {
 	userID := c.GetString("user_id")
 
-	req := &personal_schedule.AcceptAllRecoveryDraftsRequest{
+	req := &personal_schedule.SaveDraftAsRealWorkRequest{
 		UserId: userID,
 	}
-	resp, err := wc.client.AcceptRecoveryDrafts(c, req)
+	resp, err := wc.client.SaveDraftAsRealWork(c, req)
 	if err != nil {
 		wc.logger.Error("Connection error: ", "", zap.Error(err))
 		response.InternalServerError(c, "Error connecting to grpc service")

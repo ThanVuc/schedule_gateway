@@ -75,10 +75,10 @@ func (wc *workClient) UpdateWorkLabel(c *gin.Context, req *personal_schedule.Upd
 	return resp, nil
 }
 
-func (wc *workClient) AcceptRecoveryDrafts(c *gin.Context, req *personal_schedule.AcceptAllRecoveryDraftsRequest) (*personal_schedule.AcceptAllRecoveryDraftsResponse, error) {
+func (wc *workClient) SaveDraftAsRealWork(c *gin.Context, req *personal_schedule.SaveDraftAsRealWorkRequest) (*personal_schedule.SaveDraftAsRealWorkResponse, error) {
 	ctx := context.Background()
 	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
-	resp, err := wc.workClient.AcceptRecoveryDrafts(ctx, req)
+	resp, err := wc.workClient.SaveDraftAsRealWork(ctx, req)
 	if err != nil {
 		return nil, err
 	}
