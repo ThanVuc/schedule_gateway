@@ -349,11 +349,11 @@ func (wc *WorkController) GetWork(c *gin.Context) {
 		Id: id,
 	})
 
-	// if err != nil {
-	// 	wc.logger.Error("Connection error: ", "", zap.Error(err))
-	// 	response.InternalServerError(c, "Error connecting to notification service")
-	// 	return
-	// }
+	if err != nil {
+		wc.logger.Error("Connection error: ", "", zap.Error(err))
+		response.InternalServerError(c, "Error connecting to notification service")
+		return
+	}
 
 	if notificationsByWorkResp != nil && notificationsByWorkResp.Error != nil {
 		response.InternalServerError(c, notificationsByWorkResp.Error.Message)
