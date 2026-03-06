@@ -1,7 +1,6 @@
 package personalschedule_controller
 
 import (
-	"fmt"
 	"schedule_gateway/global"
 	notification_client "schedule_gateway/internal/client/notification"
 	client "schedule_gateway/internal/client/personalschedule"
@@ -46,7 +45,6 @@ func (wc *WorkController) UpsertWork(c *gin.Context) {
 			response.ValidationError(c, upsertResp.Error.Message, utils.Int32PtrToString(upsertResp.Error.ErrorCode))
 			return
 		}
-		fmt.Println("Error Message:", upsertResp.Error.Message)
 		response.InternalServerError(c, upsertResp.Error.Message)
 		return
 	}
@@ -272,7 +270,6 @@ func (wc *WorkController) buildGetWorksRequest(c *gin.Context) *personal_schedul
 
 	var startDate, endDate int64
 	now := time.Now().UTC()
-	fmt.Println("Current time UTC:", now)
 
 	startDate, endDate = utils.StartAndEndOfDayTimestamp(now)
 
