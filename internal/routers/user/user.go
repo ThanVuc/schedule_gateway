@@ -20,10 +20,10 @@ func (p *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		permissionRouterPrivate.GET("", middlewares.CheckPerm(constant.USER_RESOURCE, constant.READ_ONE_ACTION), userController.GetUserProfile)
 		permissionRouterPrivate.PUT("/update", middlewares.CheckPerm(constant.USER_RESOURCE, constant.UPDATE_ACTION), userController.UpdateUserInfo)
 	}
-	RegisterPermissionRouterResource()
+	RegisterUserRouterResource()
 }
 
-func RegisterPermissionRouterResource() {
+func RegisterUserRouterResource() {
 	// Register the resources and their permissions
 	resoucePredefine := helper.InitResources()
 

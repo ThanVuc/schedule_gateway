@@ -15,6 +15,9 @@ type ResourcePredefine struct {
 	GoalResource         *auth.Resource
 	NotificationResource *auth.Resource
 	WorkResource         *auth.Resource
+	GroupResource        *auth.Resource
+	SprintResource       *auth.Resource
+	TeamWorkResource     *auth.Resource
 }
 
 func InitResources() *ResourcePredefine {
@@ -54,6 +57,18 @@ func InitResources() *ResourcePredefine {
 		WorkResource: &auth.Resource{
 			Id:   "9",
 			Name: constant.WORK_RESOURCE,
+		},
+		GroupResource: &auth.Resource{
+			Id:   "10",
+			Name: constant.GROUP_RESOURCE,
+		},
+		SprintResource: &auth.Resource{
+			Id:   "11",
+			Name: constant.SPRINT_RESOURCE,
+		},
+		TeamWorkResource: &auth.Resource{
+			Id:   "12",
+			Name: constant.TEAM_WORK_RESOURCE,
 		},
 	}
 	return r
