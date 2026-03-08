@@ -29,7 +29,7 @@ func (nc *NotificationController) GetNotificationsByRecipientId(c *gin.Context) 
 	idReq := &common.IDRequest{
 		Id: userId,
 	}
-	requestId, _ := c.Get("request-id")
+	requestId, _ := c.Get("request_id")
 	resp, err := nc.client.GetNotificationsByRecipientId(c, idReq)
 
 	if err != nil {
@@ -48,7 +48,7 @@ func (nc *NotificationController) MarkNotificationsAsRead(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Invalid request body"})
 		return
 	}
-	requestId, _ := c.Get("request-id")
+	requestId, _ := c.Get("request_id")
 	_, err := nc.client.MarkNotificationAsRead(c, idReq)
 	if err != nil {
 		nc.logger.Error("Failed to mark notification as read", requestId.(string))
@@ -63,7 +63,7 @@ func (nc *NotificationController) DeleteNotificationById(c *gin.Context) {
 	idReq := &common.IDRequest{
 		Id: notificationId,
 	}
-	requestId, _ := c.Get("request-id")
+	requestId, _ := c.Get("request_id")
 	_, err := nc.client.DeleteNotificationById(c, idReq)
 	if err != nil {
 		nc.logger.Error("Failed to delete notification", requestId.(string))

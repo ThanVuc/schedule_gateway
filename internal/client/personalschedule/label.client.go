@@ -17,7 +17,7 @@ type labelClient struct {
 
 func (lc *labelClient) GetLabelPerTypes(c *gin.Context, req *common.EmptyRequest) (*personal_schedule.GetLabelPerTypesResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := lc.labelClient.GetLabelPerTypes(ctx, req)
 	if err != nil {
@@ -28,7 +28,7 @@ func (lc *labelClient) GetLabelPerTypes(c *gin.Context, req *common.EmptyRequest
 
 func (lc *labelClient) GetLabelsByTypeIDs(c *gin.Context, req *common.IDRequest) (*personal_schedule.GetLabelsByTypeIDsResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := lc.labelClient.GetLabelsByTypeIDs(ctx, req)
 	if err != nil {
 		return nil, err
@@ -36,9 +36,9 @@ func (lc *labelClient) GetLabelsByTypeIDs(c *gin.Context, req *common.IDRequest)
 	return resp, nil
 }
 
-func (lc *labelClient) GetDefaultLabel(c* gin.Context, req *common.EmptyRequest) (*personal_schedule.GetDefaultLabelResponse, error){
+func (lc *labelClient) GetDefaultLabel(c *gin.Context, req *common.EmptyRequest) (*personal_schedule.GetDefaultLabelResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := lc.labelClient.GetDefaultLabel(ctx, req)
 	if err != nil {
 		return nil, err

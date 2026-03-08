@@ -81,7 +81,6 @@ func (rc *RoleController) DeleteRole(c *gin.Context) {
 		response.BadRequest(c, "Role ID is required")
 		return
 	}
-	println("Deleting role with ID:", roleId)
 
 	req := &auth.DeleteRoleRequest{RoleId: roleId}
 	resp, err := rc.roleClient.DeleteRole(c, req)

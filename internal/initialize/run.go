@@ -27,7 +27,7 @@ func Run() {
 
 	var r *gin.Engine = gin.New()
 	r.Use(middlewares.LogResultMiddleware())
-	r.Use(middlewares.TrackLogMiddleware())
+	r.Use(middlewares.EnrichContextMiddleware())
 	r.Use(middlewares.CORSMiddleware())
 
 	store := cookie.NewStore([]byte(global.Config.SessionSecret))

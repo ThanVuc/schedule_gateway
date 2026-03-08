@@ -1,7 +1,6 @@
 package user_controller
 
 import (
-	"fmt"
 	"schedule_gateway/global"
 	client "schedule_gateway/internal/client/user"
 	dtos "schedule_gateway/internal/dtos/user"
@@ -26,7 +25,6 @@ func NewUserController() *UserController {
 
 func (uc *UserController) GetUserProfile(c *gin.Context) {
 	id := c.GetString("user_id")
-	fmt.Println("User ID from context:", id)
 	if id == "" {
 		response.BadRequest(c, "User ID is required")
 		return

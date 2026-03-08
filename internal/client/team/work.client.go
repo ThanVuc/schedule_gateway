@@ -8,5 +8,5 @@ import (
 
 type workClient struct {
 	logger     log.Logger
-	teamClient team_service.WorkServiceClient
+	workClient team_service.WorkServiceClient
 }

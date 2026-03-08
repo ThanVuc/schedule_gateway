@@ -9,6 +9,7 @@ package team_service
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	common "schedule_gateway/proto/common"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -24,13 +25,19 @@ var File_team_service_group_proto protoreflect.FileDescriptor
 
 const file_team_service_group_proto_rawDesc = "" +
 	"\n" +
-	"\x18team_service/group.proto\x12\fteam_service2\x0e\n" +
-	"\fGroupServiceB\x14Z\x12proto/team_serviceb\x06proto3"
+	"\x18team_service/group.proto\x12\fteam_service\x1a\x1eteam_service/common.team.proto\x1a\x13common/common.proto2C\n" +
+	"\fGroupService\x123\n" +
+	"\x04Ping\x12\x14.common.EmptyRequest\x1a\x15.common.EmptyResponseB\x14Z\x12proto/team_serviceb\x06proto3"
 
-var file_team_service_group_proto_goTypes = []any{}
+var file_team_service_group_proto_goTypes = []any{
+	(*common.EmptyRequest)(nil),  // 0: common.EmptyRequest
+	(*common.EmptyResponse)(nil), // 1: common.EmptyResponse
+}
 var file_team_service_group_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
+	0, // 0: team_service.GroupService.Ping:input_type -> common.EmptyRequest
+	1, // 1: team_service.GroupService.Ping:output_type -> common.EmptyResponse
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -41,6 +48,7 @@ func file_team_service_group_proto_init() {
 	if File_team_service_group_proto != nil {
 		return
 	}
+	file_team_service_common_team_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
