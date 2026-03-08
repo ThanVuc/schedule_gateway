@@ -17,7 +17,7 @@ type notificationClient struct {
 
 func (nc *notificationClient) GetNotificationsByRecipientId(c *gin.Context, req *common.IDRequest) (*notification_service.GetNotificationsByRecipientIdResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := nc.notificationClient.GetNotificationsByRecipientId(ctx, req)
 	if err != nil {
@@ -28,7 +28,7 @@ func (nc *notificationClient) GetNotificationsByRecipientId(c *gin.Context, req 
 
 func (nc *notificationClient) MarkNotificationAsRead(c *gin.Context, req *common.IDsRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := nc.notificationClient.MarkNotificationsAsRead(ctx, req)
 	if err != nil {
@@ -39,7 +39,7 @@ func (nc *notificationClient) MarkNotificationAsRead(c *gin.Context, req *common
 
 func (nc *notificationClient) DeleteNotificationById(c *gin.Context, req *common.IDRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := nc.notificationClient.DeleteNotificationById(ctx, req)
 	if err != nil {
@@ -50,7 +50,7 @@ func (nc *notificationClient) DeleteNotificationById(c *gin.Context, req *common
 
 func (nc *notificationClient) GetNotificationByWorkId(c *gin.Context, req *common.IDRequest) (*notification_service.GetNotificationsByWorkIdResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := nc.notificationClient.GetNotificationByWorkId(ctx, req)
 	if err != nil {
 		return nil, err

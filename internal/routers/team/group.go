@@ -3,6 +3,8 @@ package team_router
 import (
 	controller "schedule_gateway/internal/controller/team"
 	"schedule_gateway/internal/helper"
+	"schedule_gateway/internal/middlewares"
+	constant "schedule_gateway/internal/routers/constant"
 	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
@@ -16,8 +18,7 @@ func (r *GroupRouter) InitGroupRouter(Router *gin.RouterGroup) {
 	groupRouterPrivate := Router.Group("ts/groups")
 	{
 		// TODO: add permission
-		println(groupController)
-		println(groupRouterPrivate)
+		groupRouterPrivate.GET("/ping", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.CREATE_ACTION), groupController.Ping)
 	}
 	r.Register()
 }

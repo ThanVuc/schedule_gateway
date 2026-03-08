@@ -4,13 +4,18 @@ import (
 	"fmt"
 	"schedule_gateway/global"
 	"schedule_gateway/pkg/settings"
+	"schedule_gateway/proto/common"
+	"schedule_gateway/proto/team_service"
 
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type (
-	GroupClient  interface{}
+	GroupClient interface {
+		Ping(c *gin.Context, req *common.EmptyRequest) (*common.EmptyResponse, error)
+	}
 	SprintClient interface{}
 	WorkClient   interface{}
 )
@@ -25,36 +30,36 @@ func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {
 
 func NewGroupClient() GroupClient {
 	conn := getConn(&global.Config.TeamService)
-	client := (conn)
+	client := team_service.NewGroupServiceClient(conn)
 	if client == nil {
 		panic("Failed to create TeamService client at " + fmt.Sprintf("%s:%d", global.Config.TeamService.GetHost(), global.Config.TeamService.GetPort()))
 	}
 	return &groupClient{
-		teamClient: client,
+		groupClient: client,
 	}
 }
 
 func NewSprintClient() SprintClient {
 	conn := getConn(&global.Config.TeamService)
-	client := (conn)
+	client := team_service.NewSprintServiceClient(conn)
 
 	if client == nil {
 		panic("Failed to create TeamService client at " + fmt.Sprintf("%s:%d", global.Config.TeamService.GetHost(), global.Config.TeamService.GetPort()))
 	}
 	return &sprintClient{
-		teamClient: client,
+		sprintClient: client,
 	}
 }
 
 func NewWorkClient() WorkClient {
 	conn := getConn(&global.Config.TeamService)
-	client := (conn)
+	client := team_service.NewWorkServiceClient(conn)
 
 	if client == nil {
 		panic("Failed to create TeamService client at " + fmt.Sprintf("%s:%d", global.Config.TeamService.GetHost(), global.Config.TeamService.GetPort()))
 	}
 
 	return &workClient{
-		teamClient: client,
+		workClient: client,
 	}
 }

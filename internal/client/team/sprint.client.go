@@ -7,6 +7,6 @@ import (
 )
 
 type sprintClient struct {
-	logger     log.Logger
-	teamClient team_service.SprintServiceClient
+	logger       log.Logger
+	sprintClient team_service.SprintServiceClient
 }

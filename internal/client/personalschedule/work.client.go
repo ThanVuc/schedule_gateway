@@ -17,7 +17,7 @@ type workClient struct {
 
 func (wc *workClient) UpsertWork(c *gin.Context, req *personal_schedule.UpsertWorkRequest) (*personal_schedule.UpsertWorkResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.UpsertWork(ctx, req)
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func (wc *workClient) UpsertWork(c *gin.Context, req *personal_schedule.UpsertWo
 
 func (wc *workClient) GetWorks(c *gin.Context, req *personal_schedule.GetWorksRequest) (*personal_schedule.GetWorksResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.GetWorks(ctx, req)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (wc *workClient) GetWorks(c *gin.Context, req *personal_schedule.GetWorksRe
 
 func (wc *workClient) GetWork(c *gin.Context, req *personal_schedule.GetWorkRequest) (*personal_schedule.GetWorkResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.GetWork(ctx, req)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (wc *workClient) GetWork(c *gin.Context, req *personal_schedule.GetWorkRequ
 
 func (wc *workClient) DeleteWork(c *gin.Context, req *personal_schedule.DeleteWorkRequest) (*personal_schedule.DeleteWorkResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.DeleteWork(ctx, req)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (wc *workClient) DeleteWork(c *gin.Context, req *personal_schedule.DeleteWo
 
 func (wc *workClient) GetRecoveryWorks(c *gin.Context, req *personal_schedule.GetRecoveryWorksRequest) (*personal_schedule.GetRecoveryWorksResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.GetRecoveryWorks(ctx, req)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (wc *workClient) GetRecoveryWorks(c *gin.Context, req *personal_schedule.Ge
 
 func (wc *workClient) UpdateWorkLabel(c *gin.Context, req *personal_schedule.UpdateWorkLabelRequest) (*personal_schedule.UpdateWorkLabelResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.UpdateWorkLabel(ctx, req)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func (wc *workClient) UpdateWorkLabel(c *gin.Context, req *personal_schedule.Upd
 
 func (wc *workClient) SaveDraftAsRealWork(c *gin.Context, req *personal_schedule.SaveDraftAsRealWorkRequest) (*personal_schedule.SaveDraftAsRealWorkResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.SaveDraftAsRealWork(ctx, req)
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (wc *workClient) SaveDraftAsRealWork(c *gin.Context, req *personal_schedule
 
 func (wc *workClient) DeleteAllDraftWorks(c *gin.Context, req *personal_schedule.DeleteAllDraftWorksRequest) (*personal_schedule.DeleteAllDraftWorksResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.DeleteAllDraftWorks(ctx, req)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (wc *workClient) DeleteAllDraftWorks(c *gin.Context, req *personal_schedule
 
 func (wc *workClient) GenerateWorksByAI(c *gin.Context, req *personal_schedule.GenerateWorksByAIRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 	resp, err := wc.workClient.GenerateWorksByAI(ctx, req)
 	if err != nil {
 		return nil, err

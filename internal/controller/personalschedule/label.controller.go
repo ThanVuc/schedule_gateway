@@ -63,7 +63,6 @@ func (lc *LabelController) GetLabelsByTypeIDs(ctx *gin.Context) {
 
 	if resp != nil && resp.Error != nil {
 		if resp.Error != nil && resp.Error.ErrorCode != nil {
-			println(utils.Int32PtrToString(resp.Error.ErrorCode))
 			response.InternalServerError(ctx, utils.Int32PtrToString(resp.Error.ErrorCode))
 			return
 		}

@@ -441,6 +441,66 @@ func (x *Notifications) GetNotifications() []*Notification {
 	return nil
 }
 
+type Date struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Year          int32                  `protobuf:"varint,1,opt,name=year,proto3" json:"year"`
+	Month         int32                  `protobuf:"varint,2,opt,name=month,proto3" json:"month"`
+	Day           int32                  `protobuf:"varint,3,opt,name=day,proto3" json:"day"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Date) Reset() {
+	*x = Date{}
+	mi := &file_common_common_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Date) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Date) ProtoMessage() {}
+
+func (x *Date) ProtoReflect() protoreflect.Message {
+	mi := &file_common_common_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Date.ProtoReflect.Descriptor instead.
+func (*Date) Descriptor() ([]byte, []int) {
+	return file_common_common_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *Date) GetYear() int32 {
+	if x != nil {
+		return x.Year
+	}
+	return 0
+}
+
+func (x *Date) GetMonth() int32 {
+	if x != nil {
+		return x.Month
+	}
+	return 0
+}
+
+func (x *Date) GetDay() int32 {
+	if x != nil {
+		return x.Day
+	}
+	return 0
+}
+
 var File_common_common_proto protoreflect.FileDescriptor
 
 const file_common_common_proto_rawDesc = "" +
@@ -489,7 +549,11 @@ const file_common_common_proto_rawDesc = "" +
 	"\n" +
 	"_image_url\"K\n" +
 	"\rNotifications\x12:\n" +
-	"\rnotifications\x18\x01 \x03(\v2\x14.common.NotificationR\rnotificationsB\x0eZ\fproto/commonb\x06proto3"
+	"\rnotifications\x18\x01 \x03(\v2\x14.common.NotificationR\rnotifications\"B\n" +
+	"\x04Date\x12\x12\n" +
+	"\x04year\x18\x01 \x01(\x05R\x04year\x12\x14\n" +
+	"\x05month\x18\x02 \x01(\x05R\x05month\x12\x10\n" +
+	"\x03day\x18\x03 \x01(\x05R\x03dayB\x0eZ\fproto/commonb\x06proto3"
 
 var (
 	file_common_common_proto_rawDescOnce sync.Once
@@ -503,7 +567,7 @@ func file_common_common_proto_rawDescGZIP() []byte {
 	return file_common_common_proto_rawDescData
 }
 
-var file_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_common_common_proto_goTypes = []any{
 	(*EmptyResponse)(nil),  // 0: common.EmptyResponse
 	(*EmptyRequest)(nil),   // 1: common.EmptyRequest
@@ -512,13 +576,14 @@ var file_common_common_proto_goTypes = []any{
 	(*IDResponse)(nil),     // 4: common.IDResponse
 	(*Notification)(nil),   // 5: common.Notification
 	(*Notifications)(nil),  // 6: common.Notifications
-	(*Error)(nil),          // 7: common.Error
-	(NOTIFICATION_TYPE)(0), // 8: common.NOTIFICATION_TYPE
+	(*Date)(nil),           // 7: common.Date
+	(*Error)(nil),          // 8: common.Error
+	(NOTIFICATION_TYPE)(0), // 9: common.NOTIFICATION_TYPE
 }
 var file_common_common_proto_depIdxs = []int32{
-	7, // 0: common.EmptyResponse.error:type_name -> common.Error
-	7, // 1: common.IDResponse.error:type_name -> common.Error
-	8, // 2: common.Notification.correlation_type:type_name -> common.NOTIFICATION_TYPE
+	8, // 0: common.EmptyResponse.error:type_name -> common.Error
+	8, // 1: common.IDResponse.error:type_name -> common.Error
+	9, // 2: common.Notification.correlation_type:type_name -> common.NOTIFICATION_TYPE
 	5, // 3: common.Notifications.notifications:type_name -> common.Notification
 	4, // [4:4] is the sub-list for method output_type
 	4, // [4:4] is the sub-list for method input_type
@@ -543,7 +608,7 @@ func file_common_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_common_proto_rawDesc), len(file_common_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
