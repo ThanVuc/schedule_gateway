@@ -3,10 +3,14 @@ package team_controller
 import (
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
+	dtos "schedule_gateway/internal/dtos/team_service"
+	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/common"
+	"schedule_gateway/proto/team_service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanvuc/go-core-lib/log"
+	"go.uber.org/zap"
 )
 
 type GroupController struct {
@@ -27,4 +31,62 @@ func (gc *GroupController) Ping(ctx *gin.Context) {
 		gc.logger.Error("Failed to ping GroupService: ", "")
 	}
 	ctx.JSON(200, resp)
+}
+
+
+func (gc *GroupController) CreateGroup(ctx *gin.Context) {
+	req := gc.buildCreateGroupRequest(ctx)
+	if req == nil {
+		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	resp, err := gc.client.CreateGroup(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to create group: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to create group"})
+		return
+	}
+
+	dto := gc.buildGetGroupResponse(resp)
+	response.Ok(ctx, "Group created successfully", dto)
+}
+
+func (gc *GroupController) buildCreateGroupRequest(c *gin.Context) *team_service.CreateGroupRequest {
+	var req team_service.CreateGroupRequest
+	var dto dtos.CreateGroupDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		return nil
+	}
+
+	req.Name = dto.Name
+	req.Description = dto.Description
+
+	return &req
+
+}
+
+func (gc *GroupController) buildGetGroupResponse(resp *team_service.CreateGroupResponse) gin.H {
+	var groupDto *dtos.GroupDTO
+	if resp.Group != nil {
+		group := resp.Group
+		groupDto = &dtos.GroupDTO{
+			ID:          group.Id,
+			Name:        group.Name,
+			Description: group.Description,
+			CreatedAt:   group.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
+			UpdatedAt:   group.UpdatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
+		}
+		if group.Owner != nil {
+			groupDto.Owner = &dtos.SimpleUserDTO{
+				ID:     group.Owner.Id,
+				Email:  group.Owner.Email,
+				Avatar: group.Owner.Avatar,
+			}
+		}
+	}
+
+	return gin.H{
+		"group": groupDto,
+	}
 }

@@ -25,3 +25,13 @@ func (wc *groupClient) Ping(c *gin.Context, req *common.EmptyRequest) (*common.E
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) CreateGroup(c *gin.Context, req *team_service.CreateGroupRequest) (*team_service.CreateGroupResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.CreateGroup(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

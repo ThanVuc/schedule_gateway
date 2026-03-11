@@ -9,7 +9,10 @@ package team_service
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	_ "schedule_gateway/proto/common"
 	reflect "reflect"
+	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -20,19 +23,1455 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type USER_STATUS int32
+
+const (
+	USER_STATUS_USER_STATUS_UNSPECIFIED USER_STATUS = 0
+	USER_STATUS_USER_STATUS_ACTIVE      USER_STATUS = 1
+	USER_STATUS_USER_STATUS_INACTIVE    USER_STATUS = 2
+)
+
+// Enum value maps for USER_STATUS.
+var (
+	USER_STATUS_name = map[int32]string{
+		0: "USER_STATUS_UNSPECIFIED",
+		1: "USER_STATUS_ACTIVE",
+		2: "USER_STATUS_INACTIVE",
+	}
+	USER_STATUS_value = map[string]int32{
+		"USER_STATUS_UNSPECIFIED": 0,
+		"USER_STATUS_ACTIVE":      1,
+		"USER_STATUS_INACTIVE":    2,
+	}
+)
+
+func (x USER_STATUS) Enum() *USER_STATUS {
+	p := new(USER_STATUS)
+	*p = x
+	return p
+}
+
+func (x USER_STATUS) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (USER_STATUS) Descriptor() protoreflect.EnumDescriptor {
+	return file_team_service_common_team_proto_enumTypes[0].Descriptor()
+}
+
+func (USER_STATUS) Type() protoreflect.EnumType {
+	return &file_team_service_common_team_proto_enumTypes[0]
+}
+
+func (x USER_STATUS) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use USER_STATUS.Descriptor instead.
+func (USER_STATUS) EnumDescriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{0}
+}
+
+type GroupRole int32
+
+const (
+	GroupRole_GROUP_ROLE_UNSPECIFIED GroupRole = 0
+	GroupRole_GROUP_ROLE_OWNER       GroupRole = 1
+	GroupRole_GROUP_ROLE_MANAGER     GroupRole = 2
+	GroupRole_GROUP_ROLE_MEMBER      GroupRole = 3
+	GroupRole_GROUP_ROLE_VIEWER      GroupRole = 4
+)
+
+// Enum value maps for GroupRole.
+var (
+	GroupRole_name = map[int32]string{
+		0: "GROUP_ROLE_UNSPECIFIED",
+		1: "GROUP_ROLE_OWNER",
+		2: "GROUP_ROLE_MANAGER",
+		3: "GROUP_ROLE_MEMBER",
+		4: "GROUP_ROLE_VIEWER",
+	}
+	GroupRole_value = map[string]int32{
+		"GROUP_ROLE_UNSPECIFIED": 0,
+		"GROUP_ROLE_OWNER":       1,
+		"GROUP_ROLE_MANAGER":     2,
+		"GROUP_ROLE_MEMBER":      3,
+		"GROUP_ROLE_VIEWER":      4,
+	}
+)
+
+func (x GroupRole) Enum() *GroupRole {
+	p := new(GroupRole)
+	*p = x
+	return p
+}
+
+func (x GroupRole) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (GroupRole) Descriptor() protoreflect.EnumDescriptor {
+	return file_team_service_common_team_proto_enumTypes[1].Descriptor()
+}
+
+func (GroupRole) Type() protoreflect.EnumType {
+	return &file_team_service_common_team_proto_enumTypes[1]
+}
+
+func (x GroupRole) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use GroupRole.Descriptor instead.
+func (GroupRole) EnumDescriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{1}
+}
+
+type SprintStatus int32
+
+const (
+	SprintStatus_SPRINT_STATUS_UNSPECIFIED SprintStatus = 0
+	SprintStatus_SPRINT_STATUS_DRAFT       SprintStatus = 1
+	SprintStatus_SPRINT_STATUS_ACTIVE      SprintStatus = 2
+	SprintStatus_SPRINT_STATUS_COMPLETED   SprintStatus = 3
+	SprintStatus_SPRINT_STATUS_CANCELLED   SprintStatus = 4
+)
+
+// Enum value maps for SprintStatus.
+var (
+	SprintStatus_name = map[int32]string{
+		0: "SPRINT_STATUS_UNSPECIFIED",
+		1: "SPRINT_STATUS_DRAFT",
+		2: "SPRINT_STATUS_ACTIVE",
+		3: "SPRINT_STATUS_COMPLETED",
+		4: "SPRINT_STATUS_CANCELLED",
+	}
+	SprintStatus_value = map[string]int32{
+		"SPRINT_STATUS_UNSPECIFIED": 0,
+		"SPRINT_STATUS_DRAFT":       1,
+		"SPRINT_STATUS_ACTIVE":      2,
+		"SPRINT_STATUS_COMPLETED":   3,
+		"SPRINT_STATUS_CANCELLED":   4,
+	}
+)
+
+func (x SprintStatus) Enum() *SprintStatus {
+	p := new(SprintStatus)
+	*p = x
+	return p
+}
+
+func (x SprintStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SprintStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_team_service_common_team_proto_enumTypes[2].Descriptor()
+}
+
+func (SprintStatus) Type() protoreflect.EnumType {
+	return &file_team_service_common_team_proto_enumTypes[2]
+}
+
+func (x SprintStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SprintStatus.Descriptor instead.
+func (SprintStatus) EnumDescriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{2}
+}
+
+type WorkStatus int32
+
+const (
+	WorkStatus_WORK_STATUS_UNSPECIFIED WorkStatus = 0
+	WorkStatus_WORK_STATUS_TODO        WorkStatus = 1
+	WorkStatus_WORK_STATUS_IN_PROGRESS WorkStatus = 2
+	WorkStatus_WORK_STATUS_IN_REVIEW   WorkStatus = 3
+	WorkStatus_WORK_STATUS_DONE        WorkStatus = 4
+)
+
+// Enum value maps for WorkStatus.
+var (
+	WorkStatus_name = map[int32]string{
+		0: "WORK_STATUS_UNSPECIFIED",
+		1: "WORK_STATUS_TODO",
+		2: "WORK_STATUS_IN_PROGRESS",
+		3: "WORK_STATUS_IN_REVIEW",
+		4: "WORK_STATUS_DONE",
+	}
+	WorkStatus_value = map[string]int32{
+		"WORK_STATUS_UNSPECIFIED": 0,
+		"WORK_STATUS_TODO":        1,
+		"WORK_STATUS_IN_PROGRESS": 2,
+		"WORK_STATUS_IN_REVIEW":   3,
+		"WORK_STATUS_DONE":        4,
+	}
+)
+
+func (x WorkStatus) Enum() *WorkStatus {
+	p := new(WorkStatus)
+	*p = x
+	return p
+}
+
+func (x WorkStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WorkStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_team_service_common_team_proto_enumTypes[3].Descriptor()
+}
+
+func (WorkStatus) Type() protoreflect.EnumType {
+	return &file_team_service_common_team_proto_enumTypes[3]
+}
+
+func (x WorkStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WorkStatus.Descriptor instead.
+func (WorkStatus) EnumDescriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{3}
+}
+
+type WorkPriority int32
+
+const (
+	WorkPriority_WORK_PRIORITY_UNSPECIFIED WorkPriority = 0
+	WorkPriority_WORK_PRIORITY_LOW         WorkPriority = 1
+	WorkPriority_WORK_PRIORITY_MEDIUM      WorkPriority = 2
+	WorkPriority_HIWORK_PRIORITY_HIGHGH    WorkPriority = 3
+)
+
+// Enum value maps for WorkPriority.
+var (
+	WorkPriority_name = map[int32]string{
+		0: "WORK_PRIORITY_UNSPECIFIED",
+		1: "WORK_PRIORITY_LOW",
+		2: "WORK_PRIORITY_MEDIUM",
+		3: "HIWORK_PRIORITY_HIGHGH",
+	}
+	WorkPriority_value = map[string]int32{
+		"WORK_PRIORITY_UNSPECIFIED": 0,
+		"WORK_PRIORITY_LOW":         1,
+		"WORK_PRIORITY_MEDIUM":      2,
+		"HIWORK_PRIORITY_HIGHGH":    3,
+	}
+)
+
+func (x WorkPriority) Enum() *WorkPriority {
+	p := new(WorkPriority)
+	*p = x
+	return p
+}
+
+func (x WorkPriority) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WorkPriority) Descriptor() protoreflect.EnumDescriptor {
+	return file_team_service_common_team_proto_enumTypes[4].Descriptor()
+}
+
+func (WorkPriority) Type() protoreflect.EnumType {
+	return &file_team_service_common_team_proto_enumTypes[4]
+}
+
+func (x WorkPriority) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WorkPriority.Descriptor instead.
+func (WorkPriority) EnumDescriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{4}
+}
+
+type Date struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Year          int32                  `protobuf:"varint,1,opt,name=year,proto3" json:"year"`
+	Month         int32                  `protobuf:"varint,2,opt,name=month,proto3" json:"month"`
+	Day           int32                  `protobuf:"varint,3,opt,name=day,proto3" json:"day"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Date) Reset() {
+	*x = Date{}
+	mi := &file_team_service_common_team_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Date) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Date) ProtoMessage() {}
+
+func (x *Date) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Date.ProtoReflect.Descriptor instead.
+func (*Date) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Date) GetYear() int32 {
+	if x != nil {
+		return x.Year
+	}
+	return 0
+}
+
+func (x *Date) GetMonth() int32 {
+	if x != nil {
+		return x.Month
+	}
+	return 0
+}
+
+func (x *Date) GetDay() int32 {
+	if x != nil {
+		return x.Day
+	}
+	return 0
+}
+
+type Error struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message"`
+	Details       *string                `protobuf:"bytes,3,opt,name=details,proto3,oneof" json:"details"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Error) Reset() {
+	*x = Error{}
+	mi := &file_team_service_common_team_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Error) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Error) ProtoMessage() {}
+
+func (x *Error) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Error.ProtoReflect.Descriptor instead.
+func (*Error) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Error) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *Error) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *Error) GetDetails() string {
+	if x != nil && x.Details != nil {
+		return *x.Details
+	}
+	return ""
+}
+
+type SimpleUserMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email"`
+	Avatar        string                 `protobuf:"bytes,3,opt,name=avatar,proto3" json:"avatar"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SimpleUserMessage) Reset() {
+	*x = SimpleUserMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SimpleUserMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SimpleUserMessage) ProtoMessage() {}
+
+func (x *SimpleUserMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SimpleUserMessage.ProtoReflect.Descriptor instead.
+func (*SimpleUserMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SimpleUserMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *SimpleUserMessage) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *SimpleUserMessage) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+type SimpleSprintMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SimpleSprintMessage) Reset() {
+	*x = SimpleSprintMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SimpleSprintMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SimpleSprintMessage) ProtoMessage() {}
+
+func (x *SimpleSprintMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SimpleSprintMessage.ProtoReflect.Descriptor instead.
+func (*SimpleSprintMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SimpleSprintMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *SimpleSprintMessage) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type MemberMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email"`
+	Avatar        string                 `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar"`
+	Role          GroupRole              `protobuf:"varint,5,opt,name=role,proto3,enum=team_service.GroupRole" json:"role"`
+	JoinedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MemberMessage) Reset() {
+	*x = MemberMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MemberMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MemberMessage) ProtoMessage() {}
+
+func (x *MemberMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MemberMessage.ProtoReflect.Descriptor instead.
+func (*MemberMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *MemberMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *MemberMessage) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *MemberMessage) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *MemberMessage) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *MemberMessage) GetRole() GroupRole {
+	if x != nil {
+		return x.Role
+	}
+	return GroupRole_GROUP_ROLE_UNSPECIFIED
+}
+
+func (x *MemberMessage) GetJoinedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.JoinedAt
+	}
+	return nil
+}
+
+type InviteMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InviteMessage) Reset() {
+	*x = InviteMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InviteMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InviteMessage) ProtoMessage() {}
+
+func (x *InviteMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InviteMessage.ProtoReflect.Descriptor instead.
+func (*InviteMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *InviteMessage) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *InviteMessage) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+func (x *InviteMessage) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+type GroupMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
+	Owner         *SimpleUserMessage     `protobuf:"bytes,4,opt,name=owner,proto3" json:"owner"`
+	MyRole        GroupRole              `protobuf:"varint,5,opt,name=my_role,json=myRole,proto3,enum=team_service.GroupRole" json:"my_role"`
+	ActiveSprint  string                 `protobuf:"bytes,6,opt,name=active_sprint,json=activeSprint,proto3" json:"active_sprint"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GroupMessage) Reset() {
+	*x = GroupMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GroupMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupMessage) ProtoMessage() {}
+
+func (x *GroupMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupMessage.ProtoReflect.Descriptor instead.
+func (*GroupMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GroupMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *GroupMessage) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GroupMessage) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *GroupMessage) GetOwner() *SimpleUserMessage {
+	if x != nil {
+		return x.Owner
+	}
+	return nil
+}
+
+func (x *GroupMessage) GetMyRole() GroupRole {
+	if x != nil {
+		return x.MyRole
+	}
+	return GroupRole_GROUP_ROLE_UNSPECIFIED
+}
+
+func (x *GroupMessage) GetActiveSprint() string {
+	if x != nil {
+		return x.ActiveSprint
+	}
+	return ""
+}
+
+func (x *GroupMessage) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *GroupMessage) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+type SprintMessage struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	GroupId         string                 `protobuf:"bytes,2,opt,name=group_id,json=groupId,proto3" json:"group_id"`
+	Name            string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name"`
+	Description     string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description"`
+	Status          SprintStatus           `protobuf:"varint,5,opt,name=status,proto3,enum=team_service.SprintStatus" json:"status"`
+	StartDate       *Date                  `protobuf:"bytes,6,opt,name=start_date,json=startDate,proto3" json:"start_date"`
+	EndDate         *Date                  `protobuf:"bytes,7,opt,name=end_date,json=endDate,proto3" json:"end_date"`
+	TotalWork       int32                  `protobuf:"varint,8,opt,name=total_work,json=totalWork,proto3" json:"total_work"`
+	CompletedWork   int32                  `protobuf:"varint,9,opt,name=completed_work,json=completedWork,proto3" json:"completed_work"`
+	ProgressPercent float32                `protobuf:"fixed32,10,opt,name=progress_percent,json=progressPercent,proto3" json:"progress_percent"`
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SprintMessage) Reset() {
+	*x = SprintMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SprintMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SprintMessage) ProtoMessage() {}
+
+func (x *SprintMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SprintMessage.ProtoReflect.Descriptor instead.
+func (*SprintMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SprintMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *SprintMessage) GetGroupId() string {
+	if x != nil {
+		return x.GroupId
+	}
+	return ""
+}
+
+func (x *SprintMessage) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *SprintMessage) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *SprintMessage) GetStatus() SprintStatus {
+	if x != nil {
+		return x.Status
+	}
+	return SprintStatus_SPRINT_STATUS_UNSPECIFIED
+}
+
+func (x *SprintMessage) GetStartDate() *Date {
+	if x != nil {
+		return x.StartDate
+	}
+	return nil
+}
+
+func (x *SprintMessage) GetEndDate() *Date {
+	if x != nil {
+		return x.EndDate
+	}
+	return nil
+}
+
+func (x *SprintMessage) GetTotalWork() int32 {
+	if x != nil {
+		return x.TotalWork
+	}
+	return 0
+}
+
+func (x *SprintMessage) GetCompletedWork() int32 {
+	if x != nil {
+		return x.CompletedWork
+	}
+	return 0
+}
+
+func (x *SprintMessage) GetProgressPercent() float32 {
+	if x != nil {
+		return x.ProgressPercent
+	}
+	return 0
+}
+
+func (x *SprintMessage) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *SprintMessage) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+type ChecklistItemMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	IsCompleted   bool                   `protobuf:"varint,3,opt,name=is_completed,json=isCompleted,proto3" json:"is_completed"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChecklistItemMessage) Reset() {
+	*x = ChecklistItemMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChecklistItemMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChecklistItemMessage) ProtoMessage() {}
+
+func (x *ChecklistItemMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChecklistItemMessage.ProtoReflect.Descriptor instead.
+func (*ChecklistItemMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ChecklistItemMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *ChecklistItemMessage) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ChecklistItemMessage) GetIsCompleted() bool {
+	if x != nil {
+		return x.IsCompleted
+	}
+	return false
+}
+
+type ChecklistMessage struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Total         int32                   `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Completed     int32                   `protobuf:"varint,2,opt,name=completed,proto3" json:"completed"`
+	Items         []*ChecklistItemMessage `protobuf:"bytes,3,rep,name=items,proto3" json:"items"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChecklistMessage) Reset() {
+	*x = ChecklistMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChecklistMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChecklistMessage) ProtoMessage() {}
+
+func (x *ChecklistMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChecklistMessage.ProtoReflect.Descriptor instead.
+func (*ChecklistMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ChecklistMessage) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ChecklistMessage) GetCompleted() int32 {
+	if x != nil {
+		return x.Completed
+	}
+	return 0
+}
+
+func (x *ChecklistMessage) GetItems() []*ChecklistItemMessage {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type CommentMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Content       string                 `protobuf:"bytes,2,opt,name=content,proto3" json:"content"`
+	Creator       *SimpleUserMessage     `protobuf:"bytes,3,opt,name=creator,proto3" json:"creator"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CommentMessage) Reset() {
+	*x = CommentMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CommentMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CommentMessage) ProtoMessage() {}
+
+func (x *CommentMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CommentMessage.ProtoReflect.Descriptor instead.
+func (*CommentMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *CommentMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *CommentMessage) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *CommentMessage) GetCreator() *SimpleUserMessage {
+	if x != nil {
+		return x.Creator
+	}
+	return nil
+}
+
+func (x *CommentMessage) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+type CommentListMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Total         int32                  `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Comments      []*CommentMessage      `protobuf:"bytes,2,rep,name=comments,proto3" json:"comments"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CommentListMessage) Reset() {
+	*x = CommentListMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CommentListMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CommentListMessage) ProtoMessage() {}
+
+func (x *CommentListMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CommentListMessage.ProtoReflect.Descriptor instead.
+func (*CommentListMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CommentListMessage) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *CommentListMessage) GetComments() []*CommentMessage {
+	if x != nil {
+		return x.Comments
+	}
+	return nil
+}
+
+type WorkMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
+	Status        WorkStatus             `protobuf:"varint,4,opt,name=status,proto3,enum=team_service.WorkStatus" json:"status"`
+	Sprint        *SimpleSprintMessage   `protobuf:"bytes,5,opt,name=sprint,proto3" json:"sprint"`
+	Assignee      *SimpleUserMessage     `protobuf:"bytes,6,opt,name=assignee,proto3" json:"assignee"`
+	StoryPoint    int32                  `protobuf:"varint,7,opt,name=story_point,json=storyPoint,proto3" json:"story_point"`
+	DueDate       *Date                  `protobuf:"bytes,8,opt,name=due_date,json=dueDate,proto3" json:"due_date"`
+	CheckList     *ChecklistMessage      `protobuf:"bytes,9,opt,name=check_list,json=checkList,proto3" json:"check_list"`
+	Comments      *CommentListMessage    `protobuf:"bytes,10,opt,name=comments,proto3" json:"comments"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	Version       int32                  `protobuf:"varint,13,opt,name=version,proto3" json:"version"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkMessage) Reset() {
+	*x = WorkMessage{}
+	mi := &file_team_service_common_team_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkMessage) ProtoMessage() {}
+
+func (x *WorkMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkMessage.ProtoReflect.Descriptor instead.
+func (*WorkMessage) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *WorkMessage) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *WorkMessage) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *WorkMessage) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *WorkMessage) GetStatus() WorkStatus {
+	if x != nil {
+		return x.Status
+	}
+	return WorkStatus_WORK_STATUS_UNSPECIFIED
+}
+
+func (x *WorkMessage) GetSprint() *SimpleSprintMessage {
+	if x != nil {
+		return x.Sprint
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetAssignee() *SimpleUserMessage {
+	if x != nil {
+		return x.Assignee
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetStoryPoint() int32 {
+	if x != nil {
+		return x.StoryPoint
+	}
+	return 0
+}
+
+func (x *WorkMessage) GetDueDate() *Date {
+	if x != nil {
+		return x.DueDate
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetCheckList() *ChecklistMessage {
+	if x != nil {
+		return x.CheckList
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetComments() *CommentListMessage {
+	if x != nil {
+		return x.Comments
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *WorkMessage) GetVersion() int32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
 var File_team_service_common_team_proto protoreflect.FileDescriptor
 
 const file_team_service_common_team_proto_rawDesc = "" +
 	"\n" +
-	"\x1eteam_service/common.team.proto\x12\fteam_serviceB\x14Z\x12proto/team_serviceb\x06proto3"
+	"\x1eteam_service/common.team.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"B\n" +
+	"\x04Date\x12\x12\n" +
+	"\x04year\x18\x01 \x01(\x05R\x04year\x12\x14\n" +
+	"\x05month\x18\x02 \x01(\x05R\x05month\x12\x10\n" +
+	"\x03day\x18\x03 \x01(\x05R\x03day\"`\n" +
+	"\x05Error\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1d\n" +
+	"\adetails\x18\x03 \x01(\tH\x00R\adetails\x88\x01\x01B\n" +
+	"\n" +
+	"\b_details\"Q\n" +
+	"\x11SimpleUserMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x16\n" +
+	"\x06avatar\x18\x03 \x01(\tR\x06avatar\"9\n" +
+	"\x13SimpleSprintMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"\xc7\x01\n" +
+	"\rMemberMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\x12\x16\n" +
+	"\x06avatar\x18\x04 \x01(\tR\x06avatar\x12+\n" +
+	"\x04role\x18\x05 \x01(\x0e2\x17.team_service.GroupRoleR\x04role\x127\n" +
+	"\tjoined_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\bjoinedAt\"\x99\x01\n" +
+	"\rInviteMessage\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x129\n" +
+	"\n" +
+	"expires_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\x129\n" +
+	"\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xd8\x02\n" +
+	"\fGroupMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x125\n" +
+	"\x05owner\x18\x04 \x01(\v2\x1f.team_service.SimpleUserMessageR\x05owner\x120\n" +
+	"\amy_role\x18\x05 \x01(\x0e2\x17.team_service.GroupRoleR\x06myRole\x12#\n" +
+	"\ractive_sprint\x18\x06 \x01(\tR\factiveSprint\x129\n" +
+	"\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xed\x03\n" +
+	"\rSprintMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
+	"\bgroup_id\x18\x02 \x01(\tR\agroupId\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\x122\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x1a.team_service.SprintStatusR\x06status\x121\n" +
+	"\n" +
+	"start_date\x18\x06 \x01(\v2\x12.team_service.DateR\tstartDate\x12-\n" +
+	"\bend_date\x18\a \x01(\v2\x12.team_service.DateR\aendDate\x12\x1d\n" +
+	"\n" +
+	"total_work\x18\b \x01(\x05R\ttotalWork\x12%\n" +
+	"\x0ecompleted_work\x18\t \x01(\x05R\rcompletedWork\x12)\n" +
+	"\x10progress_percent\x18\n" +
+	" \x01(\x02R\x0fprogressPercent\x129\n" +
+	"\n" +
+	"created_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"]\n" +
+	"\x14ChecklistItemMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
+	"\fis_completed\x18\x03 \x01(\bR\visCompleted\"\x80\x01\n" +
+	"\x10ChecklistMessage\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x05R\x05total\x12\x1c\n" +
+	"\tcompleted\x18\x02 \x01(\x05R\tcompleted\x128\n" +
+	"\x05items\x18\x03 \x03(\v2\".team_service.ChecklistItemMessageR\x05items\"\xb0\x01\n" +
+	"\x0eCommentMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
+	"\acontent\x18\x02 \x01(\tR\acontent\x129\n" +
+	"\acreator\x18\x03 \x01(\v2\x1f.team_service.SimpleUserMessageR\acreator\x129\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"d\n" +
+	"\x12CommentListMessage\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x05R\x05total\x128\n" +
+	"\bcomments\x18\x02 \x03(\v2\x1c.team_service.CommentMessageR\bcomments\"\xda\x04\n" +
+	"\vWorkMessage\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x120\n" +
+	"\x06status\x18\x04 \x01(\x0e2\x18.team_service.WorkStatusR\x06status\x129\n" +
+	"\x06sprint\x18\x05 \x01(\v2!.team_service.SimpleSprintMessageR\x06sprint\x12;\n" +
+	"\bassignee\x18\x06 \x01(\v2\x1f.team_service.SimpleUserMessageR\bassignee\x12\x1f\n" +
+	"\vstory_point\x18\a \x01(\x05R\n" +
+	"storyPoint\x12-\n" +
+	"\bdue_date\x18\b \x01(\v2\x12.team_service.DateR\adueDate\x12=\n" +
+	"\n" +
+	"check_list\x18\t \x01(\v2\x1e.team_service.ChecklistMessageR\tcheckList\x12<\n" +
+	"\bcomments\x18\n" +
+	" \x01(\v2 .team_service.CommentListMessageR\bcomments\x129\n" +
+	"\n" +
+	"created_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x18\n" +
+	"\aversion\x18\r \x01(\x05R\aversion*\\\n" +
+	"\vUSER_STATUS\x12\x1b\n" +
+	"\x17USER_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12USER_STATUS_ACTIVE\x10\x01\x12\x18\n" +
+	"\x14USER_STATUS_INACTIVE\x10\x02*\x83\x01\n" +
+	"\tGroupRole\x12\x1a\n" +
+	"\x16GROUP_ROLE_UNSPECIFIED\x10\x00\x12\x14\n" +
+	"\x10GROUP_ROLE_OWNER\x10\x01\x12\x16\n" +
+	"\x12GROUP_ROLE_MANAGER\x10\x02\x12\x15\n" +
+	"\x11GROUP_ROLE_MEMBER\x10\x03\x12\x15\n" +
+	"\x11GROUP_ROLE_VIEWER\x10\x04*\x9a\x01\n" +
+	"\fSprintStatus\x12\x1d\n" +
+	"\x19SPRINT_STATUS_UNSPECIFIED\x10\x00\x12\x17\n" +
+	"\x13SPRINT_STATUS_DRAFT\x10\x01\x12\x18\n" +
+	"\x14SPRINT_STATUS_ACTIVE\x10\x02\x12\x1b\n" +
+	"\x17SPRINT_STATUS_COMPLETED\x10\x03\x12\x1b\n" +
+	"\x17SPRINT_STATUS_CANCELLED\x10\x04*\x8d\x01\n" +
+	"\n" +
+	"WorkStatus\x12\x1b\n" +
+	"\x17WORK_STATUS_UNSPECIFIED\x10\x00\x12\x14\n" +
+	"\x10WORK_STATUS_TODO\x10\x01\x12\x1b\n" +
+	"\x17WORK_STATUS_IN_PROGRESS\x10\x02\x12\x19\n" +
+	"\x15WORK_STATUS_IN_REVIEW\x10\x03\x12\x14\n" +
+	"\x10WORK_STATUS_DONE\x10\x04*z\n" +
+	"\fWorkPriority\x12\x1d\n" +
+	"\x19WORK_PRIORITY_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11WORK_PRIORITY_LOW\x10\x01\x12\x18\n" +
+	"\x14WORK_PRIORITY_MEDIUM\x10\x02\x12\x1a\n" +
+	"\x16HIWORK_PRIORITY_HIGHGH\x10\x03B\x14Z\x12proto/team_serviceb\x06proto3"
 
-var file_team_service_common_team_proto_goTypes = []any{}
+var (
+	file_team_service_common_team_proto_rawDescOnce sync.Once
+	file_team_service_common_team_proto_rawDescData []byte
+)
+
+func file_team_service_common_team_proto_rawDescGZIP() []byte {
+	file_team_service_common_team_proto_rawDescOnce.Do(func() {
+		file_team_service_common_team_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_team_service_common_team_proto_rawDesc), len(file_team_service_common_team_proto_rawDesc)))
+	})
+	return file_team_service_common_team_proto_rawDescData
+}
+
+var file_team_service_common_team_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+var file_team_service_common_team_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_team_service_common_team_proto_goTypes = []any{
+	(USER_STATUS)(0),              // 0: team_service.USER_STATUS
+	(GroupRole)(0),                // 1: team_service.GroupRole
+	(SprintStatus)(0),             // 2: team_service.SprintStatus
+	(WorkStatus)(0),               // 3: team_service.WorkStatus
+	(WorkPriority)(0),             // 4: team_service.WorkPriority
+	(*Date)(nil),                  // 5: team_service.Date
+	(*Error)(nil),                 // 6: team_service.Error
+	(*SimpleUserMessage)(nil),     // 7: team_service.SimpleUserMessage
+	(*SimpleSprintMessage)(nil),   // 8: team_service.SimpleSprintMessage
+	(*MemberMessage)(nil),         // 9: team_service.MemberMessage
+	(*InviteMessage)(nil),         // 10: team_service.InviteMessage
+	(*GroupMessage)(nil),          // 11: team_service.GroupMessage
+	(*SprintMessage)(nil),         // 12: team_service.SprintMessage
+	(*ChecklistItemMessage)(nil),  // 13: team_service.ChecklistItemMessage
+	(*ChecklistMessage)(nil),      // 14: team_service.ChecklistMessage
+	(*CommentMessage)(nil),        // 15: team_service.CommentMessage
+	(*CommentListMessage)(nil),    // 16: team_service.CommentListMessage
+	(*WorkMessage)(nil),           // 17: team_service.WorkMessage
+	(*timestamppb.Timestamp)(nil), // 18: google.protobuf.Timestamp
+}
 var file_team_service_common_team_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1,  // 0: team_service.MemberMessage.role:type_name -> team_service.GroupRole
+	18, // 1: team_service.MemberMessage.joined_at:type_name -> google.protobuf.Timestamp
+	18, // 2: team_service.InviteMessage.expires_at:type_name -> google.protobuf.Timestamp
+	18, // 3: team_service.InviteMessage.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 4: team_service.GroupMessage.owner:type_name -> team_service.SimpleUserMessage
+	1,  // 5: team_service.GroupMessage.my_role:type_name -> team_service.GroupRole
+	18, // 6: team_service.GroupMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 7: team_service.GroupMessage.updated_at:type_name -> google.protobuf.Timestamp
+	2,  // 8: team_service.SprintMessage.status:type_name -> team_service.SprintStatus
+	5,  // 9: team_service.SprintMessage.start_date:type_name -> team_service.Date
+	5,  // 10: team_service.SprintMessage.end_date:type_name -> team_service.Date
+	18, // 11: team_service.SprintMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 12: team_service.SprintMessage.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 13: team_service.ChecklistMessage.items:type_name -> team_service.ChecklistItemMessage
+	7,  // 14: team_service.CommentMessage.creator:type_name -> team_service.SimpleUserMessage
+	18, // 15: team_service.CommentMessage.created_at:type_name -> google.protobuf.Timestamp
+	15, // 16: team_service.CommentListMessage.comments:type_name -> team_service.CommentMessage
+	3,  // 17: team_service.WorkMessage.status:type_name -> team_service.WorkStatus
+	8,  // 18: team_service.WorkMessage.sprint:type_name -> team_service.SimpleSprintMessage
+	7,  // 19: team_service.WorkMessage.assignee:type_name -> team_service.SimpleUserMessage
+	5,  // 20: team_service.WorkMessage.due_date:type_name -> team_service.Date
+	14, // 21: team_service.WorkMessage.check_list:type_name -> team_service.ChecklistMessage
+	16, // 22: team_service.WorkMessage.comments:type_name -> team_service.CommentListMessage
+	18, // 23: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 24: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_team_service_common_team_proto_init() }
@@ -40,18 +1479,21 @@ func file_team_service_common_team_proto_init() {
 	if File_team_service_common_team_proto != nil {
 		return
 	}
+	file_team_service_common_team_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_service_common_team_proto_rawDesc), len(file_team_service_common_team_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   0,
+			NumEnums:      5,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_team_service_common_team_proto_goTypes,
 		DependencyIndexes: file_team_service_common_team_proto_depIdxs,
+		EnumInfos:         file_team_service_common_team_proto_enumTypes,
+		MessageInfos:      file_team_service_common_team_proto_msgTypes,
 	}.Build()
 	File_team_service_common_team_proto = out.File
 	file_team_service_common_team_proto_goTypes = nil
