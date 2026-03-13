@@ -33,7 +33,6 @@ func (gc *GroupController) Ping(ctx *gin.Context) {
 	ctx.JSON(200, resp)
 }
 
-
 func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 	req := gc.buildCreateGroupRequest(ctx)
 	if req == nil {
@@ -45,6 +44,12 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 	if err != nil {
 		gc.logger.Error("Failed to create group: ", "", zap.Error(err))
 		ctx.JSON(500, gin.H{"error": "Failed to create group"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to create group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.Error.Code, resp.Error.Message, *resp.Error.Details)
 		return
 	}
 

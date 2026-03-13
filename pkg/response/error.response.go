@@ -15,8 +15,8 @@ import (
 // ErrorResponse is a struct that represents an error response
 type ErrorResponse struct {
 	StatusCode int     `json:"statusCode"`
-	Message    string  `json:"message"`
-	CodeReason string  `json:"reasonStatusCode"`
+	Message    string  `json:"title"`
+	CodeReason string  `json:"detail"`
 	CreatedAt  string  `json:"createdAt"`
 	ErrorCode  *string `json:"errorCode,omitempty"`
 }
@@ -139,6 +139,17 @@ func ValidationError(c *gin.Context, message string, errorCode string) {
 		CodeReason: MSG[BAD_REQUEST],
 		CreatedAt:  time.Now().Format(time.RFC3339),
 		ErrorCode:  &errorCode,
+	})
+	c.Abort()
+}
+
+func UnprocessableEntity(c *gin.Context, code string, message, detail string) {
+	c.JSON(int(UNPROCESSABLE_ENTITY), ErrorResponse{
+		StatusCode: int(UNPROCESSABLE_ENTITY),
+		Message:    message,
+		CodeReason: detail,
+		ErrorCode:  &code,
+		CreatedAt:  time.Now().Format(time.RFC3339),
 	})
 	c.Abort()
 }
