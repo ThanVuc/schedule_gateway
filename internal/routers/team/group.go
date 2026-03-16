@@ -19,6 +19,8 @@ func (r *GroupRouter) InitGroupRouter(Router *gin.RouterGroup) {
 	{
 		// TODO: add permission
 		groupRouterPrivate.GET("/ping", middlewares.CheckPerm(constant.WORK_RESOURCE, constant.CREATE_ACTION), groupController.Ping)
+		groupRouterPrivate.POST("", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.CREATE_ACTION), groupController.CreateGroup)
+		groupRouterPrivate.GET("/:group_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.READ_ONE_ACTION), groupController.GetGroup)
 	}
 	r.Register()
 }
@@ -28,5 +30,14 @@ func (r *GroupRouter) Register() {
 	resoucePredefine := helper.InitResources()
 
 	register := helper.NewResourceRegiseter(resoucePredefine.GroupResource.Id)
-	register.AddResource(resoucePredefine.GroupResource, []*auth.Action{})
+	register.AddResource(resoucePredefine.GroupResource, []*auth.Action{
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.CREATE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ONE_ACTION,
+		},
+	})
 }

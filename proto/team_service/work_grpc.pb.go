@@ -7,7 +7,11 @@
 package team_service
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
+	common "schedule_gateway/proto/common"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -15,12 +19,37 @@ import (
 // Requires gRPC-Go v1.64.0 or later.
 const _ = grpc.SupportPackageIsVersion9
 
+const (
+	WorkService_CreateWork_FullMethodName          = "/team_service.WorkService/CreateWork"
+	WorkService_GetWork_FullMethodName             = "/team_service.WorkService/GetWork"
+	WorkService_ListWorks_FullMethodName           = "/team_service.WorkService/ListWorks"
+	WorkService_UpdateWork_FullMethodName          = "/team_service.WorkService/UpdateWork"
+	WorkService_DeleteWork_FullMethodName          = "/team_service.WorkService/DeleteWork"
+	WorkService_CreateChecklistItem_FullMethodName = "/team_service.WorkService/CreateChecklistItem"
+	WorkService_UpdateChecklistItem_FullMethodName = "/team_service.WorkService/UpdateChecklistItem"
+	WorkService_DeleteChecklistItem_FullMethodName = "/team_service.WorkService/DeleteChecklistItem"
+	WorkService_CreateComment_FullMethodName       = "/team_service.WorkService/CreateComment"
+	WorkService_UpdateComment_FullMethodName       = "/team_service.WorkService/UpdateComment"
+	WorkService_DeleteComment_FullMethodName       = "/team_service.WorkService/DeleteComment"
+)
+
 // WorkServiceClient is the client API for WorkService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // WorkService handles operations related to works/tasks in a group.
 type WorkServiceClient interface {
+	CreateWork(ctx context.Context, in *CreateWorkRequest, opts ...grpc.CallOption) (*CreateWorkResponse, error)
+	GetWork(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetWorkResponse, error)
+	ListWorks(ctx context.Context, in *ListWorksRequest, opts ...grpc.CallOption) (*ListWorksResponse, error)
+	UpdateWork(ctx context.Context, in *UpdateWorkRequest, opts ...grpc.CallOption) (*UpdateWorkResponse, error)
+	DeleteWork(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteWorkResponse, error)
+	CreateChecklistItem(ctx context.Context, in *CreateChecklistItemRequest, opts ...grpc.CallOption) (*CreateChecklistItemResponse, error)
+	UpdateChecklistItem(ctx context.Context, in *UpdateChecklistItemRequest, opts ...grpc.CallOption) (*UpdateChecklistItemResponse, error)
+	DeleteChecklistItem(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteChecklistItemResponse, error)
+	CreateComment(ctx context.Context, in *CreateCommentRequest, opts ...grpc.CallOption) (*CreateCommentResponse, error)
+	UpdateComment(ctx context.Context, in *UpdateCommentRequest, opts ...grpc.CallOption) (*UpdateCommentResponse, error)
+	DeleteComment(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteCommentResponse, error)
 }
 
 type workServiceClient struct {
@@ -31,12 +60,133 @@ func NewWorkServiceClient(cc grpc.ClientConnInterface) WorkServiceClient {
 	return &workServiceClient{cc}
 }
 
+func (c *workServiceClient) CreateWork(ctx context.Context, in *CreateWorkRequest, opts ...grpc.CallOption) (*CreateWorkResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateWorkResponse)
+	err := c.cc.Invoke(ctx, WorkService_CreateWork_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) GetWork(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetWorkResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetWorkResponse)
+	err := c.cc.Invoke(ctx, WorkService_GetWork_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) ListWorks(ctx context.Context, in *ListWorksRequest, opts ...grpc.CallOption) (*ListWorksResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListWorksResponse)
+	err := c.cc.Invoke(ctx, WorkService_ListWorks_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) UpdateWork(ctx context.Context, in *UpdateWorkRequest, opts ...grpc.CallOption) (*UpdateWorkResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateWorkResponse)
+	err := c.cc.Invoke(ctx, WorkService_UpdateWork_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) DeleteWork(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteWorkResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteWorkResponse)
+	err := c.cc.Invoke(ctx, WorkService_DeleteWork_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) CreateChecklistItem(ctx context.Context, in *CreateChecklistItemRequest, opts ...grpc.CallOption) (*CreateChecklistItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateChecklistItemResponse)
+	err := c.cc.Invoke(ctx, WorkService_CreateChecklistItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) UpdateChecklistItem(ctx context.Context, in *UpdateChecklistItemRequest, opts ...grpc.CallOption) (*UpdateChecklistItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateChecklistItemResponse)
+	err := c.cc.Invoke(ctx, WorkService_UpdateChecklistItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) DeleteChecklistItem(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteChecklistItemResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteChecklistItemResponse)
+	err := c.cc.Invoke(ctx, WorkService_DeleteChecklistItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) CreateComment(ctx context.Context, in *CreateCommentRequest, opts ...grpc.CallOption) (*CreateCommentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateCommentResponse)
+	err := c.cc.Invoke(ctx, WorkService_CreateComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) UpdateComment(ctx context.Context, in *UpdateCommentRequest, opts ...grpc.CallOption) (*UpdateCommentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateCommentResponse)
+	err := c.cc.Invoke(ctx, WorkService_UpdateComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) DeleteComment(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteCommentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteCommentResponse)
+	err := c.cc.Invoke(ctx, WorkService_DeleteComment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkServiceServer is the server API for WorkService service.
 // All implementations must embed UnimplementedWorkServiceServer
 // for forward compatibility.
 //
 // WorkService handles operations related to works/tasks in a group.
 type WorkServiceServer interface {
+	CreateWork(context.Context, *CreateWorkRequest) (*CreateWorkResponse, error)
+	GetWork(context.Context, *common.IDRequest) (*GetWorkResponse, error)
+	ListWorks(context.Context, *ListWorksRequest) (*ListWorksResponse, error)
+	UpdateWork(context.Context, *UpdateWorkRequest) (*UpdateWorkResponse, error)
+	DeleteWork(context.Context, *common.IDRequest) (*DeleteWorkResponse, error)
+	CreateChecklistItem(context.Context, *CreateChecklistItemRequest) (*CreateChecklistItemResponse, error)
+	UpdateChecklistItem(context.Context, *UpdateChecklistItemRequest) (*UpdateChecklistItemResponse, error)
+	DeleteChecklistItem(context.Context, *common.IDRequest) (*DeleteChecklistItemResponse, error)
+	CreateComment(context.Context, *CreateCommentRequest) (*CreateCommentResponse, error)
+	UpdateComment(context.Context, *UpdateCommentRequest) (*UpdateCommentResponse, error)
+	DeleteComment(context.Context, *common.IDRequest) (*DeleteCommentResponse, error)
 	mustEmbedUnimplementedWorkServiceServer()
 }
 
@@ -47,6 +197,39 @@ type WorkServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedWorkServiceServer struct{}
 
+func (UnimplementedWorkServiceServer) CreateWork(context.Context, *CreateWorkRequest) (*CreateWorkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateWork not implemented")
+}
+func (UnimplementedWorkServiceServer) GetWork(context.Context, *common.IDRequest) (*GetWorkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWork not implemented")
+}
+func (UnimplementedWorkServiceServer) ListWorks(context.Context, *ListWorksRequest) (*ListWorksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListWorks not implemented")
+}
+func (UnimplementedWorkServiceServer) UpdateWork(context.Context, *UpdateWorkRequest) (*UpdateWorkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWork not implemented")
+}
+func (UnimplementedWorkServiceServer) DeleteWork(context.Context, *common.IDRequest) (*DeleteWorkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteWork not implemented")
+}
+func (UnimplementedWorkServiceServer) CreateChecklistItem(context.Context, *CreateChecklistItemRequest) (*CreateChecklistItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateChecklistItem not implemented")
+}
+func (UnimplementedWorkServiceServer) UpdateChecklistItem(context.Context, *UpdateChecklistItemRequest) (*UpdateChecklistItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateChecklistItem not implemented")
+}
+func (UnimplementedWorkServiceServer) DeleteChecklistItem(context.Context, *common.IDRequest) (*DeleteChecklistItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteChecklistItem not implemented")
+}
+func (UnimplementedWorkServiceServer) CreateComment(context.Context, *CreateCommentRequest) (*CreateCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
+}
+func (UnimplementedWorkServiceServer) UpdateComment(context.Context, *UpdateCommentRequest) (*UpdateCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateComment not implemented")
+}
+func (UnimplementedWorkServiceServer) DeleteComment(context.Context, *common.IDRequest) (*DeleteCommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteComment not implemented")
+}
 func (UnimplementedWorkServiceServer) mustEmbedUnimplementedWorkServiceServer() {}
 func (UnimplementedWorkServiceServer) testEmbeddedByValue()                     {}
 
@@ -68,13 +251,256 @@ func RegisterWorkServiceServer(s grpc.ServiceRegistrar, srv WorkServiceServer) {
 	s.RegisterService(&WorkService_ServiceDesc, srv)
 }
 
+func _WorkService_CreateWork_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateWorkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).CreateWork(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_CreateWork_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).CreateWork(ctx, req.(*CreateWorkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_GetWork_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).GetWork(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_GetWork_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).GetWork(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_ListWorks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWorksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).ListWorks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_ListWorks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).ListWorks(ctx, req.(*ListWorksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_UpdateWork_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWorkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).UpdateWork(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_UpdateWork_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).UpdateWork(ctx, req.(*UpdateWorkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_DeleteWork_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).DeleteWork(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_DeleteWork_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).DeleteWork(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_CreateChecklistItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateChecklistItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).CreateChecklistItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_CreateChecklistItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).CreateChecklistItem(ctx, req.(*CreateChecklistItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_UpdateChecklistItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateChecklistItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).UpdateChecklistItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_UpdateChecklistItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).UpdateChecklistItem(ctx, req.(*UpdateChecklistItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_DeleteChecklistItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).DeleteChecklistItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_DeleteChecklistItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).DeleteChecklistItem(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_CreateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).CreateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_CreateComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).CreateComment(ctx, req.(*CreateCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_UpdateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).UpdateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_UpdateComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).UpdateComment(ctx, req.(*UpdateCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_DeleteComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).DeleteComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_DeleteComment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).DeleteComment(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkService_ServiceDesc is the grpc.ServiceDesc for WorkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var WorkService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "team_service.WorkService",
 	HandlerType: (*WorkServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "team_service/work.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateWork",
+			Handler:    _WorkService_CreateWork_Handler,
+		},
+		{
+			MethodName: "GetWork",
+			Handler:    _WorkService_GetWork_Handler,
+		},
+		{
+			MethodName: "ListWorks",
+			Handler:    _WorkService_ListWorks_Handler,
+		},
+		{
+			MethodName: "UpdateWork",
+			Handler:    _WorkService_UpdateWork_Handler,
+		},
+		{
+			MethodName: "DeleteWork",
+			Handler:    _WorkService_DeleteWork_Handler,
+		},
+		{
+			MethodName: "CreateChecklistItem",
+			Handler:    _WorkService_CreateChecklistItem_Handler,
+		},
+		{
+			MethodName: "UpdateChecklistItem",
+			Handler:    _WorkService_UpdateChecklistItem_Handler,
+		},
+		{
+			MethodName: "DeleteChecklistItem",
+			Handler:    _WorkService_DeleteChecklistItem_Handler,
+		},
+		{
+			MethodName: "CreateComment",
+			Handler:    _WorkService_CreateComment_Handler,
+		},
+		{
+			MethodName: "UpdateComment",
+			Handler:    _WorkService_UpdateComment_Handler,
+		},
+		{
+			MethodName: "DeleteComment",
+			Handler:    _WorkService_DeleteComment_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "team_service/work.proto",
 }
