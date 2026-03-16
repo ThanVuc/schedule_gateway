@@ -35,3 +35,13 @@ func (wc *groupClient) CreateGroup(c *gin.Context, req *team_service.CreateGroup
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) GetGroup(c *gin.Context, req *common.IDRequest) (*team_service.GetGroupResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.GetGroup(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
