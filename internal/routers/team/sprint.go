@@ -14,16 +14,40 @@ type SprintRouter struct{}
 
 func (r *SprintRouter) InitSprintRouter(Router *gin.RouterGroup) {
 	sprintController := controller.NewSprintController()
-	// private router
-	sprintRouterPrivate := Router.Group("ts/sprints")
+
+	sprintRouter := Router.Group("ts/groups/:group_id/sprints")
 	{
-		sprintRouterPrivate.POST("", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.CREATE_ACTION), sprintController.CreateSprint)
-		sprintRouterPrivate.GET("", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ALL_ACTION), sprintController.ListSprints)
-		sprintRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ONE_ACTION), sprintController.GetSprint)
-		sprintRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION), sprintController.UpdateSprint)
-		sprintRouterPrivate.PATCH("/:id/status", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION), sprintController.UpdateSprintStatus)
-		sprintRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.DELETE_ACTION), sprintController.DeleteSprint)
+		sprintRouter.POST("",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.CREATE_ACTION),
+			sprintController.CreateSprint,
+		)
+
+		sprintRouter.GET("",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ALL_ACTION),
+			sprintController.ListSprints,
+		)
+
+		sprintRouter.GET("/:sprint_id",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ONE_ACTION),
+			sprintController.GetSprint,
+		)
+
+		sprintRouter.PATCH("/:sprint_id",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION),
+			sprintController.UpdateSprint,
+		)
+
+		sprintRouter.PATCH("/:sprint_id/status",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION),
+			sprintController.UpdateSprintStatus,
+		)
+
+		sprintRouter.DELETE("/:sprint_id",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.DELETE_ACTION),
+			sprintController.DeleteSprint,
+		)
 	}
+
 	r.Register()
 }
 
