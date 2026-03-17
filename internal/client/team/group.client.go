@@ -45,3 +45,23 @@ func (wc *groupClient) GetGroup(c *gin.Context, req *common.IDRequest) (*team_se
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) UpdateGroup(c *gin.Context, req *team_service.UpdateGroupRequest) (*team_service.UpdateGroupResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.UpdateGroup(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (wc *groupClient) DeleteGroup(c *gin.Context, req *common.IDRequest) (*team_service.DeleteGroupResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.DeleteGroup(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

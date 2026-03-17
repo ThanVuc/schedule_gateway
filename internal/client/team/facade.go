@@ -17,6 +17,8 @@ type (
 		Ping(c *gin.Context, req *common.EmptyRequest) (*common.EmptyResponse, error)
 		CreateGroup(c *gin.Context, req *team_service.CreateGroupRequest) (*team_service.CreateGroupResponse, error)
 		GetGroup(c *gin.Context, req *common.IDRequest) (*team_service.GetGroupResponse, error)
+		UpdateGroup(c *gin.Context, req *team_service.UpdateGroupRequest) (*team_service.UpdateGroupResponse, error)
+		DeleteGroup(c *gin.Context, req *common.IDRequest) (*team_service.DeleteGroupResponse, error)
 	}
 	SprintClient interface {
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
