@@ -1,7 +1,6 @@
 package team_controller
 
 import (
-	"fmt"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 	dtos "schedule_gateway/internal/dtos/team_service"
@@ -95,48 +94,4 @@ func (gc *GroupController) buildGetGroupResponse(resp *team_service.CreateGroupR
 	return gin.H{
 		"group": groupDto,
 	}
-}
-
-func (gc *GroupController) GetGroup(ctx *gin.Context) {
-	id := ctx.Param("group_id")
-	if id == "" {
-		ctx.JSON(400, gin.H{"error": "Group ID is required"})
-		return
-	}
-	fmt.Printf("Group ID: %s\n", id)
-
-	req := &common.IDRequest{Id: id}
-	resp, err := gc.client.GetGroup(ctx, req)
-	if err != nil {
-		gc.logger.Error("Failed to get group: ", "", zap.Error(err))
-		ctx.JSON(500, gin.H{"error": "Failed to get group"})
-		return
-	}
-
-	var groupDto *dtos.GroupDetailDTO
-	if resp.Group != nil {
-		group := resp.Group
-		groupDto = &dtos.GroupDetailDTO{
-			ID:           group.Id,
-			Name:         group.Name,
-			Description:  *group.Description,
-			MyRole:       int32(*group.MyRole.Enum()),
-			ActiveSprint: *group.ActiveSprint,
-			Avatar:       group.Avatar,
-			MembersTotal: group.MemberCount,
-			CreatedAt:    group.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-			UpdatedAt:    group.UpdatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-		}
-		if group.Owner != nil {
-			groupDto.Owner = &dtos.SimpleUserDTO{
-				ID:     group.Owner.Id,
-				Email:  group.Owner.Email,
-				Avatar: *group.Owner.Avatar,
-			}
-		}
-	}
-
-	response.Ok(ctx, "Group retrieved successfully", gin.H{
-		"group": groupDto,
-	})
 }

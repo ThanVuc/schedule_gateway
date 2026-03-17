@@ -3,6 +3,8 @@ package team_router
 import (
 	controller "schedule_gateway/internal/controller/team"
 	"schedule_gateway/internal/helper"
+	"schedule_gateway/internal/middlewares"
+	constant "schedule_gateway/internal/routers/constant"
 	"schedule_gateway/proto/auth"
 
 	"github.com/gin-gonic/gin"
@@ -15,9 +17,12 @@ func (r *SprintRouter) InitSprintRouter(Router *gin.RouterGroup) {
 	// private router
 	sprintRouterPrivate := Router.Group("ts/sprints")
 	{
-		// TODO: add permission
-		println(sprintController)
-		println(sprintRouterPrivate)
+		sprintRouterPrivate.POST("", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.CREATE_ACTION), sprintController.CreateSprint)
+		sprintRouterPrivate.GET("", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ALL_ACTION), sprintController.ListSprints)
+		sprintRouterPrivate.GET("/:id", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ONE_ACTION), sprintController.GetSprint)
+		sprintRouterPrivate.POST("/:id", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION), sprintController.UpdateSprint)
+		sprintRouterPrivate.PATCH("/:id/status", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION), sprintController.UpdateSprintStatus)
+		sprintRouterPrivate.DELETE("/:id", middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.DELETE_ACTION), sprintController.DeleteSprint)
 	}
 	r.Register()
 }
@@ -27,5 +32,26 @@ func (r *SprintRouter) Register() {
 	resoucePredefine := helper.InitResources()
 
 	register := helper.NewResourceRegiseter(resoucePredefine.SprintResource.Id)
-	register.AddResource(resoucePredefine.SprintResource, []*auth.Action{})
+	register.AddResource(resoucePredefine.SprintResource, []*auth.Action{
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.CREATE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ALL_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_ONE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.UPDATE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.DELETE_ACTION,
+		},
+	})
 }
