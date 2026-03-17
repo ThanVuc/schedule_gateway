@@ -4,6 +4,7 @@ import (
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 
+	"github.com/gin-gonic/gin"
 	"github.com/thanvuc/go-core-lib/log"
 )
 
@@ -17,4 +18,9 @@ func NewSprintController() *SprintController {
 		logger: global.Logger,
 		client: team_client.NewSprintClient(),
 	}
+}
+
+
+func (sc *SprintController) CreateSprint(ctx *gin.Context) {
+	
 }

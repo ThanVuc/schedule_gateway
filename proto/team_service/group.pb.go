@@ -1007,7 +1007,7 @@ var File_team_service_group_proto protoreflect.FileDescriptor
 
 const file_team_service_group_proto_rawDesc = "" +
 	"\n" +
-	"\x18team_service/group.proto\x12\fteam_service\x1a\x1eteam_service/common.team.proto\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"_\n" +
+	"\x18team_service/group.proto\x12\fteam_service\x1a\x1eteam_service/common.team.proto\x1a\x13common/common.proto\x1a\x12common/error.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"_\n" +
 	"\x12CreateGroupRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x02 \x01(\tH\x00R\vdescription\x88\x01\x01B\x0e\n" +

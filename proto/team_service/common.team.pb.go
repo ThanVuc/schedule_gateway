@@ -243,7 +243,7 @@ const (
 	WorkPriority_WORK_PRIORITY_UNSPECIFIED WorkPriority = 0
 	WorkPriority_WORK_PRIORITY_LOW         WorkPriority = 1
 	WorkPriority_WORK_PRIORITY_MEDIUM      WorkPriority = 2
-	WorkPriority_HIWORK_PRIORITY_HIGHGH    WorkPriority = 3
+	WorkPriority_WORK_PRIORITY_HIGH        WorkPriority = 3
 )
 
 // Enum value maps for WorkPriority.
@@ -252,13 +252,13 @@ var (
 		0: "WORK_PRIORITY_UNSPECIFIED",
 		1: "WORK_PRIORITY_LOW",
 		2: "WORK_PRIORITY_MEDIUM",
-		3: "HIWORK_PRIORITY_HIGHGH",
+		3: "WORK_PRIORITY_HIGH",
 	}
 	WorkPriority_value = map[string]int32{
 		"WORK_PRIORITY_UNSPECIFIED": 0,
 		"WORK_PRIORITY_LOW":         1,
 		"WORK_PRIORITY_MEDIUM":      2,
-		"HIWORK_PRIORITY_HIGHGH":    3,
+		"WORK_PRIORITY_HIGH":        3,
 	}
 )
 
@@ -413,7 +413,7 @@ type SimpleUserMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email"`
-	Avatar        string                 `protobuf:"bytes,3,opt,name=avatar,proto3" json:"avatar"`
+	Avatar        *string                `protobuf:"bytes,3,opt,name=avatar,proto3,oneof" json:"avatar"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -463,8 +463,8 @@ func (x *SimpleUserMessage) GetEmail() string {
 }
 
 func (x *SimpleUserMessage) GetAvatar() string {
-	if x != nil {
-		return x.Avatar
+	if x != nil && x.Avatar != nil {
+		return *x.Avatar
 	}
 	return ""
 }
@@ -669,12 +669,14 @@ type GroupMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
+	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
 	Owner         *SimpleUserMessage     `protobuf:"bytes,4,opt,name=owner,proto3" json:"owner"`
 	MyRole        GroupRole              `protobuf:"varint,5,opt,name=my_role,json=myRole,proto3,enum=team_service.GroupRole" json:"my_role"`
-	ActiveSprint  string                 `protobuf:"bytes,6,opt,name=active_sprint,json=activeSprint,proto3" json:"active_sprint"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	ActiveSprint  *string                `protobuf:"bytes,6,opt,name=active_sprint,json=activeSprint,proto3,oneof" json:"active_sprint"`
+	MemberCount   int32                  `protobuf:"varint,7,opt,name=member_count,json=memberCount,proto3" json:"member_count"`
+	Avatar        string                 `protobuf:"bytes,8,opt,name=avatar,proto3" json:"avatar"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -724,8 +726,8 @@ func (x *GroupMessage) GetName() string {
 }
 
 func (x *GroupMessage) GetDescription() string {
-	if x != nil {
-		return x.Description
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
@@ -745,8 +747,22 @@ func (x *GroupMessage) GetMyRole() GroupRole {
 }
 
 func (x *GroupMessage) GetActiveSprint() string {
+	if x != nil && x.ActiveSprint != nil {
+		return *x.ActiveSprint
+	}
+	return ""
+}
+
+func (x *GroupMessage) GetMemberCount() int32 {
 	if x != nil {
-		return x.ActiveSprint
+		return x.MemberCount
+	}
+	return 0
+}
+
+func (x *GroupMessage) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
 	}
 	return ""
 }
@@ -1291,11 +1307,12 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1d\n" +
 	"\adetails\x18\x03 \x01(\tH\x00R\adetails\x88\x01\x01B\n" +
 	"\n" +
-	"\b_details\"Q\n" +
+	"\b_details\"a\n" +
 	"\x11SimpleUserMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
-	"\x05email\x18\x02 \x01(\tR\x05email\x12\x16\n" +
-	"\x06avatar\x18\x03 \x01(\tR\x06avatar\"9\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1b\n" +
+	"\x06avatar\x18\x03 \x01(\tH\x00R\x06avatar\x88\x01\x01B\t\n" +
+	"\a_avatar\"9\n" +
 	"\x13SimpleSprintMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\"\xc7\x01\n" +
@@ -1311,18 +1328,23 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"\n" +
 	"expires_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xd8\x02\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xbf\x03\n" +
 	"\fGroupMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x125\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x125\n" +
 	"\x05owner\x18\x04 \x01(\v2\x1f.team_service.SimpleUserMessageR\x05owner\x120\n" +
-	"\amy_role\x18\x05 \x01(\x0e2\x17.team_service.GroupRoleR\x06myRole\x12#\n" +
-	"\ractive_sprint\x18\x06 \x01(\tR\factiveSprint\x129\n" +
+	"\amy_role\x18\x05 \x01(\x0e2\x17.team_service.GroupRoleR\x06myRole\x12(\n" +
+	"\ractive_sprint\x18\x06 \x01(\tH\x01R\factiveSprint\x88\x01\x01\x12!\n" +
+	"\fmember_count\x18\a \x01(\x05R\vmemberCount\x12\x16\n" +
+	"\x06avatar\x18\b \x01(\tR\x06avatar\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xed\x03\n" +
+	"updated_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\x0e\n" +
+	"\f_descriptionB\x10\n" +
+	"\x0e_active_sprint\"\xed\x03\n" +
 	"\rSprintMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
 	"\bgroup_id\x18\x02 \x01(\tR\agroupId\x12\x12\n" +
@@ -1399,12 +1421,12 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"\x10WORK_STATUS_TODO\x10\x01\x12\x1b\n" +
 	"\x17WORK_STATUS_IN_PROGRESS\x10\x02\x12\x19\n" +
 	"\x15WORK_STATUS_IN_REVIEW\x10\x03\x12\x14\n" +
-	"\x10WORK_STATUS_DONE\x10\x04*z\n" +
+	"\x10WORK_STATUS_DONE\x10\x04*v\n" +
 	"\fWorkPriority\x12\x1d\n" +
 	"\x19WORK_PRIORITY_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11WORK_PRIORITY_LOW\x10\x01\x12\x18\n" +
-	"\x14WORK_PRIORITY_MEDIUM\x10\x02\x12\x1a\n" +
-	"\x16HIWORK_PRIORITY_HIGHGH\x10\x03B\x14Z\x12proto/team_serviceb\x06proto3"
+	"\x14WORK_PRIORITY_MEDIUM\x10\x02\x12\x16\n" +
+	"\x12WORK_PRIORITY_HIGH\x10\x03B\x14Z\x12proto/team_serviceb\x06proto3"
 
 var (
 	file_team_service_common_team_proto_rawDescOnce sync.Once
@@ -1480,6 +1502,8 @@ func file_team_service_common_team_proto_init() {
 		return
 	}
 	file_team_service_common_team_proto_msgTypes[1].OneofWrappers = []any{}
+	file_team_service_common_team_proto_msgTypes[2].OneofWrappers = []any{}
+	file_team_service_common_team_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

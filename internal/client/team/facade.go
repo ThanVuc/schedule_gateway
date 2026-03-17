@@ -16,6 +16,7 @@ type (
 	GroupClient interface {
 		Ping(c *gin.Context, req *common.EmptyRequest) (*common.EmptyResponse, error)
 		CreateGroup(c *gin.Context, req *team_service.CreateGroupRequest) (*team_service.CreateGroupResponse, error)
+		GetGroup(c *gin.Context, req *common.IDRequest) (*team_service.GetGroupResponse, error)
 	}
 	SprintClient interface{}
 	WorkClient   interface{}
