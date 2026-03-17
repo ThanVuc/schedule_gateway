@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"schedule_gateway/proto/team_service"
 	"strconv"
 	"time"
 )
@@ -49,4 +50,21 @@ func SafeInt64(i *int64) int64 {
 		return 0
 	}
 	return *i
+}
+
+func IsValidDate(date *team_service.Date) bool {
+	if date == nil {
+		return false
+	}
+
+	if date.GetYear() <= 0 || date.GetMonth() <= 0 || date.GetDay() <= 0 {
+		return false
+	}
+
+	t := time.Date(int(date.GetYear()), time.Month(date.GetMonth()), int(date.GetDay()), 0, 0, 0, 0, time.UTC)
+	return t.Year() == int(date.GetYear()) && int(t.Month()) == int(date.GetMonth()) && t.Day() == int(date.GetDay())
+}
+
+func DateToTime(date *team_service.Date) time.Time {
+	return time.Date(int(date.GetYear()), time.Month(date.GetMonth()), int(date.GetDay()), 0, 0, 0, 0, time.UTC)
 }

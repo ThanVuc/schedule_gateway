@@ -26,7 +26,7 @@ type CreateSprintRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	GroupId       string                 `protobuf:"bytes,1,opt,name=group_id,json=groupId,proto3" json:"group_id"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
-	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
+	Goal          *string                `protobuf:"bytes,3,opt,name=goal,proto3,oneof" json:"goal"`
 	StartDate     *Date                  `protobuf:"bytes,4,opt,name=start_date,json=startDate,proto3" json:"start_date"`
 	EndDate       *Date                  `protobuf:"bytes,5,opt,name=end_date,json=endDate,proto3" json:"end_date"`
 	unknownFields protoimpl.UnknownFields
@@ -77,9 +77,9 @@ func (x *CreateSprintRequest) GetName() string {
 	return ""
 }
 
-func (x *CreateSprintRequest) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
+func (x *CreateSprintRequest) GetGoal() string {
+	if x != nil && x.Goal != nil {
+		return *x.Goal
 	}
 	return ""
 }
@@ -310,7 +310,7 @@ type UpdateSprintRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name"`
-	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
+	Goal          *string                `protobuf:"bytes,3,opt,name=goal,proto3,oneof" json:"goal"`
 	StartDate     *Date                  `protobuf:"bytes,4,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date"`
 	EndDate       *Date                  `protobuf:"bytes,5,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date"`
 	unknownFields protoimpl.UnknownFields
@@ -361,9 +361,9 @@ func (x *UpdateSprintRequest) GetName() string {
 	return ""
 }
 
-func (x *UpdateSprintRequest) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
+func (x *UpdateSprintRequest) GetGoal() string {
+	if x != nil && x.Goal != nil {
+		return *x.Goal
 	}
 	return ""
 }
@@ -602,15 +602,15 @@ var File_team_service_sprint_proto protoreflect.FileDescriptor
 
 const file_team_service_sprint_proto_rawDesc = "" +
 	"\n" +
-	"\x19team_service/sprint.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1eteam_service/common.team.proto\"\xdd\x01\n" +
+	"\x19team_service/sprint.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1eteam_service/common.team.proto\"\xc8\x01\n" +
 	"\x13CreateSprintRequest\x12\x19\n" +
 	"\bgroup_id\x18\x01 \x01(\tR\agroupId\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x121\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x17\n" +
+	"\x04goal\x18\x03 \x01(\tH\x00R\x04goal\x88\x01\x01\x121\n" +
 	"\n" +
 	"start_date\x18\x04 \x01(\v2\x12.team_service.DateR\tstartDate\x12-\n" +
-	"\bend_date\x18\x05 \x01(\v2\x12.team_service.DateR\aendDateB\x0e\n" +
-	"\f_description\"\x85\x01\n" +
+	"\bend_date\x18\x05 \x01(\v2\x12.team_service.DateR\aendDateB\a\n" +
+	"\x05_goal\"\x85\x01\n" +
 	"\x14CreateSprintResponse\x123\n" +
 	"\x06sprint\x18\x01 \x01(\v2\x1b.team_service.SprintMessageR\x06sprint\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
@@ -625,16 +625,16 @@ const file_team_service_sprint_proto_rawDesc = "" +
 	"\asprints\x18\x01 \x03(\v2\x1b.team_service.SprintMessageR\asprints\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12.\n" +
 	"\x05error\x18\x03 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x86\x02\n" +
+	"\x06_error\"\xf1\x01\n" +
 	"\x13UpdateSprintRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
-	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
-	"\vdescription\x18\x03 \x01(\tH\x01R\vdescription\x88\x01\x01\x126\n" +
+	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x17\n" +
+	"\x04goal\x18\x03 \x01(\tH\x01R\x04goal\x88\x01\x01\x126\n" +
 	"\n" +
 	"start_date\x18\x04 \x01(\v2\x12.team_service.DateH\x02R\tstartDate\x88\x01\x01\x122\n" +
 	"\bend_date\x18\x05 \x01(\v2\x12.team_service.DateH\x03R\aendDate\x88\x01\x01B\a\n" +
-	"\x05_nameB\x0e\n" +
-	"\f_descriptionB\r\n" +
+	"\x05_nameB\a\n" +
+	"\x05_goalB\r\n" +
 	"\v_start_dateB\v\n" +
 	"\t_end_date\"\x85\x01\n" +
 	"\x14UpdateSprintResponse\x123\n" +

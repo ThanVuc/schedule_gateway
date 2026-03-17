@@ -18,8 +18,15 @@ type (
 		CreateGroup(c *gin.Context, req *team_service.CreateGroupRequest) (*team_service.CreateGroupResponse, error)
 		GetGroup(c *gin.Context, req *common.IDRequest) (*team_service.GetGroupResponse, error)
 	}
-	SprintClient interface{}
-	WorkClient   interface{}
+	SprintClient interface {
+		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
+		GetSprint(c *gin.Context, req *common.IDRequest) (*team_service.GetSprintResponse, error)
+		ListSprints(c *gin.Context, req *team_service.ListSprintsRequest) (*team_service.ListSprintsResponse, error)
+		UpdateSprint(c *gin.Context, req *team_service.UpdateSprintRequest) (*team_service.UpdateSprintResponse, error)
+		UpdateSprintStatus(c *gin.Context, req *team_service.UpdateSprintStatusRequest) (*team_service.UpdateSprintStatusResponse, error)
+		DeleteSprint(c *gin.Context, req *common.IDRequest) (*team_service.DeleteSprintResponse, error)
+	}
+	WorkClient interface{}
 )
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {

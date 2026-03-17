@@ -786,7 +786,7 @@ type SprintMessage struct {
 	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	GroupId         string                 `protobuf:"bytes,2,opt,name=group_id,json=groupId,proto3" json:"group_id"`
 	Name            string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name"`
-	Description     string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description"`
+	Goal            string                 `protobuf:"bytes,4,opt,name=goal,proto3" json:"goal"`
 	Status          SprintStatus           `protobuf:"varint,5,opt,name=status,proto3,enum=team_service.SprintStatus" json:"status"`
 	StartDate       *Date                  `protobuf:"bytes,6,opt,name=start_date,json=startDate,proto3" json:"start_date"`
 	EndDate         *Date                  `protobuf:"bytes,7,opt,name=end_date,json=endDate,proto3" json:"end_date"`
@@ -850,9 +850,9 @@ func (x *SprintMessage) GetName() string {
 	return ""
 }
 
-func (x *SprintMessage) GetDescription() string {
+func (x *SprintMessage) GetGoal() string {
 	if x != nil {
-		return x.Description
+		return x.Goal
 	}
 	return ""
 }
@@ -1344,12 +1344,12 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"updated_at\x18\n" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\x0e\n" +
 	"\f_descriptionB\x10\n" +
-	"\x0e_active_sprint\"\xed\x03\n" +
+	"\x0e_active_sprint\"\xdf\x03\n" +
 	"\rSprintMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
 	"\bgroup_id\x18\x02 \x01(\tR\agroupId\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\x122\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x12\n" +
+	"\x04goal\x18\x04 \x01(\tR\x04goal\x122\n" +
 	"\x06status\x18\x05 \x01(\x0e2\x1a.team_service.SprintStatusR\x06status\x121\n" +
 	"\n" +
 	"start_date\x18\x06 \x01(\v2\x12.team_service.DateR\tstartDate\x12-\n" +
