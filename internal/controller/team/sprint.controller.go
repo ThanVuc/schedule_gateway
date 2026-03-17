@@ -3,10 +3,12 @@ package team_controller
 import (
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
+	dtos "schedule_gateway/internal/dtos/team_service"
 	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/common"
 	"schedule_gateway/proto/team_service"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanvuc/go-core-lib/log"
@@ -54,13 +56,13 @@ func (sc *SprintController) CreateSprint(ctx *gin.Context) {
 }
 
 func (sc *SprintController) GetSprint(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if id == "" {
+	sprintID := ctx.Param("sprint_id")
+	if sprintID == "" {
 		response.BadRequest(ctx, "Sprint ID is required")
 		return
 	}
 
-	resp, err := sc.client.GetSprint(ctx, &common.IDRequest{Id: id})
+	resp, err := sc.client.GetSprint(ctx, &common.IDRequest{Id: sprintID})
 	if err != nil {
 		sc.logger.Error("Failed to get sprint: ", "", zap.Error(err))
 		response.InternalServerError(ctx, "Failed to get sprint")
@@ -83,10 +85,7 @@ func (sc *SprintController) GetSprint(ctx *gin.Context) {
 }
 
 func (sc *SprintController) ListSprints(ctx *gin.Context) {
-	groupID := ctx.Query("group_id")
-	if groupID == "" {
-		groupID = ctx.Param("group_id")
-	}
+	groupID := ctx.Param("group_id")
 	if groupID == "" {
 		response.BadRequest(ctx, "group_id is required")
 		return
@@ -178,13 +177,13 @@ func (sc *SprintController) UpdateSprintStatus(ctx *gin.Context) {
 }
 
 func (sc *SprintController) DeleteSprint(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if id == "" {
+	sprintID := ctx.Param("sprint_id")
+	if sprintID == "" {
 		response.BadRequest(ctx, "Sprint ID is required")
 		return
 	}
 
-	resp, err := sc.client.DeleteSprint(ctx, &common.IDRequest{Id: id})
+	resp, err := sc.client.DeleteSprint(ctx, &common.IDRequest{Id: sprintID})
 	if err != nil {
 		sc.logger.Error("Failed to delete sprint: ", "", zap.Error(err))
 		response.InternalServerError(ctx, "Failed to delete sprint")
@@ -207,80 +206,117 @@ func (sc *SprintController) DeleteSprint(ctx *gin.Context) {
 }
 
 func (sc *SprintController) buildCreateSprintRequest(ctx *gin.Context) *team_service.CreateSprintRequest {
-	var req team_service.CreateSprintRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		response.BadRequest(ctx, "Invalid request body: "+err.Error())
-		return nil
-	}
-
-	if req.GetGroupId() == "" {
+	groupID := ctx.Param("group_id")
+	if groupID == "" {
 		response.BadRequest(ctx, "group_id is required")
 		return nil
 	}
 
-	if req.GetName() == "" {
+	var dto dtos.CreateSprintDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		response.BadRequest(ctx, "Invalid request body: "+err.Error())
+		return nil
+	}
+
+	name := strings.TrimSpace(dto.Name)
+	if name == "" {
 		response.BadRequest(ctx, "name is required")
 		return nil
 	}
 
-	if !utils.IsValidDate(req.GetStartDate()) || !utils.IsValidDate(req.GetEndDate()) {
-		response.BadRequest(ctx, "start_date and end_date must be valid dates")
+	startDate, err := utils.FromStringToDate(dto.StartDate)
+	if err != nil {
+		response.BadRequest(ctx, "start_date must be in format YYYY-MM-DD")
 		return nil
 	}
 
-	start := utils.DateToTime(req.GetStartDate())
-	end := utils.DateToTime(req.GetEndDate())
+	endDate, err := utils.FromStringToDate(dto.EndDate)
+	if err != nil {
+		response.BadRequest(ctx, "end_date must be in format YYYY-MM-DD")
+		return nil
+	}
+
+	start := utils.DateToTime(startDate)
+	end := utils.DateToTime(endDate)
 	if start.After(end) {
 		response.BadRequest(ctx, "start_date must be before or equal to end_date")
 		return nil
 	}
 
-	return &req
+	return &team_service.CreateSprintRequest{
+		GroupId:   groupID,
+		Name:      name,
+		Goal:      dto.Goal,
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
 }
 
 func (sc *SprintController) buildUpdateSprintRequest(ctx *gin.Context) *team_service.UpdateSprintRequest {
-	id := ctx.Param("id")
-	if id == "" {
+	sprintID := ctx.Param("sprint_id")
+	if sprintID == "" {
 		response.BadRequest(ctx, "Sprint ID is required")
 		return nil
 	}
 
-	var req team_service.UpdateSprintRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	var dto dtos.UpdateSprintDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
 		response.BadRequest(ctx, "Invalid request body: "+err.Error())
 		return nil
 	}
 
-	req.Id = id
-
-	if req.Name == nil && req.Goal == nil && req.StartDate == nil && req.EndDate == nil {
+	if dto.Name == nil && dto.Goal == nil && dto.StartDate == nil && dto.EndDate == nil {
 		response.BadRequest(ctx, "At least one field is required to update")
 		return nil
 	}
 
-	if req.StartDate != nil && !utils.IsValidDate(req.StartDate) {
-		response.BadRequest(ctx, "start_date is invalid")
-		return nil
-	}
-
-	if req.EndDate != nil && !utils.IsValidDate(req.EndDate) {
-		response.BadRequest(ctx, "end_date is invalid")
-		return nil
-	}
-
-	if req.StartDate != nil && req.EndDate != nil {
-		if utils.DateToTime(req.StartDate).After(utils.DateToTime(req.EndDate)) {
-			response.BadRequest(ctx, "start_date must be before or equal to end_date")
+	var name *string
+	if dto.Name != nil {
+		trimmed := strings.TrimSpace(*dto.Name)
+		if trimmed == "" {
+			response.BadRequest(ctx, "name is invalid")
 			return nil
 		}
+		name = &trimmed
 	}
 
-	return &req
+	var startDate *team_service.Date
+	if dto.StartDate != nil {
+		parsedStartDate, err := utils.FromStringToDate(*dto.StartDate)
+		if err != nil {
+			response.BadRequest(ctx, "start_date must be in format YYYY-MM-DD")
+			return nil
+		}
+		startDate = parsedStartDate
+	}
+
+	var endDate *team_service.Date
+	if dto.EndDate != nil {
+		parsedEndDate, err := utils.FromStringToDate(*dto.EndDate)
+		if err != nil {
+			response.BadRequest(ctx, "end_date must be in format YYYY-MM-DD")
+			return nil
+		}
+		endDate = parsedEndDate
+	}
+
+	if startDate != nil && endDate != nil && utils.DateToTime(startDate).After(utils.DateToTime(endDate)) {
+		response.BadRequest(ctx, "start_date must be before or equal to end_date")
+		return nil
+	}
+
+	return &team_service.UpdateSprintRequest{
+		Id:        sprintID,
+		Name:      name,
+		Goal:      dto.Goal,
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
 }
 
 func (sc *SprintController) buildUpdateSprintStatusRequest(ctx *gin.Context) *team_service.UpdateSprintStatusRequest {
-	id := ctx.Param("id")
-	if id == "" {
+	sprintID := ctx.Param("sprint_id")
+	if sprintID == "" {
 		response.BadRequest(ctx, "Sprint ID is required")
 		return nil
 	}
@@ -291,7 +327,7 @@ func (sc *SprintController) buildUpdateSprintStatusRequest(ctx *gin.Context) *te
 		return nil
 	}
 
-	req.Id = id
+	req.Id = sprintID
 
 	if !isValidSprintStatus(req.GetStatus()) || req.GetStatus() == team_service.SprintStatus_SPRINT_STATUS_UNSPECIFIED {
 		response.BadRequest(ctx, "status is invalid")
@@ -312,8 +348,8 @@ func (sc *SprintController) buildSprintResponse(sprint *team_service.SprintMessa
 		"name":             sprint.GetName(),
 		"goal":             sprint.GetGoal(),
 		"status":           sprint.GetStatus(),
-		"start_date":       sprint.GetStartDate(),
-		"end_date":         sprint.GetEndDate(),
+		"start_date":       utils.FromDateToString(sprint.GetStartDate()),
+		"end_date":         utils.FromDateToString(sprint.GetEndDate()),
 		"total_work":       sprint.GetTotalWork(),
 		"completed_work":   sprint.GetCompletedWork(),
 		"progress_percent": sprint.GetProgressPercent(),

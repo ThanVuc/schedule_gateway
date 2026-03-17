@@ -5,6 +5,7 @@ import (
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 	dtos "schedule_gateway/internal/dtos/team_service"
+	"schedule_gateway/internal/utils"
 	"schedule_gateway/pkg/response"
 	"schedule_gateway/proto/common"
 	"schedule_gateway/proto/team_service"
@@ -55,6 +56,7 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 	}
 
 	dto := gc.buildGetGroupResponse(resp)
+
 	response.Ok(ctx, "Group created successfully", dto)
 }
 
@@ -79,7 +81,7 @@ func (gc *GroupController) buildGetGroupResponse(resp *team_service.CreateGroupR
 		groupDto = &dtos.GroupDTO{
 			ID:          group.Id,
 			Name:        group.Name,
-			Description: *group.Description,
+			Description: utils.SafeString(group.Description),
 			CreatedAt:   group.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
 			UpdatedAt:   group.UpdatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
 		}
@@ -87,7 +89,7 @@ func (gc *GroupController) buildGetGroupResponse(resp *team_service.CreateGroupR
 			groupDto.Owner = &dtos.SimpleUserDTO{
 				ID:     group.Owner.Id,
 				Email:  group.Owner.Email,
-				Avatar: *group.Owner.Avatar,
+				Avatar: utils.SafeString(group.Owner.Avatar),
 			}
 		}
 	}

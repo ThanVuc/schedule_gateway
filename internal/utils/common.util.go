@@ -3,6 +3,7 @@ package utils
 import (
 	"schedule_gateway/proto/team_service"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -67,4 +68,25 @@ func IsValidDate(date *team_service.Date) bool {
 
 func DateToTime(date *team_service.Date) time.Time {
 	return time.Date(int(date.GetYear()), time.Month(date.GetMonth()), int(date.GetDay()), 0, 0, 0, 0, time.UTC)
+}
+
+func FromStringToDate(value string) (*team_service.Date, error) {
+	parsedDate, err := time.Parse("2006-01-02", strings.TrimSpace(value))
+	if err != nil {
+		return nil, err
+	}
+
+	return &team_service.Date{
+		Year:  int32(parsedDate.Year()),
+		Month: int32(parsedDate.Month()),
+		Day:   int32(parsedDate.Day()),
+	}, nil
+}
+
+func FromDateToString(date *team_service.Date) string {
+	if !IsValidDate(date) {
+		return ""
+	}
+
+	return DateToTime(date).Format("2006-01-02")
 }
