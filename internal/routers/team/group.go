@@ -23,6 +23,8 @@ func (r *GroupRouter) InitGroupRouter(Router *gin.RouterGroup) {
 		groupRouterPrivate.GET("/:group_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.READ_ONE_ACTION), groupController.GetGroup)
 		groupRouterPrivate.PATCH("/:group_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.UPDATE_ACTION), groupController.UpdateGroup)
 		groupRouterPrivate.DELETE("/:group_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.DELETE_ACTION), groupController.DeleteGroup)
+		groupRouterPrivate.GET("/:group_id/members", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.READ_LIST_MEMBERS_ACTION), groupController.ListMembers)
+		groupRouterPrivate.PATCH("/:group_id/members/:user_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.UPDATE_MEMBER_ROLE_ACTION), groupController.UpdateMemberRole)
 	}
 	r.Register()
 }
@@ -48,6 +50,14 @@ func (r *GroupRouter) Register() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.DELETE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.READ_LIST_MEMBERS_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.UPDATE_MEMBER_ROLE_ACTION,
 		},
 	})
 }

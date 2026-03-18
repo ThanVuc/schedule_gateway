@@ -65,3 +65,23 @@ func (wc *groupClient) DeleteGroup(c *gin.Context, req *common.IDRequest) (*team
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) ListMembers(c *gin.Context, req *team_service.ListMembersRequest) (*team_service.ListMembersResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.ListMembers(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (wc *groupClient) UpdateMemberRole(c *gin.Context, req *team_service.UpdateMemberRoleRequest) (*team_service.UpdateMemberRoleResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.UpdateMemberRole(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

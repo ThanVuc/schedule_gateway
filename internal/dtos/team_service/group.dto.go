@@ -34,3 +34,16 @@ type GroupDetailDTO struct {
 	CreatedAt    string         `json:"created_at"`
 	UpdatedAt    string         `json:"updated_at"`
 }
+
+type MemberDTO struct {
+	ID       string `json:"id"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
+	Role     int32  `json:"role"`
+	JoinedAt string `json:"joined_at"`
+}
+
+
+type UpdateMemberRoleDTO struct {
+	Role   int32  `json:"role" binding:"required"`
+}
