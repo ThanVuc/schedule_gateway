@@ -59,3 +59,9 @@ const (
 	RECOVER_WORKS_ACTION           = "recover_works"
 	ACCEPT_ALL_DRAFTS_WORKS_ACTION = "accept_all_drafts_works"
 )
+
+// group resource actions
+const (
+	READ_LIST_MEMBERS_ACTION = "read_list_members"
+	UPDATE_MEMBER_ROLE_ACTION = "update_member_role"
+)

@@ -50,8 +50,9 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 	}
 
 	if resp.GetError() != nil {
+		fmt.Print("Error code: ", resp.GetError().GetCode())
 		gc.logger.Error("Failed to create group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
-		response.UnprocessableEntity(ctx, resp.Error.Code, resp.Error.Message, *resp.Error.Details)
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
 	}
 
@@ -138,6 +139,12 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 		}
 	}
 
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to get group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
 	response.Ok(ctx, "Group retrieved successfully", gin.H{
 		"group": groupDto,
 	})
@@ -173,7 +180,7 @@ func (gc *GroupController) UpdateGroup(ctx *gin.Context) {
 
 	if resp.GetError() != nil {
 		gc.logger.Error("Failed to update group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
-		response.UnprocessableEntity(ctx, resp.Error.Code, resp.Error.Message, *resp.Error.Details)
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
 	}
 
@@ -224,9 +231,104 @@ func (gc *GroupController) DeleteGroup(ctx *gin.Context) {
 
 	if resp.GetError() != nil {
 		gc.logger.Error("Failed to delete group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
-		response.UnprocessableEntity(ctx, resp.Error.Code, resp.Error.Message, *resp.Error.Details)
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
 	}
 
 	response.Ok(ctx, "Group deleted successfully", nil)
+}
+
+func (gc *GroupController) ListMembers(ctx *gin.Context) {
+	id := ctx.Param("group_id")
+	if id == "" {
+		ctx.JSON(400, gin.H{"error": "Group ID is required"})
+		return
+	}
+
+	req := &team_service.ListMembersRequest{GroupId: id}
+	resp, err := gc.client.ListMembers(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to list group members: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to list group members"})
+		return
+	}
+
+	var members []dtos.MemberDTO
+	for _, member := range resp.Members {
+		members = append(members, dtos.MemberDTO{
+			ID:       member.Id,
+			Email:    member.Email,
+			Avatar:   member.Avatar,
+			Role:     int32(*member.Role.Enum()),
+			JoinedAt: member.JoinedAt.AsTime().Format("2006-01-02T15:04:05Z"),
+		})
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to list group members: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.Ok(ctx, "Group members retrieved successfully", gin.H{
+		"members": members,
+		"total":   resp.Total,
+	})
+
+}
+
+func (gc *GroupController) UpdateMemberRole(ctx *gin.Context) {
+	groupId := ctx.Param("group_id")
+	if groupId == "" {
+		ctx.JSON(400, gin.H{"error": "Group ID is required"})
+		return
+	}
+
+	userId := ctx.Param("user_id")
+	if userId == "" {
+		ctx.JSON(400, gin.H{"error": "User ID is required"})
+		return
+	}
+
+	var dto dtos.UpdateMemberRoleDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	req := &team_service.UpdateMemberRoleRequest{
+		GroupId:  groupId,
+		MemberId: userId,
+		NewRole:  team_service.GroupRole(dto.Role),
+	}
+
+	resp, err := gc.client.UpdateMemberRole(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to update member role: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to update member role"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to update member role: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	var memberDto *dtos.MemberDTO
+	if resp.Member != nil {
+		member := resp.Member
+		memberDto = &dtos.MemberDTO{
+			ID:       member.Id,
+			Email:    member.Email,
+			Avatar:   member.Avatar,
+			Role:     int32(*member.Role.Enum()),
+			JoinedAt: member.JoinedAt.AsTime().Format("2006-01-02T15:04:05Z"),
+		}
+	}
+
+	response.Ok(ctx, "Member role updated successfully", gin.H{
+		"member": memberDto,
+	})
+
 }
