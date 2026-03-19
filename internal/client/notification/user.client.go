@@ -17,7 +17,7 @@ type userNotificationClient struct {
 
 func (uc *userNotificationClient) UpsertUserFCMToken(c *gin.Context, req *notification_service.UpsertUserFCMTokenRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := uc.userNotificationClient.UpsertUserFCMToken(ctx, req)
 	if err != nil {

@@ -10,4 +10,7 @@ const (
 	GOAL_RESOURCE         = "goal"
 	NOTIFICATION_RESOURCE = "notification"
 	WORK_RESOURCE         = "work"
+	GROUP_RESOURCE        = "group"
+	SPRINT_RESOURCE       = "sprint"
+	TEAM_WORK_RESOURCE    = "team-work"
 )

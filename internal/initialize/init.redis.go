@@ -10,7 +10,6 @@ import (
 
 func InitRedis() {
 	redisConfig := global.Config.Redis
-	println("HOST: " + fmt.Sprintf("%s:%s", redisConfig.Host, strconv.Itoa(redisConfig.Port)))
 	redisClient := cache.NewRedisCache(cache.Config{
 		Addr:     fmt.Sprintf("%s:%s", redisConfig.Host, strconv.Itoa(redisConfig.Port)),
 		DB:       redisConfig.DB,

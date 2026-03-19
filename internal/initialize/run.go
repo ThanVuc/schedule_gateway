@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"fmt"
 	"net/http"
 	"schedule_gateway/global"
 	"schedule_gateway/internal/helper"
@@ -28,7 +27,7 @@ func Run() {
 
 	var r *gin.Engine = gin.New()
 	r.Use(middlewares.LogResultMiddleware())
-	r.Use(middlewares.TrackLogMiddleware())
+	r.Use(middlewares.EnrichContextMiddleware())
 	r.Use(middlewares.CORSMiddleware())
 
 	store := cookie.NewStore([]byte(global.Config.SessionSecret))
@@ -61,6 +60,6 @@ func Run() {
 	helper.WriteToJsonFile("resources")
 	go InitResource()
 
-	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
-	// r.Run(":8081")
+	// r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
+	r.Run(":8081")
 }

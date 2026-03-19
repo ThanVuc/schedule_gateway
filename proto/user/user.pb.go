@@ -9,6 +9,7 @@ package user
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	common "schedule_gateway/proto/common"
 	reflect "reflect"
 	sync "sync"
@@ -234,28 +235,33 @@ func (x *UpdateUserProfileRequest) GetAuthor() string {
 	return ""
 }
 
-type GetPresignedAvatarURLResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url"`
-	Error         *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type GetUserResponse struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Email                string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email"`
+	Status               bool                   `protobuf:"varint,2,opt,name=status,proto3" json:"status"`
+	TimeZone             string                 `protobuf:"bytes,3,opt,name=time_zone,json=timeZone,proto3" json:"time_zone"`
+	UseEmailNotification bool                   `protobuf:"varint,4,opt,name=use_email_notification,json=useEmailNotification,proto3" json:"use_email_notification"`
+	UseAppNotification   bool                   `protobuf:"varint,5,opt,name=use_app_notification,json=useAppNotification,proto3" json:"use_app_notification"`
+	CreatedAt            *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	Error                *common.Error          `protobuf:"bytes,7,opt,name=error,proto3,oneof" json:"error"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
-func (x *GetPresignedAvatarURLResponse) Reset() {
-	*x = GetPresignedAvatarURLResponse{}
+func (x *GetUserResponse) Reset() {
+	*x = GetUserResponse{}
 	mi := &file_user_service_user_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPresignedAvatarURLResponse) String() string {
+func (x *GetUserResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPresignedAvatarURLResponse) ProtoMessage() {}
+func (*GetUserResponse) ProtoMessage() {}
 
-func (x *GetPresignedAvatarURLResponse) ProtoReflect() protoreflect.Message {
+func (x *GetUserResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_user_service_user_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -267,19 +273,150 @@ func (x *GetPresignedAvatarURLResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPresignedAvatarURLResponse.ProtoReflect.Descriptor instead.
-func (*GetPresignedAvatarURLResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetUserResponse.ProtoReflect.Descriptor instead.
+func (*GetUserResponse) Descriptor() ([]byte, []int) {
 	return file_user_service_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetPresignedAvatarURLResponse) GetUrl() string {
+func (x *GetUserResponse) GetEmail() string {
 	if x != nil {
-		return x.Url
+		return x.Email
 	}
 	return ""
 }
 
-func (x *GetPresignedAvatarURLResponse) GetError() *common.Error {
+func (x *GetUserResponse) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
+func (x *GetUserResponse) GetTimeZone() string {
+	if x != nil {
+		return x.TimeZone
+	}
+	return ""
+}
+
+func (x *GetUserResponse) GetUseEmailNotification() bool {
+	if x != nil {
+		return x.UseEmailNotification
+	}
+	return false
+}
+
+func (x *GetUserResponse) GetUseAppNotification() bool {
+	if x != nil {
+		return x.UseAppNotification
+	}
+	return false
+}
+
+func (x *GetUserResponse) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *GetUserResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type ConfigureUserRequest struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	UseEmailNotification bool                   `protobuf:"varint,1,opt,name=use_email_notification,json=useEmailNotification,proto3" json:"use_email_notification"`
+	UseAppNotification   bool                   `protobuf:"varint,2,opt,name=use_app_notification,json=useAppNotification,proto3" json:"use_app_notification"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *ConfigureUserRequest) Reset() {
+	*x = ConfigureUserRequest{}
+	mi := &file_user_service_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConfigureUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConfigureUserRequest) ProtoMessage() {}
+
+func (x *ConfigureUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConfigureUserRequest.ProtoReflect.Descriptor instead.
+func (*ConfigureUserRequest) Descriptor() ([]byte, []int) {
+	return file_user_service_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ConfigureUserRequest) GetUseEmailNotification() bool {
+	if x != nil {
+		return x.UseEmailNotification
+	}
+	return false
+}
+
+func (x *ConfigureUserRequest) GetUseAppNotification() bool {
+	if x != nil {
+		return x.UseAppNotification
+	}
+	return false
+}
+
+type ConfigureUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Error         *common.Error          `protobuf:"bytes,1,opt,name=error,proto3,oneof" json:"error"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConfigureUserResponse) Reset() {
+	*x = ConfigureUserResponse{}
+	mi := &file_user_service_user_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConfigureUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConfigureUserResponse) ProtoMessage() {}
+
+func (x *ConfigureUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_user_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConfigureUserResponse.ProtoReflect.Descriptor instead.
+func (*ConfigureUserResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ConfigureUserResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
@@ -290,7 +427,7 @@ var File_user_service_user_proto protoreflect.FileDescriptor
 
 const file_user_service_user_proto_rawDesc = "" +
 	"\n" +
-	"\x17user_service/user.proto\x12\x04user\x1a\x12common/error.proto\x1a\x1euser_service/common.user.proto\x1a\x13common/common.proto\"'\n" +
+	"\x17user_service/user.proto\x12\x04user\x1a\x12common/error.proto\x1a\x1euser_service/common.user.proto\x1a\x13common/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"'\n" +
 	"\x15GetUserProfileRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"\x7f\n" +
 	"\x16GetUserProfileResponse\x121\n" +
@@ -309,15 +446,28 @@ const file_user_service_user_proto_rawDesc = "" +
 	"\x06gender\x18\b \x01(\bR\x06gender\x12\x1a\n" +
 	"\bsentence\x18\t \x01(\tR\bsentence\x12\x16\n" +
 	"\x06author\x18\n" +
-	" \x01(\tR\x06author\"e\n" +
-	"\x1dGetPresignedAvatarURLResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\x12(\n" +
-	"\x05error\x18\x02 \x01(\v2\r.common.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xfa\x01\n" +
+	" \x01(\tR\x06author\"\xb3\x02\n" +
+	"\x0fGetUserResponse\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\bR\x06status\x12\x1b\n" +
+	"\ttime_zone\x18\x03 \x01(\tR\btimeZone\x124\n" +
+	"\x16use_email_notification\x18\x04 \x01(\bR\x14useEmailNotification\x120\n" +
+	"\x14use_app_notification\x18\x05 \x01(\bR\x12useAppNotification\x129\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12(\n" +
+	"\x05error\x18\a \x01(\v2\r.common.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"~\n" +
+	"\x14ConfigureUserRequest\x124\n" +
+	"\x16use_email_notification\x18\x01 \x01(\bR\x14useEmailNotification\x120\n" +
+	"\x14use_app_notification\x18\x02 \x01(\bR\x12useAppNotification\"K\n" +
+	"\x15ConfigureUserResponse\x12(\n" +
+	"\x05error\x18\x01 \x01(\v2\r.common.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xa8\x02\n" +
 	"\vUserService\x12K\n" +
 	"\x0eGetUserProfile\x12\x1b.user.GetUserProfileRequest\x1a\x1c.user.GetUserProfileResponse\x12J\n" +
-	"\x11UpdateUserProfile\x12\x1e.user.UpdateUserProfileRequest\x1a\x15.common.EmptyResponse\x12R\n" +
-	"\x15GetPresignedAvatarURL\x12\x14.common.EmptyRequest\x1a#.user.GetPresignedAvatarURLResponseB\fZ\n" +
+	"\x11UpdateUserProfile\x12\x1e.user.UpdateUserProfileRequest\x1a\x15.common.EmptyResponse\x126\n" +
+	"\aGetUser\x12\x14.common.EmptyRequest\x1a\x15.user.GetUserResponse\x12H\n" +
+	"\rConfigureUser\x12\x1a.user.ConfigureUserRequest\x1a\x1b.user.ConfigureUserResponseB\fZ\n" +
 	"proto/userb\x06proto3"
 
 var (
@@ -332,32 +482,39 @@ func file_user_service_user_proto_rawDescGZIP() []byte {
 	return file_user_service_user_proto_rawDescData
 }
 
-var file_user_service_user_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_user_service_user_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_user_service_user_proto_goTypes = []any{
-	(*GetUserProfileRequest)(nil),         // 0: user.GetUserProfileRequest
-	(*GetUserProfileResponse)(nil),        // 1: user.GetUserProfileResponse
-	(*UpdateUserProfileRequest)(nil),      // 2: user.UpdateUserProfileRequest
-	(*GetPresignedAvatarURLResponse)(nil), // 3: user.GetPresignedAvatarURLResponse
-	(*UserProfileItem)(nil),               // 4: user.UserProfileItem
-	(*common.Error)(nil),                  // 5: common.Error
-	(*common.EmptyRequest)(nil),           // 6: common.EmptyRequest
-	(*common.EmptyResponse)(nil),          // 7: common.EmptyResponse
+	(*GetUserProfileRequest)(nil),    // 0: user.GetUserProfileRequest
+	(*GetUserProfileResponse)(nil),   // 1: user.GetUserProfileResponse
+	(*UpdateUserProfileRequest)(nil), // 2: user.UpdateUserProfileRequest
+	(*GetUserResponse)(nil),          // 3: user.GetUserResponse
+	(*ConfigureUserRequest)(nil),     // 4: user.ConfigureUserRequest
+	(*ConfigureUserResponse)(nil),    // 5: user.ConfigureUserResponse
+	(*UserProfileItem)(nil),          // 6: user.UserProfileItem
+	(*common.Error)(nil),             // 7: common.Error
+	(*timestamppb.Timestamp)(nil),    // 8: google.protobuf.Timestamp
+	(*common.EmptyRequest)(nil),      // 9: common.EmptyRequest
+	(*common.EmptyResponse)(nil),     // 10: common.EmptyResponse
 }
 var file_user_service_user_proto_depIdxs = []int32{
-	4, // 0: user.GetUserProfileResponse.profiles:type_name -> user.UserProfileItem
-	5, // 1: user.GetUserProfileResponse.error:type_name -> common.Error
-	5, // 2: user.GetPresignedAvatarURLResponse.error:type_name -> common.Error
-	0, // 3: user.UserService.GetUserProfile:input_type -> user.GetUserProfileRequest
-	2, // 4: user.UserService.UpdateUserProfile:input_type -> user.UpdateUserProfileRequest
-	6, // 5: user.UserService.GetPresignedAvatarURL:input_type -> common.EmptyRequest
-	1, // 6: user.UserService.GetUserProfile:output_type -> user.GetUserProfileResponse
-	7, // 7: user.UserService.UpdateUserProfile:output_type -> common.EmptyResponse
-	3, // 8: user.UserService.GetPresignedAvatarURL:output_type -> user.GetPresignedAvatarURLResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	6,  // 0: user.GetUserProfileResponse.profiles:type_name -> user.UserProfileItem
+	7,  // 1: user.GetUserProfileResponse.error:type_name -> common.Error
+	8,  // 2: user.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 3: user.GetUserResponse.error:type_name -> common.Error
+	7,  // 4: user.ConfigureUserResponse.error:type_name -> common.Error
+	0,  // 5: user.UserService.GetUserProfile:input_type -> user.GetUserProfileRequest
+	2,  // 6: user.UserService.UpdateUserProfile:input_type -> user.UpdateUserProfileRequest
+	9,  // 7: user.UserService.GetUser:input_type -> common.EmptyRequest
+	4,  // 8: user.UserService.ConfigureUser:input_type -> user.ConfigureUserRequest
+	1,  // 9: user.UserService.GetUserProfile:output_type -> user.GetUserProfileResponse
+	10, // 10: user.UserService.UpdateUserProfile:output_type -> common.EmptyResponse
+	3,  // 11: user.UserService.GetUser:output_type -> user.GetUserResponse
+	5,  // 12: user.UserService.ConfigureUser:output_type -> user.ConfigureUserResponse
+	9,  // [9:13] is the sub-list for method output_type
+	5,  // [5:9] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_user_service_user_proto_init() }
@@ -368,13 +525,14 @@ func file_user_service_user_proto_init() {
 	file_user_service_common_user_proto_init()
 	file_user_service_user_proto_msgTypes[1].OneofWrappers = []any{}
 	file_user_service_user_proto_msgTypes[3].OneofWrappers = []any{}
+	file_user_service_user_proto_msgTypes[5].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_user_proto_rawDesc), len(file_user_service_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

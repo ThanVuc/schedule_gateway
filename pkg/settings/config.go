@@ -10,16 +10,19 @@ package settings
 */
 
 type Config struct {
-	Server                  Server                  `mapstructure:"server" json:"server" yaml:"server"`
-	Log                     Log                     `mapstructure:"log" json:"log" yaml:"log"`
+	Server        Server `mapstructure:"server" json:"server" yaml:"server"`
+	Log           Log    `mapstructure:"log" json:"log" yaml:"log"`
+	CsrfSecret    string `mapstructure:"csrf_secret" json:"csrf_secret" yaml:"csrf_secret"`
+	SessionSecret string `mapstructure:"session_secret" json:"session_secret" yaml:"session_secret"`
+	R2            R2     `mapstructure:"r2" json:"r2" yaml:"r2"`
+	Redis         Redis  `mapstructure:"redis" json:"redis" yaml:"redis"`
+
+	// ========= gRPC =========
 	AuthService             AuthService             `mapstructure:"auth_service" json:"auth_service" yaml:"auth_service"`
 	UserService             UserService             `mapstructure:"user_service" json:"user_service" yaml:"user_service"`
-	CsrfSecret              string                  `mapstructure:"csrf_secret" json:"csrf_secret" yaml:"csrf_secret"`
-	SessionSecret           string                  `mapstructure:"session_secret" json:"session_secret" yaml:"session_secret"`
 	PersonalScheduleService PersonalScheduleService `mapstructure:"personal_schedule_service" json:"personal_schedule_service" yaml:"personal_schedule_service"`
-	R2                      R2                      `mapstructure:"r2" json:"r2" yaml:"r2"`
 	NotificationService     NotificationService     `mapstructure:"notification_service" json:"notification_service" yaml:"notification_service"`
-	Redis                   Redis                   `mapstructure:"redis" json:"redis" yaml:"redis"`
+	TeamService             TeamService             `mapstructure:"team_service" json:"team_service" yaml:"team_service"`
 }
 
 type Server struct {
@@ -69,4 +72,9 @@ type Redis struct {
 	DB       int    `mapstructure:"db" json:"db" yaml:"db"`
 	PoolSize int    `mapstructure:"pool_size" json:"pool_size" yaml:"pool_size"`
 	MinIdle  int    `mapstructure:"min_idle" json:"min_idle" yaml:"min_idle"`
+}
+
+type TeamService struct {
+	Host string `mapstructure:"host" json:"host" yaml:"host"`
+	Port int    `mapstructure:"port" json:"port" yaml:"port"`
 }

@@ -20,9 +20,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_GetUserProfile_FullMethodName        = "/user.UserService/GetUserProfile"
-	UserService_UpdateUserProfile_FullMethodName     = "/user.UserService/UpdateUserProfile"
-	UserService_GetPresignedAvatarURL_FullMethodName = "/user.UserService/GetPresignedAvatarURL"
+	UserService_GetUserProfile_FullMethodName    = "/user.UserService/GetUserProfile"
+	UserService_UpdateUserProfile_FullMethodName = "/user.UserService/UpdateUserProfile"
+	UserService_GetUser_FullMethodName           = "/user.UserService/GetUser"
+	UserService_ConfigureUser_FullMethodName     = "/user.UserService/ConfigureUser"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -31,7 +32,8 @@ const (
 type UserServiceClient interface {
 	GetUserProfile(ctx context.Context, in *GetUserProfileRequest, opts ...grpc.CallOption) (*GetUserProfileResponse, error)
 	UpdateUserProfile(ctx context.Context, in *UpdateUserProfileRequest, opts ...grpc.CallOption) (*common.EmptyResponse, error)
-	GetPresignedAvatarURL(ctx context.Context, in *common.EmptyRequest, opts ...grpc.CallOption) (*GetPresignedAvatarURLResponse, error)
+	GetUser(ctx context.Context, in *common.EmptyRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
+	ConfigureUser(ctx context.Context, in *ConfigureUserRequest, opts ...grpc.CallOption) (*ConfigureUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -62,10 +64,20 @@ func (c *userServiceClient) UpdateUserProfile(ctx context.Context, in *UpdateUse
 	return out, nil
 }
 
-func (c *userServiceClient) GetPresignedAvatarURL(ctx context.Context, in *common.EmptyRequest, opts ...grpc.CallOption) (*GetPresignedAvatarURLResponse, error) {
+func (c *userServiceClient) GetUser(ctx context.Context, in *common.EmptyRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPresignedAvatarURLResponse)
-	err := c.cc.Invoke(ctx, UserService_GetPresignedAvatarURL_FullMethodName, in, out, cOpts...)
+	out := new(GetUserResponse)
+	err := c.cc.Invoke(ctx, UserService_GetUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) ConfigureUser(ctx context.Context, in *ConfigureUserRequest, opts ...grpc.CallOption) (*ConfigureUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ConfigureUserResponse)
+	err := c.cc.Invoke(ctx, UserService_ConfigureUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +90,8 @@ func (c *userServiceClient) GetPresignedAvatarURL(ctx context.Context, in *commo
 type UserServiceServer interface {
 	GetUserProfile(context.Context, *GetUserProfileRequest) (*GetUserProfileResponse, error)
 	UpdateUserProfile(context.Context, *UpdateUserProfileRequest) (*common.EmptyResponse, error)
-	GetPresignedAvatarURL(context.Context, *common.EmptyRequest) (*GetPresignedAvatarURLResponse, error)
+	GetUser(context.Context, *common.EmptyRequest) (*GetUserResponse, error)
+	ConfigureUser(context.Context, *ConfigureUserRequest) (*ConfigureUserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -95,8 +108,11 @@ func (UnimplementedUserServiceServer) GetUserProfile(context.Context, *GetUserPr
 func (UnimplementedUserServiceServer) UpdateUserProfile(context.Context, *UpdateUserProfileRequest) (*common.EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserProfile not implemented")
 }
-func (UnimplementedUserServiceServer) GetPresignedAvatarURL(context.Context, *common.EmptyRequest) (*GetPresignedAvatarURLResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPresignedAvatarURL not implemented")
+func (UnimplementedUserServiceServer) GetUser(context.Context, *common.EmptyRequest) (*GetUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserServiceServer) ConfigureUser(context.Context, *ConfigureUserRequest) (*ConfigureUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfigureUser not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -155,20 +171,38 @@ func _UserService_UpdateUserProfile_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_GetPresignedAvatarURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(common.EmptyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).GetPresignedAvatarURL(ctx, in)
+		return srv.(UserServiceServer).GetUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_GetPresignedAvatarURL_FullMethodName,
+		FullMethod: UserService_GetUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetPresignedAvatarURL(ctx, req.(*common.EmptyRequest))
+		return srv.(UserServiceServer).GetUser(ctx, req.(*common.EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_ConfigureUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfigureUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ConfigureUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ConfigureUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ConfigureUser(ctx, req.(*ConfigureUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -189,8 +223,12 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_UpdateUserProfile_Handler,
 		},
 		{
-			MethodName: "GetPresignedAvatarURL",
-			Handler:    _UserService_GetPresignedAvatarURL_Handler,
+			MethodName: "GetUser",
+			Handler:    _UserService_GetUser_Handler,
+		},
+		{
+			MethodName: "ConfigureUser",
+			Handler:    _UserService_ConfigureUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

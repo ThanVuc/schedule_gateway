@@ -17,7 +17,7 @@ type userClient struct {
 
 func (uc *userClient) AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUserRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := uc.userClient.AssignRoleToUser(ctx, req)
 	if err != nil {
@@ -28,7 +28,7 @@ func (uc *userClient) AssignRoleToUser(c *gin.Context, req *auth.AssignRoleToUse
 
 func (p *userClient) GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.GetUsersResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := p.userClient.GetUsers(ctx, req)
 	if err != nil {
@@ -39,7 +39,7 @@ func (p *userClient) GetUsers(c *gin.Context, req *auth.GetUsersRequest) (*auth.
 
 func (p *userClient) GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.GetUserResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := p.userClient.GetUser(ctx, req)
 	if err != nil {
@@ -50,7 +50,7 @@ func (p *userClient) GetUser(c *gin.Context, req *auth.GetUserRequest) (*auth.Ge
 
 func (p *userClient) LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := p.userClient.LockOrUnLockUser(ctx, req)
 	if err != nil {
@@ -61,7 +61,7 @@ func (p *userClient) LockOrUnLockUser(c *gin.Context, req *auth.LockUserRequest)
 
 func (p *userClient) PresignUrlForAvatarUpsert(c *gin.Context, req *auth.PresignUrlRequest) (*auth.PresignRequestUrlForAvatarUpsertResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := p.userClient.PresignUrlForAvatarUpsert(ctx, req)
 	if err != nil {

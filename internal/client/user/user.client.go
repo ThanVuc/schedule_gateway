@@ -15,7 +15,7 @@ type userClient struct {
 
 func (uc *userClient) GetUserProfile(c *gin.Context, req *user.GetUserProfileRequest) (*user.GetUserProfileResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := uc.userClient.GetUserProfile(ctx, req)
 	if err != nil {
@@ -24,10 +24,9 @@ func (uc *userClient) GetUserProfile(c *gin.Context, req *user.GetUserProfileReq
 	return resp, nil
 }
 
-
 func (uc *userClient) UpdateUserProfile(c *gin.Context, req *user.UpdateUserProfileRequest) (*common.EmptyResponse, error) {
 	ctx := context.Background()
-	ctx = utils.WithRequestID(ctx, c.GetString("request-id"))
+	ctx = utils.EnrichContext(ctx, c)
 
 	resp, err := uc.userClient.UpdateUserProfile(ctx, req)
 	if err != nil {

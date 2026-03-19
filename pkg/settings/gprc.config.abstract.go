@@ -36,3 +36,11 @@ func (ns *NotificationService) GetHost() string {
 func (ns *NotificationService) GetPort() int {
 	return ns.Port
 }
+
+func (ts *TeamService) GetHost() string {
+	return ts.Host
+}
+
+func (ts *TeamService) GetPort() int {
+	return ts.Port
+}

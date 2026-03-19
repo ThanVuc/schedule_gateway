@@ -29,7 +29,7 @@ func NewUserNotificationController() *UserNotificationController {
 func (uc *UserNotificationController) UpsertUserFCMToken(c *gin.Context) {
 	requestDto := dtos.UpsertNotificationRequestDTO{}
 
-	requestId := c.GetString("request-id")
+	requestId := c.GetString("request_id")
 	userId := c.GetString("user_id")
 
 	if err := c.ShouldBindJSON(&requestDto); err != nil {

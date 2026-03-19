@@ -5,14 +5,27 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc/metadata"
 )
 
-func WithRequestID(ctx context.Context, requestID string) context.Context {
-	if requestID == "" {
-		return ctx
+func EnrichContext(ctx context.Context, c *gin.Context) context.Context {
+	requestID := c.GetString("request_id")
+	userID := c.GetString("user_id")
+	GroupId := c.Param("group_id")
+
+	md, ok := metadata.FromOutgoingContext(ctx)
+	if !ok {
+		md = metadata.New(nil)
 	}
-	md := metadata.Pairs("x-request-id", requestID)
+
+	md = md.Copy()
+	md.Set("x-request-id", requestID)
+	md.Set("x-user-id", userID)
+	if GroupId != "" {
+		md.Set("x-group-id", GroupId)
+	}
+
 	return metadata.NewOutgoingContext(ctx, md)
 }
 

@@ -8,7 +8,7 @@ import (
 )
 
 func InitRouter(r *gin.Engine) {
-	r.Use(middlewares.TrackLogMiddleware())
+	r.Use(middlewares.EnrichContextMiddleware())
 	r.Use(middlewares.CORSMiddleware())
 
 	permRouter := routers.RouterGroupApp.AuthorizationRouterEnter.PermissionRouter
@@ -20,6 +20,9 @@ func InitRouter(r *gin.Engine) {
 	goalRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.GoalRouter
 	notificationRouter := routers.RouterGroupApp.NotificationRouterEnter.NotificationRouter
 	workRouter := routers.RouterGroupApp.PersonalScheduleRouterEnter.WorkRouter
+	groupRouter := routers.RouterGroupApp.TeamRouterEnter.GroupRouter
+	sprintRouter := routers.RouterGroupApp.TeamRouterEnter.SprintRouter
+	teamWorkRouter := routers.RouterGroupApp.TeamRouterEnter.WorkRouter
 
 	MainGroup := r.Group("api/v1/")
 	{
@@ -40,5 +43,8 @@ func InitRouter(r *gin.Engine) {
 		goalRouter.InitGoalRouter(MainGroup)
 		notificationRouter.InitNotificationRouter(MainGroup)
 		workRouter.InitWorkRouter(MainGroup)
+		groupRouter.InitGroupRouter(MainGroup)
+		sprintRouter.InitSprintRouter(MainGroup)
+		teamWorkRouter.InitWorkRouter(MainGroup)
 	}
 }
