@@ -60,6 +60,6 @@ func Run() {
 	helper.WriteToJsonFile("resources")
 	go InitResource()
 
-	// r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
-	r.Run(":8081")
+	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
+	// r.Run(":8081")
 }
