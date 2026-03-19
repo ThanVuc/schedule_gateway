@@ -200,7 +200,7 @@ func (sc *SprintController) DeleteSprint(ctx *gin.Context) {
 		return
 	}
 
-	response.Ok(ctx, "Delete sprint successful", gin.H{
+	response.NoContent(ctx, "Delete sprint successful", gin.H{
 		"is_success": resp.GetSuccess(),
 	})
 }
@@ -353,8 +353,8 @@ func (sc *SprintController) buildSprintResponse(sprint *team_service.SprintMessa
 		"total_work":       sprint.GetTotalWork(),
 		"completed_work":   sprint.GetCompletedWork(),
 		"progress_percent": sprint.GetProgressPercent(),
-		"created_at":       sprint.GetCreatedAt(),
-		"updated_at":       sprint.GetUpdatedAt(),
+		"created_at":       utils.TimestampToISO8601(sprint.GetCreatedAt()),
+		"updated_at":       utils.TimestampToISO8601(sprint.GetUpdatedAt()),
 	}
 }
 
