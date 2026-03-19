@@ -21,6 +21,8 @@ type (
 		DeleteGroup(c *gin.Context, req *common.IDRequest) (*team_service.DeleteGroupResponse, error)
 		ListMembers(c *gin.Context, req *team_service.ListMembersRequest) (*team_service.ListMembersResponse, error)
 		UpdateMemberRole(c *gin.Context, req *team_service.UpdateMemberRoleRequest) (*team_service.UpdateMemberRoleResponse, error)
+		RemoveMember(c *gin.Context, req *team_service.RemoveMemberRequest) (*team_service.RemoveMemberResponse, error)
+		CreateInvite(c *gin.Context, req *team_service.CreateInviteRequest) (*team_service.CreateInviteResponse, error)
 	}
 	SprintClient interface {
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)

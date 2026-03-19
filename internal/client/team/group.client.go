@@ -85,3 +85,23 @@ func (wc *groupClient) UpdateMemberRole(c *gin.Context, req *team_service.Update
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) RemoveMember(c *gin.Context, req *team_service.RemoveMemberRequest) (*team_service.RemoveMemberResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.RemoveMember(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (wc *groupClient) CreateInvite(c *gin.Context, req *team_service.CreateInviteRequest) (*team_service.CreateInviteResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.CreateInvite(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
