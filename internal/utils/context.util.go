@@ -12,6 +12,7 @@ import (
 func EnrichContext(ctx context.Context, c *gin.Context) context.Context {
 	requestID := c.GetString("request_id")
 	userID := c.GetString("user_id")
+	GroupId := c.Param("group_id")
 
 	md, ok := metadata.FromOutgoingContext(ctx)
 	if !ok {
@@ -21,6 +22,9 @@ func EnrichContext(ctx context.Context, c *gin.Context) context.Context {
 	md = md.Copy()
 	md.Set("x-request-id", requestID)
 	md.Set("x-user-id", userID)
+	if GroupId != "" {
+		md.Set("x-group-id", GroupId)
+	}
 
 	return metadata.NewOutgoingContext(ctx, md)
 }
