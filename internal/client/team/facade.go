@@ -32,7 +32,21 @@ type (
 		UpdateSprintStatus(c *gin.Context, req *team_service.UpdateSprintStatusRequest) (*team_service.UpdateSprintStatusResponse, error)
 		DeleteSprint(c *gin.Context, req *common.IDRequest) (*team_service.DeleteSprintResponse, error)
 	}
-	WorkClient interface{}
+	WorkClient interface {
+		CreateWork(c *gin.Context, req *team_service.CreateWorkRequest) (*team_service.CreateWorkResponse, error)
+		GetWork(c *gin.Context, req *common.IDRequest) (*team_service.GetWorkResponse, error)
+		ListWorks(c *gin.Context, req *team_service.ListWorksRequest) (*team_service.ListWorksResponse, error)
+		UpdateWork(c *gin.Context, req *team_service.UpdateWorkRequest) (*team_service.UpdateWorkResponse, error)
+		DeleteWork(c *gin.Context, req *common.IDRequest) (*team_service.DeleteWorkResponse, error)
+
+		CreateChecklistItem(c *gin.Context, req *team_service.CreateChecklistItemRequest) (*team_service.CreateChecklistItemResponse, error)
+		UpdateChecklistItem(c *gin.Context, req *team_service.UpdateChecklistItemRequest) (*team_service.UpdateChecklistItemResponse, error)
+		DeleteChecklistItem(c *gin.Context, req *common.IDRequest) (*team_service.DeleteChecklistItemResponse, error)
+
+		CreateComment(c *gin.Context, req *team_service.CreateCommentRequest) (*team_service.CreateCommentResponse, error)
+		UpdateComment(c *gin.Context, req *team_service.UpdateCommentRequest) (*team_service.UpdateCommentResponse, error)
+		DeleteComment(c *gin.Context, req *common.IDRequest) (*team_service.DeleteCommentResponse, error)
+	}
 )
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {

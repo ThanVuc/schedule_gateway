@@ -272,7 +272,7 @@ func (gc *GroupController) ListMembers(ctx *gin.Context) {
 
 	response.Ok(ctx, "Group members retrieved successfully", gin.H{
 		"members": members,
-		"total":   resp.Total,
+		"total":   len(members),
 	})
 
 }

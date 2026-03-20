@@ -390,8 +390,7 @@ func (x *ListMembersRequest) GetGroupId() string {
 type ListMembersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Members       []*MemberMessage       `protobuf:"bytes,1,rep,name=members,proto3" json:"members"`
-	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
-	Error         *Error                 `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error"`
+	Error         *Error                 `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -431,13 +430,6 @@ func (x *ListMembersResponse) GetMembers() []*MemberMessage {
 		return x.Members
 	}
 	return nil
-}
-
-func (x *ListMembersResponse) GetTotal() int32 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
 }
 
 func (x *ListMembersResponse) GetError() *Error {
@@ -1059,11 +1051,10 @@ const file_team_service_group_proto_rawDesc = "" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"/\n" +
 	"\x12ListMembersRequest\x12\x19\n" +
-	"\bgroup_id\x18\x01 \x01(\tR\agroupId\"\x9c\x01\n" +
+	"\bgroup_id\x18\x01 \x01(\tR\agroupId\"\x86\x01\n" +
 	"\x13ListMembersResponse\x125\n" +
-	"\amembers\x18\x01 \x03(\v2\x1b.team_service.MemberMessageR\amembers\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\x12.\n" +
-	"\x05error\x18\x03 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\amembers\x18\x01 \x03(\v2\x1b.team_service.MemberMessageR\amembers\x12.\n" +
+	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"\x85\x01\n" +
 	"\x17UpdateMemberRoleRequest\x12\x19\n" +
 	"\bgroup_id\x18\x01 \x01(\tR\agroupId\x12\x1b\n" +
