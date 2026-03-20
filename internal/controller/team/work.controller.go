@@ -52,7 +52,7 @@ func (wc *WorkController) CreateWork(ctx *gin.Context) {
 	}
 
 	response.Created(ctx, "Create work successful", gin.H{
-		"work": wc.buildWorkResponse(resp.GetWork()),
+		"item": wc.buildWorkResponse(resp.GetWork()),
 	})
 }
 
@@ -80,7 +80,7 @@ func (wc *WorkController) GetWork(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Get work successful", gin.H{
-		"work": wc.buildWorkResponse(resp.GetWork()),
+		"item": wc.buildWorkResponse(resp.GetWork()),
 	})
 }
 
@@ -109,7 +109,7 @@ func (wc *WorkController) ListWorks(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "List works successful", gin.H{
-		"works": works,
+		"items": works,
 		"total": len(works),
 	})
 }
@@ -137,7 +137,7 @@ func (wc *WorkController) UpdateWork(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Update work successful", gin.H{
-		"work": wc.buildWorkResponse(resp.GetWork()),
+		"item": wc.buildWorkResponse(resp.GetWork()),
 	})
 }
 
@@ -165,7 +165,7 @@ func (wc *WorkController) DeleteWork(ctx *gin.Context) {
 	}
 
 	response.NoContent(ctx, "Delete work successful", gin.H{
-		"is_success": resp.GetSuccess(),
+		"item": gin.H{"is_success": resp.GetSuccess()},
 	})
 }
 
@@ -219,7 +219,7 @@ func (wc *WorkController) UpdateChecklistItem(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Update checklist item successful", gin.H{
-		"checklist": wc.buildChecklistItemResponse(resp.GetChecklist()),
+		"item": wc.buildChecklistItemResponse(resp.GetChecklist()),
 	})
 }
 
@@ -247,7 +247,7 @@ func (wc *WorkController) DeleteChecklistItem(ctx *gin.Context) {
 	}
 
 	response.NoContent(ctx, "Delete checklist item successful", gin.H{
-		"checklist": wc.buildChecklistItemResponse(resp.GetChecklist()),
+		"item": wc.buildChecklistItemResponse(resp.GetChecklist()),
 	})
 }
 
@@ -274,7 +274,7 @@ func (wc *WorkController) CreateComment(ctx *gin.Context) {
 	}
 
 	response.Created(ctx, "Create comment successful", gin.H{
-		"comments": wc.buildCommentListResponse(resp.GetComment()),
+		"items": wc.buildCommentListResponse(resp.GetComment()),
 	})
 }
 
@@ -301,7 +301,7 @@ func (wc *WorkController) UpdateComment(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Update comment successful", gin.H{
-		"comments": wc.buildCommentListResponse(resp.GetComment()),
+		"items": wc.buildCommentListResponse(resp.GetComment()),
 	})
 }
 
@@ -329,7 +329,7 @@ func (wc *WorkController) DeleteComment(ctx *gin.Context) {
 	}
 
 	response.NoContent(ctx, "Delete comment successful", gin.H{
-		"comments": wc.buildCommentListResponse(resp.GetComment()),
+		"items": wc.buildCommentListResponse(resp.GetComment()),
 	})
 }
 
@@ -667,8 +667,8 @@ func (wc *WorkController) buildCommentListResponse(commentList *team_service.Com
 	comments := make([]gin.H, 0)
 	if commentList == nil {
 		return gin.H{
-			"total":    int32(0),
-			"comments": comments,
+			"total": int32(0),
+			"items": comments,
 		}
 	}
 
@@ -677,8 +677,8 @@ func (wc *WorkController) buildCommentListResponse(commentList *team_service.Com
 	}
 
 	return gin.H{
-		"total":    commentList.GetTotal(),
-		"comments": comments,
+		"total": commentList.GetTotal(),
+		"items": comments,
 	}
 }
 
