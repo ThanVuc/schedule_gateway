@@ -272,7 +272,7 @@ func (gc *GroupController) ListMembers(ctx *gin.Context) {
 
 	response.Ok(ctx, "Group members retrieved successfully", gin.H{
 		"members": members,
-		"total":   resp.Total,
+		"total":   len(members),
 	})
 
 }
@@ -331,4 +331,92 @@ func (gc *GroupController) UpdateMemberRole(ctx *gin.Context) {
 		"member": memberDto,
 	})
 
+}
+
+func (gc *GroupController) RemoveMember(ctx *gin.Context) {
+	groupId := ctx.Param("group_id")
+	if groupId == "" {
+		ctx.JSON(400, gin.H{"error": "Group ID is required"})
+		return
+	}
+
+	userId := ctx.Param("user_id")
+	if userId == "" {
+		ctx.JSON(400, gin.H{"error": "User ID is required"})
+		return
+	}
+
+	req := &team_service.RemoveMemberRequest{
+		GroupId:  groupId,
+		MemberId: userId,
+	}
+
+	resp, err := gc.client.RemoveMember(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to remove member: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to remove member"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to remove member: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.Ok(ctx, "Member removed successfully", gin.H{
+		"success": resp.Success,
+	})
+}
+
+func (gc *GroupController) CreateInvite(ctx *gin.Context) {
+	groupId := ctx.Param("group_id")
+	if groupId == "" {
+		ctx.JSON(400, gin.H{"error": "Group ID is required"})
+		return
+	}
+
+	var dto dtos.CreateInviteDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	var email *string
+	if dto.Email != "" {
+		email = &dto.Email
+	}
+
+	req := &team_service.CreateInviteRequest{
+		GroupId: groupId,
+		Email:   email,
+		Role:    team_service.GroupRole(dto.Role),
+	}
+	fmt.Printf("REQ: %+v\n", req)
+	resp, err := gc.client.CreateInvite(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to create invite: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to create invite"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to create invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	var inviteDto *dtos.InviteDTO
+	if resp.Invite != nil {
+		invite := resp.Invite
+		inviteDto = &dtos.InviteDTO{
+			Code:      invite.Code,
+			ExpiresAt: invite.ExpiresAt.AsTime().Format("2006-01-02T15:04:05Z"),
+			CreateAt:  invite.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
+		}
+	}
+
+	response.Ok(ctx, "Invite created successfully", gin.H{
+		"invite": inviteDto,
+	})
 }

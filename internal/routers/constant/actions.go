@@ -62,6 +62,8 @@ const (
 
 // group resource actions
 const (
-	READ_LIST_MEMBERS_ACTION = "read_list_members"
+	READ_LIST_MEMBERS_ACTION  = "read_list_members"
 	UPDATE_MEMBER_ROLE_ACTION = "update_member_role"
+	REMOVE_MEMBER_ACTION      = "remove_member"
+	CREATE_INVITE_ACTION      = "create_invite"
 )
