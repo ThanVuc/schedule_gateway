@@ -51,7 +51,7 @@ func (sc *SprintController) CreateSprint(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Create sprint successful", gin.H{
-		"sprint": sc.buildSprintResponse(resp.GetSprint()),
+		"item": sc.buildSprintResponse(resp.GetSprint()),
 	})
 }
 
@@ -80,7 +80,7 @@ func (sc *SprintController) GetSprint(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Get sprint successful", gin.H{
-		"sprint": sc.buildSprintResponse(resp.GetSprint()),
+		"item": sc.buildSprintResponse(resp.GetSprint()),
 	})
 }
 
@@ -114,8 +114,8 @@ func (sc *SprintController) ListSprints(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "List sprints successful", gin.H{
-		"sprints": sprints,
-		"total":   resp.GetTotal(),
+		"items": sprints,
+		"total": resp.GetTotal(),
 	})
 }
 
@@ -143,7 +143,7 @@ func (sc *SprintController) UpdateSprint(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Update sprint successful", gin.H{
-		"sprint": sc.buildSprintResponse(resp.GetSprint()),
+		"item": sc.buildSprintResponse(resp.GetSprint()),
 	})
 }
 
@@ -171,8 +171,10 @@ func (sc *SprintController) UpdateSprintStatus(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Update sprint status successful", gin.H{
-		"id":     resp.GetId(),
-		"status": resp.GetStatus(),
+		"item": gin.H{
+			"id":     resp.GetId(),
+			"status": resp.GetStatus(),
+		},
 	})
 }
 
@@ -201,7 +203,7 @@ func (sc *SprintController) DeleteSprint(ctx *gin.Context) {
 	}
 
 	response.NoContent(ctx, "Delete sprint successful", gin.H{
-		"is_success": resp.GetSuccess(),
+		"item": gin.H{"is_success": resp.GetSuccess()},
 	})
 }
 
