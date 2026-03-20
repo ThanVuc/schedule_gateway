@@ -24,13 +24,9 @@ const (
 
 type CreateWorkRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SprintId      string                 `protobuf:"bytes,1,opt,name=sprint_id,json=sprintId,proto3" json:"sprint_id"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
-	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
-	Status        WorkStatus             `protobuf:"varint,4,opt,name=status,proto3,enum=team_service.WorkStatus" json:"status"`
-	AssigneeId    *string                `protobuf:"bytes,5,opt,name=assignee_id,json=assigneeId,proto3,oneof" json:"assignee_id"`
-	StoryPoint    *string                `protobuf:"bytes,6,opt,name=story_point,json=storyPoint,proto3,oneof" json:"story_point"`
-	DueDate       *Date                  `protobuf:"bytes,7,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
+	Description   *string                `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description"`
+	SprintId      *string                `protobuf:"bytes,3,opt,name=sprint_id,json=sprintId,proto3,oneof" json:"sprint_id"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -65,13 +61,6 @@ func (*CreateWorkRequest) Descriptor() ([]byte, []int) {
 	return file_team_service_work_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *CreateWorkRequest) GetSprintId() string {
-	if x != nil {
-		return x.SprintId
-	}
-	return ""
-}
-
 func (x *CreateWorkRequest) GetName() string {
 	if x != nil {
 		return x.Name
@@ -86,32 +75,11 @@ func (x *CreateWorkRequest) GetDescription() string {
 	return ""
 }
 
-func (x *CreateWorkRequest) GetStatus() WorkStatus {
-	if x != nil {
-		return x.Status
-	}
-	return WorkStatus_WORK_STATUS_UNSPECIFIED
-}
-
-func (x *CreateWorkRequest) GetAssigneeId() string {
-	if x != nil && x.AssigneeId != nil {
-		return *x.AssigneeId
+func (x *CreateWorkRequest) GetSprintId() string {
+	if x != nil && x.SprintId != nil {
+		return *x.SprintId
 	}
 	return ""
-}
-
-func (x *CreateWorkRequest) GetStoryPoint() string {
-	if x != nil && x.StoryPoint != nil {
-		return *x.StoryPoint
-	}
-	return ""
-}
-
-func (x *CreateWorkRequest) GetDueDate() *Date {
-	if x != nil {
-		return x.DueDate
-	}
-	return nil
 }
 
 type CreateWorkResponse struct {
@@ -220,7 +188,7 @@ func (x *GetWorkResponse) GetError() *Error {
 
 type ListWorksRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SprintId      string                 `protobuf:"bytes,1,opt,name=sprint_id,json=sprintId,proto3" json:"sprint_id"`
+	SprintId      *string                `protobuf:"bytes,1,opt,name=sprint_id,json=sprintId,proto3,oneof" json:"sprint_id"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -256,8 +224,8 @@ func (*ListWorksRequest) Descriptor() ([]byte, []int) {
 }
 
 func (x *ListWorksRequest) GetSprintId() string {
-	if x != nil {
-		return x.SprintId
+	if x != nil && x.SprintId != nil {
+		return *x.SprintId
 	}
 	return ""
 }
@@ -317,12 +285,15 @@ func (x *ListWorksResponse) GetError() *Error {
 type UpdateWorkRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name"`
 	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
 	AssigneeId    *string                `protobuf:"bytes,4,opt,name=assignee_id,json=assigneeId,proto3,oneof" json:"assignee_id"`
 	StoryPoint    *string                `protobuf:"bytes,5,opt,name=story_point,json=storyPoint,proto3,oneof" json:"story_point"`
 	DueDate       *Date                  `protobuf:"bytes,6,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date"`
-	Version       int32                  `protobuf:"varint,7,opt,name=version,proto3" json:"version"`
+	Priority      *WorkPriority          `protobuf:"varint,7,opt,name=priority,proto3,enum=team_service.WorkPriority,oneof" json:"priority"`
+	Status        *WorkStatus            `protobuf:"varint,8,opt,name=status,proto3,enum=team_service.WorkStatus,oneof" json:"status"`
+	SprintId      *string                `protobuf:"bytes,9,opt,name=sprint_id,json=sprintId,proto3,oneof" json:"sprint_id"`
+	Version       int32                  `protobuf:"varint,10,opt,name=version,proto3" json:"version"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -365,8 +336,8 @@ func (x *UpdateWorkRequest) GetId() string {
 }
 
 func (x *UpdateWorkRequest) GetName() string {
-	if x != nil {
-		return x.Name
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
 }
@@ -397,6 +368,27 @@ func (x *UpdateWorkRequest) GetDueDate() *Date {
 		return x.DueDate
 	}
 	return nil
+}
+
+func (x *UpdateWorkRequest) GetPriority() WorkPriority {
+	if x != nil && x.Priority != nil {
+		return *x.Priority
+	}
+	return WorkPriority_WORK_PRIORITY_UNSPECIFIED
+}
+
+func (x *UpdateWorkRequest) GetStatus() WorkStatus {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return WorkStatus_WORK_STATUS_UNSPECIFIED
+}
+
+func (x *UpdateWorkRequest) GetSprintId() string {
+	if x != nil && x.SprintId != nil {
+		return *x.SprintId
+	}
+	return ""
 }
 
 func (x *UpdateWorkRequest) GetVersion() int32 {
@@ -458,118 +450,6 @@ func (x *UpdateWorkResponse) GetError() *Error {
 	return nil
 }
 
-type UpdateWorkStatusRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	Status        WorkStatus             `protobuf:"varint,2,opt,name=status,proto3,enum=team_service.WorkStatus" json:"status"`
-	Version       int32                  `protobuf:"varint,3,opt,name=version,proto3" json:"version"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateWorkStatusRequest) Reset() {
-	*x = UpdateWorkStatusRequest{}
-	mi := &file_team_service_work_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateWorkStatusRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateWorkStatusRequest) ProtoMessage() {}
-
-func (x *UpdateWorkStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateWorkStatusRequest.ProtoReflect.Descriptor instead.
-func (*UpdateWorkStatusRequest) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *UpdateWorkStatusRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *UpdateWorkStatusRequest) GetStatus() WorkStatus {
-	if x != nil {
-		return x.Status
-	}
-	return WorkStatus_WORK_STATUS_UNSPECIFIED
-}
-
-func (x *UpdateWorkStatusRequest) GetVersion() int32 {
-	if x != nil {
-		return x.Version
-	}
-	return 0
-}
-
-type UpdateWorkStatusResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Work          *WorkMessage           `protobuf:"bytes,1,opt,name=work,proto3" json:"work"`
-	Error         *Error                 `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateWorkStatusResponse) Reset() {
-	*x = UpdateWorkStatusResponse{}
-	mi := &file_team_service_work_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateWorkStatusResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateWorkStatusResponse) ProtoMessage() {}
-
-func (x *UpdateWorkStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateWorkStatusResponse.ProtoReflect.Descriptor instead.
-func (*UpdateWorkStatusResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *UpdateWorkStatusResponse) GetWork() *WorkMessage {
-	if x != nil {
-		return x.Work
-	}
-	return nil
-}
-
-func (x *UpdateWorkStatusResponse) GetError() *Error {
-	if x != nil {
-		return x.Error
-	}
-	return nil
-}
-
 type DeleteWorkResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success"`
@@ -580,7 +460,7 @@ type DeleteWorkResponse struct {
 
 func (x *DeleteWorkResponse) Reset() {
 	*x = DeleteWorkResponse{}
-	mi := &file_team_service_work_proto_msgTypes[9]
+	mi := &file_team_service_work_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -592,7 +472,7 @@ func (x *DeleteWorkResponse) String() string {
 func (*DeleteWorkResponse) ProtoMessage() {}
 
 func (x *DeleteWorkResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[9]
+	mi := &file_team_service_work_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -605,7 +485,7 @@ func (x *DeleteWorkResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteWorkResponse.ProtoReflect.Descriptor instead.
 func (*DeleteWorkResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{9}
+	return file_team_service_work_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DeleteWorkResponse) GetSuccess() bool {
@@ -632,7 +512,7 @@ type CreateChecklistItemRequest struct {
 
 func (x *CreateChecklistItemRequest) Reset() {
 	*x = CreateChecklistItemRequest{}
-	mi := &file_team_service_work_proto_msgTypes[10]
+	mi := &file_team_service_work_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -644,7 +524,7 @@ func (x *CreateChecklistItemRequest) String() string {
 func (*CreateChecklistItemRequest) ProtoMessage() {}
 
 func (x *CreateChecklistItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[10]
+	mi := &file_team_service_work_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -657,7 +537,7 @@ func (x *CreateChecklistItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateChecklistItemRequest.ProtoReflect.Descriptor instead.
 func (*CreateChecklistItemRequest) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{10}
+	return file_team_service_work_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateChecklistItemRequest) GetWorkId() string {
@@ -684,7 +564,7 @@ type CreateChecklistItemResponse struct {
 
 func (x *CreateChecklistItemResponse) Reset() {
 	*x = CreateChecklistItemResponse{}
-	mi := &file_team_service_work_proto_msgTypes[11]
+	mi := &file_team_service_work_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -696,7 +576,7 @@ func (x *CreateChecklistItemResponse) String() string {
 func (*CreateChecklistItemResponse) ProtoMessage() {}
 
 func (x *CreateChecklistItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[11]
+	mi := &file_team_service_work_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -709,7 +589,7 @@ func (x *CreateChecklistItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateChecklistItemResponse.ProtoReflect.Descriptor instead.
 func (*CreateChecklistItemResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{11}
+	return file_team_service_work_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreateChecklistItemResponse) GetItem() *ChecklistItemMessage {
@@ -737,7 +617,7 @@ type UpdateChecklistItemRequest struct {
 
 func (x *UpdateChecklistItemRequest) Reset() {
 	*x = UpdateChecklistItemRequest{}
-	mi := &file_team_service_work_proto_msgTypes[12]
+	mi := &file_team_service_work_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -749,7 +629,7 @@ func (x *UpdateChecklistItemRequest) String() string {
 func (*UpdateChecklistItemRequest) ProtoMessage() {}
 
 func (x *UpdateChecklistItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[12]
+	mi := &file_team_service_work_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -762,7 +642,7 @@ func (x *UpdateChecklistItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateChecklistItemRequest.ProtoReflect.Descriptor instead.
 func (*UpdateChecklistItemRequest) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{12}
+	return file_team_service_work_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateChecklistItemRequest) GetId() string {
@@ -796,7 +676,7 @@ type UpdateChecklistItemResponse struct {
 
 func (x *UpdateChecklistItemResponse) Reset() {
 	*x = UpdateChecklistItemResponse{}
-	mi := &file_team_service_work_proto_msgTypes[13]
+	mi := &file_team_service_work_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -808,7 +688,7 @@ func (x *UpdateChecklistItemResponse) String() string {
 func (*UpdateChecklistItemResponse) ProtoMessage() {}
 
 func (x *UpdateChecklistItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[13]
+	mi := &file_team_service_work_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -821,7 +701,7 @@ func (x *UpdateChecklistItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateChecklistItemResponse.ProtoReflect.Descriptor instead.
 func (*UpdateChecklistItemResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{13}
+	return file_team_service_work_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateChecklistItemResponse) GetChecklist() *ChecklistItemMessage {
@@ -848,7 +728,7 @@ type DeleteChecklistItemResponse struct {
 
 func (x *DeleteChecklistItemResponse) Reset() {
 	*x = DeleteChecklistItemResponse{}
-	mi := &file_team_service_work_proto_msgTypes[14]
+	mi := &file_team_service_work_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -860,7 +740,7 @@ func (x *DeleteChecklistItemResponse) String() string {
 func (*DeleteChecklistItemResponse) ProtoMessage() {}
 
 func (x *DeleteChecklistItemResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[14]
+	mi := &file_team_service_work_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -873,7 +753,7 @@ func (x *DeleteChecklistItemResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteChecklistItemResponse.ProtoReflect.Descriptor instead.
 func (*DeleteChecklistItemResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{14}
+	return file_team_service_work_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeleteChecklistItemResponse) GetChecklist() *ChecklistItemMessage {
@@ -900,7 +780,7 @@ type CreateCommentRequest struct {
 
 func (x *CreateCommentRequest) Reset() {
 	*x = CreateCommentRequest{}
-	mi := &file_team_service_work_proto_msgTypes[15]
+	mi := &file_team_service_work_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -912,7 +792,7 @@ func (x *CreateCommentRequest) String() string {
 func (*CreateCommentRequest) ProtoMessage() {}
 
 func (x *CreateCommentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[15]
+	mi := &file_team_service_work_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -925,7 +805,7 @@ func (x *CreateCommentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCommentRequest.ProtoReflect.Descriptor instead.
 func (*CreateCommentRequest) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{15}
+	return file_team_service_work_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CreateCommentRequest) GetWorkId() string {
@@ -952,7 +832,7 @@ type CreateCommentResponse struct {
 
 func (x *CreateCommentResponse) Reset() {
 	*x = CreateCommentResponse{}
-	mi := &file_team_service_work_proto_msgTypes[16]
+	mi := &file_team_service_work_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -964,7 +844,7 @@ func (x *CreateCommentResponse) String() string {
 func (*CreateCommentResponse) ProtoMessage() {}
 
 func (x *CreateCommentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[16]
+	mi := &file_team_service_work_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -977,7 +857,7 @@ func (x *CreateCommentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCommentResponse.ProtoReflect.Descriptor instead.
 func (*CreateCommentResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{16}
+	return file_team_service_work_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateCommentResponse) GetComment() *CommentListMessage {
@@ -1004,7 +884,7 @@ type DeleteCommentResponse struct {
 
 func (x *DeleteCommentResponse) Reset() {
 	*x = DeleteCommentResponse{}
-	mi := &file_team_service_work_proto_msgTypes[17]
+	mi := &file_team_service_work_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1016,7 +896,7 @@ func (x *DeleteCommentResponse) String() string {
 func (*DeleteCommentResponse) ProtoMessage() {}
 
 func (x *DeleteCommentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[17]
+	mi := &file_team_service_work_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1029,7 +909,7 @@ func (x *DeleteCommentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCommentResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCommentResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{17}
+	return file_team_service_work_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DeleteCommentResponse) GetComment() *CommentListMessage {
@@ -1056,7 +936,7 @@ type UpdateCommentRequest struct {
 
 func (x *UpdateCommentRequest) Reset() {
 	*x = UpdateCommentRequest{}
-	mi := &file_team_service_work_proto_msgTypes[18]
+	mi := &file_team_service_work_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1068,7 +948,7 @@ func (x *UpdateCommentRequest) String() string {
 func (*UpdateCommentRequest) ProtoMessage() {}
 
 func (x *UpdateCommentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[18]
+	mi := &file_team_service_work_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1081,7 +961,7 @@ func (x *UpdateCommentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCommentRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCommentRequest) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{18}
+	return file_team_service_work_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *UpdateCommentRequest) GetId() string {
@@ -1108,7 +988,7 @@ type UpdateCommentResponse struct {
 
 func (x *UpdateCommentResponse) Reset() {
 	*x = UpdateCommentResponse{}
-	mi := &file_team_service_work_proto_msgTypes[19]
+	mi := &file_team_service_work_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1120,7 +1000,7 @@ func (x *UpdateCommentResponse) String() string {
 func (*UpdateCommentResponse) ProtoMessage() {}
 
 func (x *UpdateCommentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_service_work_proto_msgTypes[19]
+	mi := &file_team_service_work_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1133,7 +1013,7 @@ func (x *UpdateCommentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCommentResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCommentResponse) Descriptor() ([]byte, []int) {
-	return file_team_service_work_proto_rawDescGZIP(), []int{19}
+	return file_team_service_work_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *UpdateCommentResponse) GetComment() *CommentListMessage {
@@ -1154,21 +1034,14 @@ var File_team_service_work_proto protoreflect.FileDescriptor
 
 const file_team_service_work_proto_rawDesc = "" +
 	"\n" +
-	"\x17team_service/work.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1eteam_service/common.team.proto\"\xda\x02\n" +
-	"\x11CreateWorkRequest\x12\x1b\n" +
-	"\tsprint_id\x18\x01 \x01(\tR\bsprintId\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x120\n" +
-	"\x06status\x18\x04 \x01(\x0e2\x18.team_service.WorkStatusR\x06status\x12$\n" +
-	"\vassignee_id\x18\x05 \x01(\tH\x01R\n" +
-	"assigneeId\x88\x01\x01\x12$\n" +
-	"\vstory_point\x18\x06 \x01(\tH\x02R\n" +
-	"storyPoint\x88\x01\x01\x122\n" +
-	"\bdue_date\x18\a \x01(\v2\x12.team_service.DateH\x03R\adueDate\x88\x01\x01B\x0e\n" +
-	"\f_descriptionB\x0e\n" +
-	"\f_assignee_idB\x0e\n" +
-	"\f_story_pointB\v\n" +
-	"\t_due_date\"}\n" +
+	"\x17team_service/work.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1eteam_service/common.team.proto\"\x8e\x01\n" +
+	"\x11CreateWorkRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12%\n" +
+	"\vdescription\x18\x02 \x01(\tH\x00R\vdescription\x88\x01\x01\x12 \n" +
+	"\tsprint_id\x18\x03 \x01(\tH\x01R\bsprintId\x88\x01\x01B\x0e\n" +
+	"\f_descriptionB\f\n" +
+	"\n" +
+	"_sprint_id\"}\n" +
 	"\x12CreateWorkResponse\x12-\n" +
 	"\x04work\x18\x01 \x01(\v2\x19.team_service.WorkMessageR\x04work\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
@@ -1176,36 +1049,39 @@ const file_team_service_work_proto_rawDesc = "" +
 	"\x0fGetWorkResponse\x12-\n" +
 	"\x04work\x18\x01 \x01(\v2\x19.team_service.WorkMessageR\x04work\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"/\n" +
-	"\x10ListWorksRequest\x12\x1b\n" +
-	"\tsprint_id\x18\x01 \x01(\tR\bsprintId\"~\n" +
+	"\x06_error\"B\n" +
+	"\x10ListWorksRequest\x12 \n" +
+	"\tsprint_id\x18\x01 \x01(\tH\x00R\bsprintId\x88\x01\x01B\f\n" +
+	"\n" +
+	"_sprint_id\"~\n" +
 	"\x11ListWorksResponse\x12/\n" +
 	"\x05works\x18\x01 \x03(\v2\x19.team_service.WorkMessageR\x05works\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xb5\x02\n" +
+	"\x06_error\"\xff\x03\n" +
 	"\x11UpdateWorkRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12$\n" +
-	"\vassignee_id\x18\x04 \x01(\tH\x01R\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x03 \x01(\tH\x01R\vdescription\x88\x01\x01\x12$\n" +
+	"\vassignee_id\x18\x04 \x01(\tH\x02R\n" +
 	"assigneeId\x88\x01\x01\x12$\n" +
-	"\vstory_point\x18\x05 \x01(\tH\x02R\n" +
+	"\vstory_point\x18\x05 \x01(\tH\x03R\n" +
 	"storyPoint\x88\x01\x01\x122\n" +
-	"\bdue_date\x18\x06 \x01(\v2\x12.team_service.DateH\x03R\adueDate\x88\x01\x01\x12\x18\n" +
-	"\aversion\x18\a \x01(\x05R\aversionB\x0e\n" +
+	"\bdue_date\x18\x06 \x01(\v2\x12.team_service.DateH\x04R\adueDate\x88\x01\x01\x12;\n" +
+	"\bpriority\x18\a \x01(\x0e2\x1a.team_service.WorkPriorityH\x05R\bpriority\x88\x01\x01\x125\n" +
+	"\x06status\x18\b \x01(\x0e2\x18.team_service.WorkStatusH\x06R\x06status\x88\x01\x01\x12 \n" +
+	"\tsprint_id\x18\t \x01(\tH\aR\bsprintId\x88\x01\x01\x12\x18\n" +
+	"\aversion\x18\n" +
+	" \x01(\x05R\aversionB\a\n" +
+	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0e\n" +
 	"\f_assignee_idB\x0e\n" +
 	"\f_story_pointB\v\n" +
-	"\t_due_date\"}\n" +
+	"\t_due_dateB\v\n" +
+	"\t_priorityB\t\n" +
+	"\a_statusB\f\n" +
+	"\n" +
+	"_sprint_id\"}\n" +
 	"\x12UpdateWorkResponse\x12-\n" +
-	"\x04work\x18\x01 \x01(\v2\x19.team_service.WorkMessageR\x04work\x12.\n" +
-	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"u\n" +
-	"\x17UpdateWorkStatusRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x120\n" +
-	"\x06status\x18\x02 \x01(\x0e2\x18.team_service.WorkStatusR\x06status\x12\x18\n" +
-	"\aversion\x18\x03 \x01(\x05R\aversion\"\x83\x01\n" +
-	"\x18UpdateWorkStatusResponse\x12-\n" +
 	"\x04work\x18\x01 \x01(\v2\x19.team_service.WorkMessageR\x04work\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"h\n" +
@@ -1280,7 +1156,7 @@ func file_team_service_work_proto_rawDescGZIP() []byte {
 	return file_team_service_work_proto_rawDescData
 }
 
-var file_team_service_work_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_team_service_work_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_team_service_work_proto_goTypes = []any{
 	(*CreateWorkRequest)(nil),           // 0: team_service.CreateWorkRequest
 	(*CreateWorkResponse)(nil),          // 1: team_service.CreateWorkResponse
@@ -1289,82 +1165,78 @@ var file_team_service_work_proto_goTypes = []any{
 	(*ListWorksResponse)(nil),           // 4: team_service.ListWorksResponse
 	(*UpdateWorkRequest)(nil),           // 5: team_service.UpdateWorkRequest
 	(*UpdateWorkResponse)(nil),          // 6: team_service.UpdateWorkResponse
-	(*UpdateWorkStatusRequest)(nil),     // 7: team_service.UpdateWorkStatusRequest
-	(*UpdateWorkStatusResponse)(nil),    // 8: team_service.UpdateWorkStatusResponse
-	(*DeleteWorkResponse)(nil),          // 9: team_service.DeleteWorkResponse
-	(*CreateChecklistItemRequest)(nil),  // 10: team_service.CreateChecklistItemRequest
-	(*CreateChecklistItemResponse)(nil), // 11: team_service.CreateChecklistItemResponse
-	(*UpdateChecklistItemRequest)(nil),  // 12: team_service.UpdateChecklistItemRequest
-	(*UpdateChecklistItemResponse)(nil), // 13: team_service.UpdateChecklistItemResponse
-	(*DeleteChecklistItemResponse)(nil), // 14: team_service.DeleteChecklistItemResponse
-	(*CreateCommentRequest)(nil),        // 15: team_service.CreateCommentRequest
-	(*CreateCommentResponse)(nil),       // 16: team_service.CreateCommentResponse
-	(*DeleteCommentResponse)(nil),       // 17: team_service.DeleteCommentResponse
-	(*UpdateCommentRequest)(nil),        // 18: team_service.UpdateCommentRequest
-	(*UpdateCommentResponse)(nil),       // 19: team_service.UpdateCommentResponse
-	(WorkStatus)(0),                     // 20: team_service.WorkStatus
-	(*Date)(nil),                        // 21: team_service.Date
-	(*WorkMessage)(nil),                 // 22: team_service.WorkMessage
-	(*Error)(nil),                       // 23: team_service.Error
-	(*ChecklistItemMessage)(nil),        // 24: team_service.ChecklistItemMessage
-	(*CommentListMessage)(nil),          // 25: team_service.CommentListMessage
-	(*common.IDRequest)(nil),            // 26: common.IDRequest
+	(*DeleteWorkResponse)(nil),          // 7: team_service.DeleteWorkResponse
+	(*CreateChecklistItemRequest)(nil),  // 8: team_service.CreateChecklistItemRequest
+	(*CreateChecklistItemResponse)(nil), // 9: team_service.CreateChecklistItemResponse
+	(*UpdateChecklistItemRequest)(nil),  // 10: team_service.UpdateChecklistItemRequest
+	(*UpdateChecklistItemResponse)(nil), // 11: team_service.UpdateChecklistItemResponse
+	(*DeleteChecklistItemResponse)(nil), // 12: team_service.DeleteChecklistItemResponse
+	(*CreateCommentRequest)(nil),        // 13: team_service.CreateCommentRequest
+	(*CreateCommentResponse)(nil),       // 14: team_service.CreateCommentResponse
+	(*DeleteCommentResponse)(nil),       // 15: team_service.DeleteCommentResponse
+	(*UpdateCommentRequest)(nil),        // 16: team_service.UpdateCommentRequest
+	(*UpdateCommentResponse)(nil),       // 17: team_service.UpdateCommentResponse
+	(*WorkMessage)(nil),                 // 18: team_service.WorkMessage
+	(*Error)(nil),                       // 19: team_service.Error
+	(*Date)(nil),                        // 20: team_service.Date
+	(WorkPriority)(0),                   // 21: team_service.WorkPriority
+	(WorkStatus)(0),                     // 22: team_service.WorkStatus
+	(*ChecklistItemMessage)(nil),        // 23: team_service.ChecklistItemMessage
+	(*CommentListMessage)(nil),          // 24: team_service.CommentListMessage
+	(*common.IDRequest)(nil),            // 25: common.IDRequest
 }
 var file_team_service_work_proto_depIdxs = []int32{
-	20, // 0: team_service.CreateWorkRequest.status:type_name -> team_service.WorkStatus
-	21, // 1: team_service.CreateWorkRequest.due_date:type_name -> team_service.Date
-	22, // 2: team_service.CreateWorkResponse.work:type_name -> team_service.WorkMessage
-	23, // 3: team_service.CreateWorkResponse.error:type_name -> team_service.Error
-	22, // 4: team_service.GetWorkResponse.work:type_name -> team_service.WorkMessage
-	23, // 5: team_service.GetWorkResponse.error:type_name -> team_service.Error
-	22, // 6: team_service.ListWorksResponse.works:type_name -> team_service.WorkMessage
-	23, // 7: team_service.ListWorksResponse.error:type_name -> team_service.Error
-	21, // 8: team_service.UpdateWorkRequest.due_date:type_name -> team_service.Date
-	22, // 9: team_service.UpdateWorkResponse.work:type_name -> team_service.WorkMessage
-	23, // 10: team_service.UpdateWorkResponse.error:type_name -> team_service.Error
-	20, // 11: team_service.UpdateWorkStatusRequest.status:type_name -> team_service.WorkStatus
-	22, // 12: team_service.UpdateWorkStatusResponse.work:type_name -> team_service.WorkMessage
-	23, // 13: team_service.UpdateWorkStatusResponse.error:type_name -> team_service.Error
-	23, // 14: team_service.DeleteWorkResponse.error:type_name -> team_service.Error
-	24, // 15: team_service.CreateChecklistItemResponse.item:type_name -> team_service.ChecklistItemMessage
-	23, // 16: team_service.CreateChecklistItemResponse.error:type_name -> team_service.Error
-	24, // 17: team_service.UpdateChecklistItemResponse.checklist:type_name -> team_service.ChecklistItemMessage
-	23, // 18: team_service.UpdateChecklistItemResponse.error:type_name -> team_service.Error
-	24, // 19: team_service.DeleteChecklistItemResponse.checklist:type_name -> team_service.ChecklistItemMessage
-	23, // 20: team_service.DeleteChecklistItemResponse.error:type_name -> team_service.Error
-	25, // 21: team_service.CreateCommentResponse.comment:type_name -> team_service.CommentListMessage
-	23, // 22: team_service.CreateCommentResponse.error:type_name -> team_service.Error
-	25, // 23: team_service.DeleteCommentResponse.comment:type_name -> team_service.CommentListMessage
-	23, // 24: team_service.DeleteCommentResponse.error:type_name -> team_service.Error
-	25, // 25: team_service.UpdateCommentResponse.comment:type_name -> team_service.CommentListMessage
-	23, // 26: team_service.UpdateCommentResponse.error:type_name -> team_service.Error
-	0,  // 27: team_service.WorkService.CreateWork:input_type -> team_service.CreateWorkRequest
-	26, // 28: team_service.WorkService.GetWork:input_type -> common.IDRequest
-	3,  // 29: team_service.WorkService.ListWorks:input_type -> team_service.ListWorksRequest
-	5,  // 30: team_service.WorkService.UpdateWork:input_type -> team_service.UpdateWorkRequest
-	26, // 31: team_service.WorkService.DeleteWork:input_type -> common.IDRequest
-	10, // 32: team_service.WorkService.CreateChecklistItem:input_type -> team_service.CreateChecklistItemRequest
-	12, // 33: team_service.WorkService.UpdateChecklistItem:input_type -> team_service.UpdateChecklistItemRequest
-	26, // 34: team_service.WorkService.DeleteChecklistItem:input_type -> common.IDRequest
-	15, // 35: team_service.WorkService.CreateComment:input_type -> team_service.CreateCommentRequest
-	18, // 36: team_service.WorkService.UpdateComment:input_type -> team_service.UpdateCommentRequest
-	26, // 37: team_service.WorkService.DeleteComment:input_type -> common.IDRequest
-	1,  // 38: team_service.WorkService.CreateWork:output_type -> team_service.CreateWorkResponse
-	2,  // 39: team_service.WorkService.GetWork:output_type -> team_service.GetWorkResponse
-	4,  // 40: team_service.WorkService.ListWorks:output_type -> team_service.ListWorksResponse
-	6,  // 41: team_service.WorkService.UpdateWork:output_type -> team_service.UpdateWorkResponse
-	9,  // 42: team_service.WorkService.DeleteWork:output_type -> team_service.DeleteWorkResponse
-	11, // 43: team_service.WorkService.CreateChecklistItem:output_type -> team_service.CreateChecklistItemResponse
-	13, // 44: team_service.WorkService.UpdateChecklistItem:output_type -> team_service.UpdateChecklistItemResponse
-	14, // 45: team_service.WorkService.DeleteChecklistItem:output_type -> team_service.DeleteChecklistItemResponse
-	16, // 46: team_service.WorkService.CreateComment:output_type -> team_service.CreateCommentResponse
-	19, // 47: team_service.WorkService.UpdateComment:output_type -> team_service.UpdateCommentResponse
-	17, // 48: team_service.WorkService.DeleteComment:output_type -> team_service.DeleteCommentResponse
-	38, // [38:49] is the sub-list for method output_type
-	27, // [27:38] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	18, // 0: team_service.CreateWorkResponse.work:type_name -> team_service.WorkMessage
+	19, // 1: team_service.CreateWorkResponse.error:type_name -> team_service.Error
+	18, // 2: team_service.GetWorkResponse.work:type_name -> team_service.WorkMessage
+	19, // 3: team_service.GetWorkResponse.error:type_name -> team_service.Error
+	18, // 4: team_service.ListWorksResponse.works:type_name -> team_service.WorkMessage
+	19, // 5: team_service.ListWorksResponse.error:type_name -> team_service.Error
+	20, // 6: team_service.UpdateWorkRequest.due_date:type_name -> team_service.Date
+	21, // 7: team_service.UpdateWorkRequest.priority:type_name -> team_service.WorkPriority
+	22, // 8: team_service.UpdateWorkRequest.status:type_name -> team_service.WorkStatus
+	18, // 9: team_service.UpdateWorkResponse.work:type_name -> team_service.WorkMessage
+	19, // 10: team_service.UpdateWorkResponse.error:type_name -> team_service.Error
+	19, // 11: team_service.DeleteWorkResponse.error:type_name -> team_service.Error
+	23, // 12: team_service.CreateChecklistItemResponse.item:type_name -> team_service.ChecklistItemMessage
+	19, // 13: team_service.CreateChecklistItemResponse.error:type_name -> team_service.Error
+	23, // 14: team_service.UpdateChecklistItemResponse.checklist:type_name -> team_service.ChecklistItemMessage
+	19, // 15: team_service.UpdateChecklistItemResponse.error:type_name -> team_service.Error
+	23, // 16: team_service.DeleteChecklistItemResponse.checklist:type_name -> team_service.ChecklistItemMessage
+	19, // 17: team_service.DeleteChecklistItemResponse.error:type_name -> team_service.Error
+	24, // 18: team_service.CreateCommentResponse.comment:type_name -> team_service.CommentListMessage
+	19, // 19: team_service.CreateCommentResponse.error:type_name -> team_service.Error
+	24, // 20: team_service.DeleteCommentResponse.comment:type_name -> team_service.CommentListMessage
+	19, // 21: team_service.DeleteCommentResponse.error:type_name -> team_service.Error
+	24, // 22: team_service.UpdateCommentResponse.comment:type_name -> team_service.CommentListMessage
+	19, // 23: team_service.UpdateCommentResponse.error:type_name -> team_service.Error
+	0,  // 24: team_service.WorkService.CreateWork:input_type -> team_service.CreateWorkRequest
+	25, // 25: team_service.WorkService.GetWork:input_type -> common.IDRequest
+	3,  // 26: team_service.WorkService.ListWorks:input_type -> team_service.ListWorksRequest
+	5,  // 27: team_service.WorkService.UpdateWork:input_type -> team_service.UpdateWorkRequest
+	25, // 28: team_service.WorkService.DeleteWork:input_type -> common.IDRequest
+	8,  // 29: team_service.WorkService.CreateChecklistItem:input_type -> team_service.CreateChecklistItemRequest
+	10, // 30: team_service.WorkService.UpdateChecklistItem:input_type -> team_service.UpdateChecklistItemRequest
+	25, // 31: team_service.WorkService.DeleteChecklistItem:input_type -> common.IDRequest
+	13, // 32: team_service.WorkService.CreateComment:input_type -> team_service.CreateCommentRequest
+	16, // 33: team_service.WorkService.UpdateComment:input_type -> team_service.UpdateCommentRequest
+	25, // 34: team_service.WorkService.DeleteComment:input_type -> common.IDRequest
+	1,  // 35: team_service.WorkService.CreateWork:output_type -> team_service.CreateWorkResponse
+	2,  // 36: team_service.WorkService.GetWork:output_type -> team_service.GetWorkResponse
+	4,  // 37: team_service.WorkService.ListWorks:output_type -> team_service.ListWorksResponse
+	6,  // 38: team_service.WorkService.UpdateWork:output_type -> team_service.UpdateWorkResponse
+	7,  // 39: team_service.WorkService.DeleteWork:output_type -> team_service.DeleteWorkResponse
+	9,  // 40: team_service.WorkService.CreateChecklistItem:output_type -> team_service.CreateChecklistItemResponse
+	11, // 41: team_service.WorkService.UpdateChecklistItem:output_type -> team_service.UpdateChecklistItemResponse
+	12, // 42: team_service.WorkService.DeleteChecklistItem:output_type -> team_service.DeleteChecklistItemResponse
+	14, // 43: team_service.WorkService.CreateComment:output_type -> team_service.CreateCommentResponse
+	17, // 44: team_service.WorkService.UpdateComment:output_type -> team_service.UpdateCommentResponse
+	15, // 45: team_service.WorkService.DeleteComment:output_type -> team_service.DeleteCommentResponse
+	35, // [35:46] is the sub-list for method output_type
+	24, // [24:35] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_team_service_work_proto_init() }
@@ -1376,25 +1248,25 @@ func file_team_service_work_proto_init() {
 	file_team_service_work_proto_msgTypes[0].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[1].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[2].OneofWrappers = []any{}
+	file_team_service_work_proto_msgTypes[3].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[4].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[5].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[6].OneofWrappers = []any{}
-	file_team_service_work_proto_msgTypes[8].OneofWrappers = []any{}
+	file_team_service_work_proto_msgTypes[7].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[9].OneofWrappers = []any{}
+	file_team_service_work_proto_msgTypes[10].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[11].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[12].OneofWrappers = []any{}
-	file_team_service_work_proto_msgTypes[13].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[14].OneofWrappers = []any{}
-	file_team_service_work_proto_msgTypes[16].OneofWrappers = []any{}
+	file_team_service_work_proto_msgTypes[15].OneofWrappers = []any{}
 	file_team_service_work_proto_msgTypes[17].OneofWrappers = []any{}
-	file_team_service_work_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_service_work_proto_rawDesc), len(file_team_service_work_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

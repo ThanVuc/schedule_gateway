@@ -104,3 +104,7 @@ func TimestampToISO8601(timestamp *timestamppb.Timestamp) string {
 
 	return timestamp.AsTime().UTC().Format(time.RFC3339)
 }
+
+func Ptr[T any](v T) *T {
+	return &v
+}
