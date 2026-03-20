@@ -39,7 +39,7 @@ Enum quick map:
   "message": "Group created successfully",
   "reasonStatusCode": "success",
   "metadata": {
-    "group": {
+    "item": {
       "id": "{{group_id}}",
       "name": "Platform Team",
       "description": "Owns core platform",
@@ -67,7 +67,7 @@ Enum quick map:
   "message": "Group retrieved successfully",
   "reasonStatusCode": "success",
   "metadata": {
-    "group": {
+    "item": {
       "id": "{{group_id}}",
       "name": "Platform Team",
       "description": "Owns core platform",
@@ -106,7 +106,7 @@ Enum quick map:
   "message": "Group updated successfully",
   "reasonStatusCode": "success",
   "metadata": {
-    "group": {
+    "item": {
       "id": "{{group_id}}",
       "name": "Platform Team Updated",
       "description": "Updated description",
@@ -133,7 +133,9 @@ Enum quick map:
   "statusCode": 200,
   "message": "Group deleted successfully",
   "reasonStatusCode": "success",
-  "metadata": null
+  "metadata": {
+    "item": null
+  }
 }
 ```
 
@@ -149,7 +151,7 @@ Enum quick map:
   "message": "Group members retrieved successfully",
   "reasonStatusCode": "success",
   "metadata": {
-    "members": [
+    "items": [
       {
         "id": "{{user_id}}",
         "email": "member@example.com",
@@ -181,7 +183,7 @@ Enum quick map:
   "message": "Member role updated successfully",
   "reasonStatusCode": "success",
   "metadata": {
-    "member": {
+    "item": {
       "id": "{{user_id}}",
       "email": "member@example.com",
       "avatar": "",
@@ -213,7 +215,7 @@ Enum quick map:
   "message": "Create sprint successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "sprint": {
+    "item": {
       "id": "{{sprint_id}}",
       "group_id": "{{group_id}}",
       "name": "Sprint 12",
@@ -243,7 +245,7 @@ Enum quick map:
   "message": "List sprints successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "sprints": [
+    "items": [
       {
         "id": "{{sprint_id}}",
         "group_id": "{{group_id}}",
@@ -276,7 +278,7 @@ Enum quick map:
   "message": "Get sprint successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "sprint": {
+    "item": {
       "id": "{{sprint_id}}",
       "group_id": "{{group_id}}",
       "name": "Sprint 12",
@@ -313,7 +315,7 @@ Enum quick map:
   "message": "Update sprint successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "sprint": {
+    "item": {
       "id": "{{sprint_id}}",
       "group_id": "{{group_id}}",
       "name": "Sprint 12.1",
@@ -349,8 +351,10 @@ Enum quick map:
   "message": "Update sprint status successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "id": "{{sprint_id}}",
-    "status": 2
+    "item": {
+      "id": "{{sprint_id}}",
+      "status": 2
+    }
   }
 }
 ```
@@ -367,7 +371,9 @@ Enum quick map:
   "message": "Delete sprint successful",
   "reasonStatusCode": "no content",
   "metadata": {
-    "is_success": true
+    "item": {
+      "is_success": true
+    }
   }
 }
 ```
@@ -392,7 +398,7 @@ Enum quick map:
   "message": "Create work successful",
   "reasonStatusCode": "created",
   "metadata": {
-    "work": {
+    "item": {
       "id": "{{work_id}}",
       "name": "Implement Team API",
       "description": "Build endpoints and docs",
@@ -433,7 +439,7 @@ Enum quick map:
   "message": "List works successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "works": [
+    "items": [
       {
         "id": "{{work_id}}",
         "name": "Implement Team API",
@@ -477,7 +483,7 @@ Enum quick map:
   "message": "Get work successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "work": {
+    "item": {
       "id": "{{work_id}}",
       "name": "Implement Team API",
       "description": "Build endpoints and docs",
@@ -531,7 +537,7 @@ Enum quick map:
   "message": "Update work successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "work": {
+    "item": {
       "id": "{{work_id}}",
       "name": "Implement Team API v2",
       "description": "Improve validation and docs",
@@ -576,7 +582,9 @@ Enum quick map:
   "message": "Delete work successful",
   "reasonStatusCode": "no content",
   "metadata": {
-    "is_success": true
+    "item": {
+      "is_success": true
+    }
   }
 }
 ```
@@ -627,7 +635,7 @@ Enum quick map:
   "message": "Update checklist item successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "checklist": {
+    "item": {
       "id": "{{checklist_id}}",
       "name": "Write integration tests",
       "is_completed": true
@@ -648,7 +656,7 @@ Enum quick map:
   "message": "Delete checklist item successful",
   "reasonStatusCode": "no content",
   "metadata": {
-    "checklist": {
+    "item": {
       "id": "{{checklist_id}}",
       "name": "Write integration tests",
       "is_completed": true
@@ -675,21 +683,19 @@ Enum quick map:
   "message": "Create comment successful",
   "reasonStatusCode": "created",
   "metadata": {
-    "comments": {
-      "total": 1,
-      "comments": [
-        {
-          "id": "{{comment_id}}",
-          "content": "Please review this task",
-          "creator": {
-            "id": "{{creator_id}}",
-            "email": "creator@example.com",
-            "avatar": ""
-          },
-          "created_at": "2026-03-20T10:00:00Z"
-        }
-      ]
-    }
+    "items": [
+      {
+        "id": "{{comment_id}}",
+        "content": "Please review this task",
+        "creator": {
+          "id": "{{creator_id}}",
+          "email": "creator@example.com",
+          "avatar": ""
+        },
+        "created_at": "2026-03-20T10:00:00Z"
+      }
+    ],
+    "total": 1
   }
 }
 ```
@@ -712,21 +718,19 @@ Enum quick map:
   "message": "Update comment successful",
   "reasonStatusCode": "success",
   "metadata": {
-    "comments": {
-      "total": 1,
-      "comments": [
-        {
-          "id": "{{comment_id}}",
-          "content": "Updated comment body",
-          "creator": {
-            "id": "{{creator_id}}",
-            "email": "creator@example.com",
-            "avatar": ""
-          },
-          "created_at": "2026-03-20T10:00:00Z"
-        }
-      ]
-    }
+    "items": [
+      {
+        "id": "{{comment_id}}",
+        "content": "Updated comment body",
+        "creator": {
+          "id": "{{creator_id}}",
+          "email": "creator@example.com",
+          "avatar": ""
+        },
+        "created_at": "2026-03-20T10:00:00Z"
+      }
+    ],
+    "total": 1
   }
 }
 ```
@@ -743,10 +747,8 @@ Enum quick map:
   "message": "Delete comment successful",
   "reasonStatusCode": "no content",
   "metadata": {
-    "comments": {
-      "total": 0,
-      "comments": []
-    }
+    "items": [],
+    "total": 0
   }
 }
 ```

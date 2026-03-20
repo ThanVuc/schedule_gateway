@@ -58,7 +58,7 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 
 	dto := gc.buildGetGroupResponse(resp)
 
-	response.Ok(ctx, "Group created successfully", dto)
+	response.Ok(ctx, "Group created successfully", gin.H{"item": dto})
 }
 
 func (gc *GroupController) buildCreateGroupRequest(c *gin.Context) *team_service.CreateGroupRequest {
@@ -96,7 +96,7 @@ func (gc *GroupController) buildGetGroupResponse(resp *team_service.CreateGroupR
 	}
 
 	return gin.H{
-		"group": groupDto,
+		"item": groupDto,
 	}
 }
 
@@ -146,7 +146,7 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Group retrieved successfully", gin.H{
-		"group": groupDto,
+		"item": groupDto,
 	})
 }
 
@@ -185,7 +185,7 @@ func (gc *GroupController) UpdateGroup(ctx *gin.Context) {
 	}
 
 	dtoResp := gc.builUpdateGroupResponse(resp)
-	response.Ok(ctx, "Group updated successfully", dtoResp)
+	response.Ok(ctx, "Group updated successfully", gin.H{"item": dtoResp["item"]})
 
 }
 
@@ -235,7 +235,7 @@ func (gc *GroupController) DeleteGroup(ctx *gin.Context) {
 		return
 	}
 
-	response.Ok(ctx, "Group deleted successfully", nil)
+	response.Ok(ctx, "Group deleted successfully", gin.H{"item": nil})
 }
 
 func (gc *GroupController) ListMembers(ctx *gin.Context) {
@@ -271,8 +271,8 @@ func (gc *GroupController) ListMembers(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Group members retrieved successfully", gin.H{
-		"members": members,
-		"total":   len(members),
+		"items": members,
+		"total": len(members),
 	})
 
 }
@@ -328,7 +328,7 @@ func (gc *GroupController) UpdateMemberRole(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Member role updated successfully", gin.H{
-		"member": memberDto,
+		"item": memberDto,
 	})
 
 }
@@ -365,7 +365,7 @@ func (gc *GroupController) RemoveMember(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Member removed successfully", gin.H{
-		"success": resp.Success,
+		"item": gin.H{"is_success": resp.Success},
 	})
 }
 
@@ -417,6 +417,6 @@ func (gc *GroupController) CreateInvite(ctx *gin.Context) {
 	}
 
 	response.Ok(ctx, "Invite created successfully", gin.H{
-		"invite": inviteDto,
+		"item": inviteDto,
 	})
 }
