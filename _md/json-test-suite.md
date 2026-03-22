@@ -55,6 +55,34 @@ Enum quick map:
 }
 ```
 
+## 2.1 API - ListGroups() - Endpoints: GET /api/v1/ts/groups
+
+- Request:
+  - No body
+- Response (200):
+
+```json
+{
+  "statusCode": 200,
+  "message": "List groups successful",
+  "reasonStatusCode": "success",
+  "metadata": {
+    "items": [
+      {
+        "id": "{{group_id}}",
+        "name": "Platform Team",
+        "my_role": 1,
+        "member_total": 3,
+        "avatar_url": "",
+        "created_at": "2026-03-20T10:00:00Z",
+        "updated_at": "2026-03-20T10:00:00Z"
+      }
+    ],
+    "total": 1
+  }
+}
+```
+
 ## 3. API 3 - GetGroup() - Endpoints: GET /api/v1/ts/groups/:group_id
 
 - Request:
