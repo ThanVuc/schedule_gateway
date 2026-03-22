@@ -46,6 +46,16 @@ func (wc *groupClient) GetGroup(c *gin.Context, req *common.IDRequest) (*team_se
 	return resp, nil
 }
 
+func (wc *groupClient) GetSimpleUserByGroupID(c *gin.Context, req *common.IDRequest) (*team_service.GetSimpleUserByGroupIDResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.GetSimpleUserByGroupID(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (wc *groupClient) UpdateGroup(c *gin.Context, req *team_service.UpdateGroupRequest) (*team_service.UpdateGroupResponse, error) {
 	ctx := context.Background()
 	ctx = utils.EnrichContext(ctx, c)

@@ -17,6 +17,7 @@ type (
 		Ping(c *gin.Context, req *common.EmptyRequest) (*common.EmptyResponse, error)
 		CreateGroup(c *gin.Context, req *team_service.CreateGroupRequest) (*team_service.CreateGroupResponse, error)
 		GetGroup(c *gin.Context, req *common.IDRequest) (*team_service.GetGroupResponse, error)
+		GetSimpleUserByGroupID(c *gin.Context, req *common.IDRequest) (*team_service.GetSimpleUserByGroupIDResponse, error)
 		UpdateGroup(c *gin.Context, req *team_service.UpdateGroupRequest) (*team_service.UpdateGroupResponse, error)
 		DeleteGroup(c *gin.Context, req *common.IDRequest) (*team_service.DeleteGroupResponse, error)
 		ListMembers(c *gin.Context, req *team_service.ListMembersRequest) (*team_service.ListMembersResponse, error)
@@ -27,6 +28,7 @@ type (
 	SprintClient interface {
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
 		GetSprint(c *gin.Context, req *common.IDRequest) (*team_service.GetSprintResponse, error)
+		GetSimpleSprints(c *gin.Context, req *common.IDRequest) (*team_service.GetSimpleSprintsResponse, error)
 		ListSprints(c *gin.Context, req *team_service.ListSprintsRequest) (*team_service.ListSprintsResponse, error)
 		UpdateSprint(c *gin.Context, req *team_service.UpdateSprintRequest) (*team_service.UpdateSprintResponse, error)
 		UpdateSprintStatus(c *gin.Context, req *team_service.UpdateSprintStatusRequest) (*team_service.UpdateSprintStatusResponse, error)

@@ -27,6 +27,7 @@ func (r *GroupRouter) InitGroupRouter(Router *gin.RouterGroup) {
 		groupRouterPrivate.PATCH("/:group_id/members/:user_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.UPDATE_MEMBER_ROLE_ACTION), groupController.UpdateMemberRole)
 		groupRouterPrivate.DELETE("/:group_id/members/:user_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.REMOVE_MEMBER_ACTION), groupController.RemoveMember)
 		groupRouterPrivate.POST("/:group_id/invites", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.CREATE_INVITE_ACTION), groupController.CreateInvite)
+		groupRouterPrivate.GET("/:group_id/users/simple", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.READ_LIST_MEMBERS_ACTION), groupController.ListSimpleUsers)
 	}
 	r.Register()
 }
