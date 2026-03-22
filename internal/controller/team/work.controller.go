@@ -86,8 +86,12 @@ func (wc *WorkController) GetWork(ctx *gin.Context) {
 
 func (wc *WorkController) ListWorks(ctx *gin.Context) {
 	sprintID := ctx.Query("sprint_id")
+	asigneeID := ctx.Query("assignee_id")
 
-	resp, err := wc.client.ListWorks(ctx, &team_service.ListWorksRequest{SprintId: utils.Ptr(sprintID)})
+	resp, err := wc.client.ListWorks(ctx, &team_service.ListWorksRequest{
+		SprintId:   utils.PtrOrNilString(sprintID),
+		AssigneeId: utils.PtrOrNilString(asigneeID),
+	})
 	if err != nil {
 		wc.logger.Error("Failed to ilst works: ", "", zap.Error(err))
 		response.InternalServerError(ctx, "Failed to list works")

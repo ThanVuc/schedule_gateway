@@ -108,3 +108,10 @@ func TimestampToISO8601(timestamp *timestamppb.Timestamp) string {
 func Ptr[T any](v T) *T {
 	return &v
 }
+
+func PtrOrNilString(v string) *string {
+	if v == "" {
+		return nil
+	}
+	return &v
+}
