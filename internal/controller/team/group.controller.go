@@ -150,6 +150,55 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 	})
 }
 
+func (gc *GroupController) ListSimpleUsers(ctx *gin.Context) {
+	groupID := ctx.Param("group_id")
+	if groupID == "" {
+		response.BadRequest(ctx, "Group ID is required")
+		return
+	}
+
+	resp, err := gc.client.GetSimpleUserByGroupID(ctx, &common.IDRequest{Id: groupID})
+	if err != nil {
+		gc.logger.Error("Failed to list simple users: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Failed to list simple users")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to list simple users: ", "", zap.String("code", resp.Error.Code), zap.String("message", utils.SafeString(resp.Error.Details)))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	items := gc.buildSimpleUsersResponse(resp.GetUsers())
+	response.Ok(ctx, "List simple users successful", gin.H{
+		"items": items,
+		"total": len(items),
+	})
+}
+
+func (gc *GroupController) buildSimpleUsersResponse(users []*team_service.SimpleUserMessage) []dtos.SimpleUserDTO {
+	items := make([]dtos.SimpleUserDTO, 0, len(users))
+	for _, user := range users {
+		if user == nil {
+			continue
+		}
+
+		items = append(items, dtos.SimpleUserDTO{
+			ID:     user.GetId(),
+			Email:  user.GetEmail(),
+			Avatar: user.GetAvatar(),
+		})
+	}
+
+	return items
+}
+
 func (gc *GroupController) UpdateGroup(ctx *gin.Context) {
 	id := ctx.Param("group_id")
 	if id == "" {

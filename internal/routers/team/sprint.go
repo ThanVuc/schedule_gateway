@@ -27,6 +27,11 @@ func (r *SprintRouter) InitSprintRouter(Router *gin.RouterGroup) {
 			sprintController.ListSprints,
 		)
 
+		sprintRouter.GET("/simple",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ALL_ACTION),
+			sprintController.ListSimpleSprints,
+		)
+
 		sprintRouter.GET("/:sprint_id",
 			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.READ_ONE_ACTION),
 			sprintController.GetSprint,

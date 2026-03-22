@@ -473,6 +473,7 @@ type SimpleSprintMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Status        *SprintStatus          `protobuf:"varint,3,opt,name=status,proto3,enum=team_service.SprintStatus,oneof" json:"status"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -519,6 +520,13 @@ func (x *SimpleSprintMessage) GetName() string {
 		return x.Name
 	}
 	return ""
+}
+
+func (x *SimpleSprintMessage) GetStatus() SprintStatus {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return SprintStatus_SPRINT_STATUS_UNSPECIFIED
 }
 
 type MemberMessage struct {
@@ -1312,10 +1320,12 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1b\n" +
 	"\x06avatar\x18\x03 \x01(\tH\x00R\x06avatar\x88\x01\x01B\t\n" +
-	"\a_avatar\"9\n" +
+	"\a_avatar\"}\n" +
 	"\x13SimpleSprintMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\"\xc7\x01\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x127\n" +
+	"\x06status\x18\x03 \x01(\x0e2\x1a.team_service.SprintStatusH\x00R\x06status\x88\x01\x01B\t\n" +
+	"\a_status\"\xc7\x01\n" +
 	"\rMemberMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -1464,36 +1474,37 @@ var file_team_service_common_team_proto_goTypes = []any{
 	(*timestamppb.Timestamp)(nil), // 18: google.protobuf.Timestamp
 }
 var file_team_service_common_team_proto_depIdxs = []int32{
-	1,  // 0: team_service.MemberMessage.role:type_name -> team_service.GroupRole
-	18, // 1: team_service.MemberMessage.joined_at:type_name -> google.protobuf.Timestamp
-	18, // 2: team_service.InviteMessage.expires_at:type_name -> google.protobuf.Timestamp
-	18, // 3: team_service.InviteMessage.created_at:type_name -> google.protobuf.Timestamp
-	7,  // 4: team_service.GroupMessage.owner:type_name -> team_service.SimpleUserMessage
-	1,  // 5: team_service.GroupMessage.my_role:type_name -> team_service.GroupRole
-	18, // 6: team_service.GroupMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 7: team_service.GroupMessage.updated_at:type_name -> google.protobuf.Timestamp
-	2,  // 8: team_service.SprintMessage.status:type_name -> team_service.SprintStatus
-	5,  // 9: team_service.SprintMessage.start_date:type_name -> team_service.Date
-	5,  // 10: team_service.SprintMessage.end_date:type_name -> team_service.Date
-	18, // 11: team_service.SprintMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 12: team_service.SprintMessage.updated_at:type_name -> google.protobuf.Timestamp
-	13, // 13: team_service.ChecklistMessage.items:type_name -> team_service.ChecklistItemMessage
-	7,  // 14: team_service.CommentMessage.creator:type_name -> team_service.SimpleUserMessage
-	18, // 15: team_service.CommentMessage.created_at:type_name -> google.protobuf.Timestamp
-	15, // 16: team_service.CommentListMessage.comments:type_name -> team_service.CommentMessage
-	3,  // 17: team_service.WorkMessage.status:type_name -> team_service.WorkStatus
-	8,  // 18: team_service.WorkMessage.sprint:type_name -> team_service.SimpleSprintMessage
-	7,  // 19: team_service.WorkMessage.assignee:type_name -> team_service.SimpleUserMessage
-	5,  // 20: team_service.WorkMessage.due_date:type_name -> team_service.Date
-	14, // 21: team_service.WorkMessage.check_list:type_name -> team_service.ChecklistMessage
-	16, // 22: team_service.WorkMessage.comments:type_name -> team_service.CommentListMessage
-	18, // 23: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 24: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	2,  // 0: team_service.SimpleSprintMessage.status:type_name -> team_service.SprintStatus
+	1,  // 1: team_service.MemberMessage.role:type_name -> team_service.GroupRole
+	18, // 2: team_service.MemberMessage.joined_at:type_name -> google.protobuf.Timestamp
+	18, // 3: team_service.InviteMessage.expires_at:type_name -> google.protobuf.Timestamp
+	18, // 4: team_service.InviteMessage.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 5: team_service.GroupMessage.owner:type_name -> team_service.SimpleUserMessage
+	1,  // 6: team_service.GroupMessage.my_role:type_name -> team_service.GroupRole
+	18, // 7: team_service.GroupMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 8: team_service.GroupMessage.updated_at:type_name -> google.protobuf.Timestamp
+	2,  // 9: team_service.SprintMessage.status:type_name -> team_service.SprintStatus
+	5,  // 10: team_service.SprintMessage.start_date:type_name -> team_service.Date
+	5,  // 11: team_service.SprintMessage.end_date:type_name -> team_service.Date
+	18, // 12: team_service.SprintMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 13: team_service.SprintMessage.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 14: team_service.ChecklistMessage.items:type_name -> team_service.ChecklistItemMessage
+	7,  // 15: team_service.CommentMessage.creator:type_name -> team_service.SimpleUserMessage
+	18, // 16: team_service.CommentMessage.created_at:type_name -> google.protobuf.Timestamp
+	15, // 17: team_service.CommentListMessage.comments:type_name -> team_service.CommentMessage
+	3,  // 18: team_service.WorkMessage.status:type_name -> team_service.WorkStatus
+	8,  // 19: team_service.WorkMessage.sprint:type_name -> team_service.SimpleSprintMessage
+	7,  // 20: team_service.WorkMessage.assignee:type_name -> team_service.SimpleUserMessage
+	5,  // 21: team_service.WorkMessage.due_date:type_name -> team_service.Date
+	14, // 22: team_service.WorkMessage.check_list:type_name -> team_service.ChecklistMessage
+	16, // 23: team_service.WorkMessage.comments:type_name -> team_service.CommentListMessage
+	18, // 24: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 25: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_team_service_common_team_proto_init() }
@@ -1503,6 +1514,7 @@ func file_team_service_common_team_proto_init() {
 	}
 	file_team_service_common_team_proto_msgTypes[1].OneofWrappers = []any{}
 	file_team_service_common_team_proto_msgTypes[2].OneofWrappers = []any{}
+	file_team_service_common_team_proto_msgTypes[3].OneofWrappers = []any{}
 	file_team_service_common_team_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
