@@ -116,38 +116,100 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 		return
 	}
 
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to get group: ", "", zap.String("code", resp.Error.Code), zap.String("message", utils.SafeString(resp.Error.Details)))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
 	var groupDto *dtos.GroupDetailDTO
 	if resp.Group != nil {
 		group := resp.Group
 		groupDto = &dtos.GroupDetailDTO{
-			ID:           group.Id,
-			Name:         group.Name,
-			Description:  *group.Description,
-			MyRole:       int32(*group.MyRole.Enum()),
-			ActiveSprint: *group.ActiveSprint,
-			Avatar:       group.Avatar,
-			MembersTotal: group.MemberCount,
-			CreatedAt:    group.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-			UpdatedAt:    group.UpdatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
+			ID:           group.GetId(),
+			Name:         group.GetName(),
+			Description:  group.GetDescription(),
+			MyRole:       int32(group.GetMyRole()),
+			ActiveSprint: group.GetActiveSprint(),
+			Avatar:       group.GetAvatar(),
+			MembersTotal: group.GetMemberCount(),
+			CreatedAt:    utils.TimestampToISO8601(group.GetCreatedAt()),
+			UpdatedAt:    utils.TimestampToISO8601(group.GetUpdatedAt()),
 		}
 		if group.Owner != nil {
 			groupDto.Owner = &dtos.SimpleUserDTO{
-				ID:     group.Owner.Id,
-				Email:  group.Owner.Email,
-				Avatar: *group.Owner.Avatar,
+				ID:     group.Owner.GetId(),
+				Email:  group.Owner.GetEmail(),
+				Avatar: group.Owner.GetAvatar(),
 			}
 		}
-	}
-
-	if resp.GetError() != nil {
-		gc.logger.Error("Failed to get group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
-		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
-		return
 	}
 
 	response.Ok(ctx, "Group retrieved successfully", gin.H{
 		"item": groupDto,
 	})
+}
+
+func (gc *GroupController) ListGroups(ctx *gin.Context) {
+	resp, err := gc.client.ListGroups(ctx, &common.IDRequest{})
+	if err != nil {
+		gc.logger.Error("Failed to list groups: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Failed to list groups")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to list groups: ", "", zap.String("code", resp.Error.Code), zap.String("message", utils.SafeString(resp.Error.Details)))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	items := gc.buildListGroupsResponse(resp.GetGroups())
+	response.Ok(ctx, "List groups successful", gin.H{
+		"items": items,
+		"total": resp.GetTotal(),
+	})
+}
+
+func (gc *GroupController) buildListGroupsResponse(groups []*team_service.GroupMessage) []dtos.ListGroupItemDTO {
+	items := make([]dtos.ListGroupItemDTO, 0, len(groups))
+	for _, group := range groups {
+		if group == nil {
+			continue
+		}
+
+		createdAt := ""
+		if group.GetCreatedAt() != nil {
+			createdAt = group.GetCreatedAt().AsTime().Format("2006-01-02T15:04:05Z")
+		}
+
+		updatedAt := ""
+		if group.GetUpdatedAt() != nil {
+			updatedAt = group.GetUpdatedAt().AsTime().Format("2006-01-02T15:04:05Z")
+		}
+
+		items = append(items, dtos.ListGroupItemDTO{
+			ID:          group.GetId(),
+			Name:        group.GetName(),
+			MyRole:      int32(group.GetMyRole()),
+			MemberTotal: group.GetMemberCount(),
+			AvatarURL:   group.GetAvatar(),
+			CreatedAt:   createdAt,
+			UpdatedAt:   updatedAt,
+		})
+	}
+
+	return items
 }
 
 func (gc *GroupController) ListSimpleUsers(ctx *gin.Context) {
