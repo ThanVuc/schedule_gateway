@@ -17,6 +17,7 @@ type (
 		Ping(c *gin.Context, req *common.EmptyRequest) (*common.EmptyResponse, error)
 		CreateGroup(c *gin.Context, req *team_service.CreateGroupRequest) (*team_service.CreateGroupResponse, error)
 		GetGroup(c *gin.Context, req *common.IDRequest) (*team_service.GetGroupResponse, error)
+		ListGroups(c *gin.Context, req *common.IDRequest) (*team_service.ListGroupsResponse, error)
 		GetSimpleUserByGroupID(c *gin.Context, req *common.IDRequest) (*team_service.GetSimpleUserByGroupIDResponse, error)
 		UpdateGroup(c *gin.Context, req *team_service.UpdateGroupRequest) (*team_service.UpdateGroupResponse, error)
 		DeleteGroup(c *gin.Context, req *common.IDRequest) (*team_service.DeleteGroupResponse, error)

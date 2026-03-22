@@ -753,6 +753,54 @@ Enum quick map:
 }
 ```
 
+## 25. API 25 - ListSimpleUsers() - Endpoints: GET /api/v1/ts/groups/:group_id/users/simple
+
+- Request:
+  - No body
+- Response (200):
+
+```json
+{
+  "statusCode": 200,
+  "message": "List simple users successful",
+  "reasonStatusCode": "success",
+  "metadata": {
+    "items": [
+      {
+        "id": "{{user_id}}",
+        "email": "member@example.com",
+        "avatar": ""
+      }
+    ],
+    "total": 1
+  }
+}
+```
+
+## 26. API 26 - ListSimpleSprints() - Endpoints: GET /api/v1/ts/groups/:group_id/sprints/simple
+
+- Request:
+  - No body
+- Response (200):
+
+```json
+{
+  "statusCode": 200,
+  "message": "List simple sprints successful",
+  "reasonStatusCode": "success",
+  "metadata": {
+    "items": [
+      {
+        "id": "{{sprint_id}}",
+        "name": "Sprint 12",
+        "status": 1
+      }
+    ],
+    "total": 1
+  }
+}
+```
+
 ## Notes
 
 - You asked to skip headers, so only request body is shown for APIs that send body.
