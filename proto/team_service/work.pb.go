@@ -189,6 +189,7 @@ func (x *GetWorkResponse) GetError() *Error {
 type ListWorksRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SprintId      *string                `protobuf:"bytes,1,opt,name=sprint_id,json=sprintId,proto3,oneof" json:"sprint_id"`
+	AssigneeId    *string                `protobuf:"bytes,2,opt,name=assignee_id,json=assigneeId,proto3,oneof" json:"assignee_id"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -226,6 +227,13 @@ func (*ListWorksRequest) Descriptor() ([]byte, []int) {
 func (x *ListWorksRequest) GetSprintId() string {
 	if x != nil && x.SprintId != nil {
 		return *x.SprintId
+	}
+	return ""
+}
+
+func (x *ListWorksRequest) GetAssigneeId() string {
+	if x != nil && x.AssigneeId != nil {
+		return *x.AssigneeId
 	}
 	return ""
 }
@@ -1049,11 +1057,14 @@ const file_team_service_work_proto_rawDesc = "" +
 	"\x0fGetWorkResponse\x12-\n" +
 	"\x04work\x18\x01 \x01(\v2\x19.team_service.WorkMessageR\x04work\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"B\n" +
+	"\x06_error\"x\n" +
 	"\x10ListWorksRequest\x12 \n" +
-	"\tsprint_id\x18\x01 \x01(\tH\x00R\bsprintId\x88\x01\x01B\f\n" +
+	"\tsprint_id\x18\x01 \x01(\tH\x00R\bsprintId\x88\x01\x01\x12$\n" +
+	"\vassignee_id\x18\x02 \x01(\tH\x01R\n" +
+	"assigneeId\x88\x01\x01B\f\n" +
 	"\n" +
-	"_sprint_id\"~\n" +
+	"_sprint_idB\x0e\n" +
+	"\f_assignee_id\"~\n" +
 	"\x11ListWorksResponse\x12/\n" +
 	"\x05works\x18\x01 \x03(\v2\x19.team_service.WorkMessageR\x05works\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
