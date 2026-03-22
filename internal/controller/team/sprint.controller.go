@@ -119,6 +119,37 @@ func (sc *SprintController) ListSprints(ctx *gin.Context) {
 	})
 }
 
+func (sc *SprintController) ListSimpleSprints(ctx *gin.Context) {
+	groupID := ctx.Param("group_id")
+	if groupID == "" {
+		response.BadRequest(ctx, "group_id is required")
+		return
+	}
+
+	resp, err := sc.client.GetSimpleSprints(ctx, &common.IDRequest{Id: groupID})
+	if err != nil {
+		sc.logger.Error("Failed to list simple sprints: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Failed to list simple sprints")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	items := sc.buildSimpleSprintResponses(resp.GetSprints())
+	response.Ok(ctx, "List simple sprints successful", gin.H{
+		"items": items,
+		"total": len(items),
+	})
+}
+
 func (sc *SprintController) UpdateSprint(ctx *gin.Context) {
 	req := sc.buildUpdateSprintRequest(ctx)
 	if req == nil {
@@ -358,6 +389,23 @@ func (sc *SprintController) buildSprintResponse(sprint *team_service.SprintMessa
 		"created_at":       utils.TimestampToISO8601(sprint.GetCreatedAt()),
 		"updated_at":       utils.TimestampToISO8601(sprint.GetUpdatedAt()),
 	}
+}
+
+func (sc *SprintController) buildSimpleSprintResponses(sprints []*team_service.SimpleSprintMessage) []dtos.SimpleSprintDTO {
+	items := make([]dtos.SimpleSprintDTO, 0, len(sprints))
+	for _, sprint := range sprints {
+		if sprint == nil {
+			continue
+		}
+
+		items = append(items, dtos.SimpleSprintDTO{
+			ID:     sprint.GetId(),
+			Name:   sprint.GetName(),
+			Status: int32(sprint.GetStatus()),
+		})
+	}
+
+	return items
 }
 
 func isValidSprintStatus(status team_service.SprintStatus) bool {

@@ -13,3 +13,9 @@ type UpdateSprintDTO struct {
 	StartDate *string `json:"start_date,omitempty"`
 	EndDate   *string `json:"end_date,omitempty"`
 }
+
+type SimpleSprintDTO struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Status int32  `json:"status"`
+}

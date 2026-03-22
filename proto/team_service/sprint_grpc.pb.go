@@ -26,6 +26,7 @@ const (
 	SprintService_UpdateSprint_FullMethodName       = "/team_service.SprintService/UpdateSprint"
 	SprintService_UpdateSprintStatus_FullMethodName = "/team_service.SprintService/UpdateSprintStatus"
 	SprintService_DeleteSprint_FullMethodName       = "/team_service.SprintService/DeleteSprint"
+	SprintService_GetSimpleSprints_FullMethodName   = "/team_service.SprintService/GetSimpleSprints"
 )
 
 // SprintServiceClient is the client API for SprintService service.
@@ -40,6 +41,7 @@ type SprintServiceClient interface {
 	UpdateSprint(ctx context.Context, in *UpdateSprintRequest, opts ...grpc.CallOption) (*UpdateSprintResponse, error)
 	UpdateSprintStatus(ctx context.Context, in *UpdateSprintStatusRequest, opts ...grpc.CallOption) (*UpdateSprintStatusResponse, error)
 	DeleteSprint(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteSprintResponse, error)
+	GetSimpleSprints(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleSprintsResponse, error)
 }
 
 type sprintServiceClient struct {
@@ -110,6 +112,16 @@ func (c *sprintServiceClient) DeleteSprint(ctx context.Context, in *common.IDReq
 	return out, nil
 }
 
+func (c *sprintServiceClient) GetSimpleSprints(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleSprintsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSimpleSprintsResponse)
+	err := c.cc.Invoke(ctx, SprintService_GetSimpleSprints_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SprintServiceServer is the server API for SprintService service.
 // All implementations must embed UnimplementedSprintServiceServer
 // for forward compatibility.
@@ -122,6 +134,7 @@ type SprintServiceServer interface {
 	UpdateSprint(context.Context, *UpdateSprintRequest) (*UpdateSprintResponse, error)
 	UpdateSprintStatus(context.Context, *UpdateSprintStatusRequest) (*UpdateSprintStatusResponse, error)
 	DeleteSprint(context.Context, *common.IDRequest) (*DeleteSprintResponse, error)
+	GetSimpleSprints(context.Context, *common.IDRequest) (*GetSimpleSprintsResponse, error)
 	mustEmbedUnimplementedSprintServiceServer()
 }
 
@@ -149,6 +162,9 @@ func (UnimplementedSprintServiceServer) UpdateSprintStatus(context.Context, *Upd
 }
 func (UnimplementedSprintServiceServer) DeleteSprint(context.Context, *common.IDRequest) (*DeleteSprintResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSprint not implemented")
+}
+func (UnimplementedSprintServiceServer) GetSimpleSprints(context.Context, *common.IDRequest) (*GetSimpleSprintsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSimpleSprints not implemented")
 }
 func (UnimplementedSprintServiceServer) mustEmbedUnimplementedSprintServiceServer() {}
 func (UnimplementedSprintServiceServer) testEmbeddedByValue()                       {}
@@ -279,6 +295,24 @@ func _SprintService_DeleteSprint_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SprintService_GetSimpleSprints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SprintServiceServer).GetSimpleSprints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SprintService_GetSimpleSprints_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SprintServiceServer).GetSimpleSprints(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SprintService_ServiceDesc is the grpc.ServiceDesc for SprintService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -309,6 +343,10 @@ var SprintService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteSprint",
 			Handler:    _SprintService_DeleteSprint_Handler,
+		},
+		{
+			MethodName: "GetSimpleSprints",
+			Handler:    _SprintService_GetSimpleSprints_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

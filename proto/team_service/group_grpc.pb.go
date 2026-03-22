@@ -20,18 +20,19 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GroupService_Ping_FullMethodName               = "/team_service.GroupService/Ping"
-	GroupService_CreateGroup_FullMethodName        = "/team_service.GroupService/CreateGroup"
-	GroupService_GetGroup_FullMethodName           = "/team_service.GroupService/GetGroup"
-	GroupService_ListGroups_FullMethodName         = "/team_service.GroupService/ListGroups"
-	GroupService_UpdateGroup_FullMethodName        = "/team_service.GroupService/UpdateGroup"
-	GroupService_DeleteGroup_FullMethodName        = "/team_service.GroupService/DeleteGroup"
-	GroupService_ListMembers_FullMethodName        = "/team_service.GroupService/ListMembers"
-	GroupService_UpdateMemberRole_FullMethodName   = "/team_service.GroupService/UpdateMemberRole"
-	GroupService_ConfirmDeleteGroup_FullMethodName = "/team_service.GroupService/ConfirmDeleteGroup"
-	GroupService_RemoveMember_FullMethodName       = "/team_service.GroupService/RemoveMember"
-	GroupService_CreateInvite_FullMethodName       = "/team_service.GroupService/CreateInvite"
-	GroupService_AcceptInvite_FullMethodName       = "/team_service.GroupService/AcceptInvite"
+	GroupService_Ping_FullMethodName                   = "/team_service.GroupService/Ping"
+	GroupService_CreateGroup_FullMethodName            = "/team_service.GroupService/CreateGroup"
+	GroupService_GetGroup_FullMethodName               = "/team_service.GroupService/GetGroup"
+	GroupService_ListGroups_FullMethodName             = "/team_service.GroupService/ListGroups"
+	GroupService_UpdateGroup_FullMethodName            = "/team_service.GroupService/UpdateGroup"
+	GroupService_DeleteGroup_FullMethodName            = "/team_service.GroupService/DeleteGroup"
+	GroupService_ListMembers_FullMethodName            = "/team_service.GroupService/ListMembers"
+	GroupService_UpdateMemberRole_FullMethodName       = "/team_service.GroupService/UpdateMemberRole"
+	GroupService_ConfirmDeleteGroup_FullMethodName     = "/team_service.GroupService/ConfirmDeleteGroup"
+	GroupService_RemoveMember_FullMethodName           = "/team_service.GroupService/RemoveMember"
+	GroupService_CreateInvite_FullMethodName           = "/team_service.GroupService/CreateInvite"
+	GroupService_AcceptInvite_FullMethodName           = "/team_service.GroupService/AcceptInvite"
+	GroupService_GetSimpleUserByGroupID_FullMethodName = "/team_service.GroupService/GetSimpleUserByGroupID"
 )
 
 // GroupServiceClient is the client API for GroupService service.
@@ -52,6 +53,7 @@ type GroupServiceClient interface {
 	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
 	CreateInvite(ctx context.Context, in *CreateInviteRequest, opts ...grpc.CallOption) (*CreateInviteResponse, error)
 	AcceptInvite(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error)
+	GetSimpleUserByGroupID(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleUserByGroupIDResponse, error)
 }
 
 type groupServiceClient struct {
@@ -182,6 +184,16 @@ func (c *groupServiceClient) AcceptInvite(ctx context.Context, in *AcceptInviteR
 	return out, nil
 }
 
+func (c *groupServiceClient) GetSimpleUserByGroupID(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleUserByGroupIDResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSimpleUserByGroupIDResponse)
+	err := c.cc.Invoke(ctx, GroupService_GetSimpleUserByGroupID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GroupServiceServer is the server API for GroupService service.
 // All implementations must embed UnimplementedGroupServiceServer
 // for forward compatibility.
@@ -200,6 +212,7 @@ type GroupServiceServer interface {
 	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
 	CreateInvite(context.Context, *CreateInviteRequest) (*CreateInviteResponse, error)
 	AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error)
+	GetSimpleUserByGroupID(context.Context, *common.IDRequest) (*GetSimpleUserByGroupIDResponse, error)
 	mustEmbedUnimplementedGroupServiceServer()
 }
 
@@ -245,6 +258,9 @@ func (UnimplementedGroupServiceServer) CreateInvite(context.Context, *CreateInvi
 }
 func (UnimplementedGroupServiceServer) AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AcceptInvite not implemented")
+}
+func (UnimplementedGroupServiceServer) GetSimpleUserByGroupID(context.Context, *common.IDRequest) (*GetSimpleUserByGroupIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSimpleUserByGroupID not implemented")
 }
 func (UnimplementedGroupServiceServer) mustEmbedUnimplementedGroupServiceServer() {}
 func (UnimplementedGroupServiceServer) testEmbeddedByValue()                      {}
@@ -483,6 +499,24 @@ func _GroupService_AcceptInvite_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GroupService_GetSimpleUserByGroupID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServiceServer).GetSimpleUserByGroupID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GroupService_GetSimpleUserByGroupID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServiceServer).GetSimpleUserByGroupID(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GroupService_ServiceDesc is the grpc.ServiceDesc for GroupService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -537,6 +571,10 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AcceptInvite",
 			Handler:    _GroupService_AcceptInvite_Handler,
+		},
+		{
+			MethodName: "GetSimpleUserByGroupID",
+			Handler:    _GroupService_GetSimpleUserByGroupID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
