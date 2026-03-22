@@ -873,8 +873,9 @@ func (x *AcceptInviteResponse) GetError() *Error {
 
 type ListGroupsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Groups        *GroupMessage          `protobuf:"bytes,1,opt,name=groups,proto3" json:"groups"`
-	Error         *Error                 `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error"`
+	Groups        []*GroupMessage        `protobuf:"bytes,1,rep,name=groups,proto3" json:"groups"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
+	Error         *Error                 `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -909,11 +910,18 @@ func (*ListGroupsResponse) Descriptor() ([]byte, []int) {
 	return file_team_service_group_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *ListGroupsResponse) GetGroups() *GroupMessage {
+func (x *ListGroupsResponse) GetGroups() []*GroupMessage {
 	if x != nil {
 		return x.Groups
 	}
 	return nil
+}
+
+func (x *ListGroupsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
 }
 
 func (x *ListGroupsResponse) GetError() *Error {
@@ -1146,10 +1154,11 @@ const file_team_service_group_proto_rawDesc = "" +
 	"\x14AcceptInviteResponse\x12\x1a\n" +
 	"\blocation\x18\x01 \x01(\tR\blocation\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x82\x01\n" +
+	"\x06_error\"\x98\x01\n" +
 	"\x12ListGroupsResponse\x122\n" +
-	"\x06groups\x18\x01 \x01(\v2\x1a.team_service.GroupMessageR\x06groups\x12.\n" +
-	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06groups\x18\x01 \x03(\v2\x1a.team_service.GroupMessageR\x06groups\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\x12.\n" +
+	"\x05error\x18\x03 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"1\n" +
 	"\x19ConfirmDeleteGroupRequest\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\"\x9f\x01\n" +

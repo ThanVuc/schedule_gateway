@@ -35,6 +35,16 @@ type GroupDetailDTO struct {
 	UpdatedAt    string         `json:"updated_at"`
 }
 
+type ListGroupItemDTO struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	MyRole      int32  `json:"my_role"`
+	MemberTotal int32  `json:"member_total"`
+	AvatarURL   string `json:"avatar_url"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
+}
+
 type MemberDTO struct {
 	ID       string `json:"id"`
 	Email    string `json:"email"`
