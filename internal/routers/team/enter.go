@@ -4,4 +4,5 @@ type TeamRouterGroup struct {
 	GroupRouter
 	SprintRouter
 	WorkRouter
+	UserRouter
 }

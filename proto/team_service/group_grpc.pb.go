@@ -28,7 +28,6 @@ const (
 	GroupService_DeleteGroup_FullMethodName            = "/team_service.GroupService/DeleteGroup"
 	GroupService_ListMembers_FullMethodName            = "/team_service.GroupService/ListMembers"
 	GroupService_UpdateMemberRole_FullMethodName       = "/team_service.GroupService/UpdateMemberRole"
-	GroupService_ConfirmDeleteGroup_FullMethodName     = "/team_service.GroupService/ConfirmDeleteGroup"
 	GroupService_RemoveMember_FullMethodName           = "/team_service.GroupService/RemoveMember"
 	GroupService_CreateInvite_FullMethodName           = "/team_service.GroupService/CreateInvite"
 	GroupService_AcceptInvite_FullMethodName           = "/team_service.GroupService/AcceptInvite"
@@ -49,7 +48,6 @@ type GroupServiceClient interface {
 	DeleteGroup(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteGroupResponse, error)
 	ListMembers(ctx context.Context, in *ListMembersRequest, opts ...grpc.CallOption) (*ListMembersResponse, error)
 	UpdateMemberRole(ctx context.Context, in *UpdateMemberRoleRequest, opts ...grpc.CallOption) (*UpdateMemberRoleResponse, error)
-	ConfirmDeleteGroup(ctx context.Context, in *ConfirmDeleteGroupRequest, opts ...grpc.CallOption) (*ConfirmDeleteGroupResponse, error)
 	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
 	CreateInvite(ctx context.Context, in *CreateInviteRequest, opts ...grpc.CallOption) (*CreateInviteResponse, error)
 	AcceptInvite(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error)
@@ -144,16 +142,6 @@ func (c *groupServiceClient) UpdateMemberRole(ctx context.Context, in *UpdateMem
 	return out, nil
 }
 
-func (c *groupServiceClient) ConfirmDeleteGroup(ctx context.Context, in *ConfirmDeleteGroupRequest, opts ...grpc.CallOption) (*ConfirmDeleteGroupResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ConfirmDeleteGroupResponse)
-	err := c.cc.Invoke(ctx, GroupService_ConfirmDeleteGroup_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *groupServiceClient) RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RemoveMemberResponse)
@@ -208,7 +196,6 @@ type GroupServiceServer interface {
 	DeleteGroup(context.Context, *common.IDRequest) (*DeleteGroupResponse, error)
 	ListMembers(context.Context, *ListMembersRequest) (*ListMembersResponse, error)
 	UpdateMemberRole(context.Context, *UpdateMemberRoleRequest) (*UpdateMemberRoleResponse, error)
-	ConfirmDeleteGroup(context.Context, *ConfirmDeleteGroupRequest) (*ConfirmDeleteGroupResponse, error)
 	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
 	CreateInvite(context.Context, *CreateInviteRequest) (*CreateInviteResponse, error)
 	AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error)
@@ -246,9 +233,6 @@ func (UnimplementedGroupServiceServer) ListMembers(context.Context, *ListMembers
 }
 func (UnimplementedGroupServiceServer) UpdateMemberRole(context.Context, *UpdateMemberRoleRequest) (*UpdateMemberRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateMemberRole not implemented")
-}
-func (UnimplementedGroupServiceServer) ConfirmDeleteGroup(context.Context, *ConfirmDeleteGroupRequest) (*ConfirmDeleteGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConfirmDeleteGroup not implemented")
 }
 func (UnimplementedGroupServiceServer) RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveMember not implemented")
@@ -427,24 +411,6 @@ func _GroupService_UpdateMemberRole_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GroupService_ConfirmDeleteGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConfirmDeleteGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServiceServer).ConfirmDeleteGroup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GroupService_ConfirmDeleteGroup_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServiceServer).ConfirmDeleteGroup(ctx, req.(*ConfirmDeleteGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _GroupService_RemoveMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveMemberRequest)
 	if err := dec(in); err != nil {
@@ -555,10 +521,6 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateMemberRole",
 			Handler:    _GroupService_UpdateMemberRole_Handler,
-		},
-		{
-			MethodName: "ConfirmDeleteGroup",
-			Handler:    _GroupService_ConfirmDeleteGroup_Handler,
 		},
 		{
 			MethodName: "RemoveMember",

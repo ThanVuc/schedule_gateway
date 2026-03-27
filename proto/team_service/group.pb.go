@@ -1170,7 +1170,7 @@ const file_team_service_group_proto_rawDesc = "" +
 	"\x1eGetSimpleUserByGroupIDResponse\x125\n" +
 	"\x05users\x18\x01 \x03(\v2\x1f.team_service.SimpleUserMessageR\x05users\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xb2\b\n" +
+	"\x06_error2\xc9\a\n" +
 	"\fGroupService\x123\n" +
 	"\x04Ping\x12\x14.common.EmptyRequest\x1a\x15.common.EmptyResponse\x12R\n" +
 	"\vCreateGroup\x12 .team_service.CreateGroupRequest\x1a!.team_service.CreateGroupResponse\x12=\n" +
@@ -1180,8 +1180,7 @@ const file_team_service_group_proto_rawDesc = "" +
 	"\vUpdateGroup\x12 .team_service.UpdateGroupRequest\x1a!.team_service.UpdateGroupResponse\x12C\n" +
 	"\vDeleteGroup\x12\x11.common.IDRequest\x1a!.team_service.DeleteGroupResponse\x12R\n" +
 	"\vListMembers\x12 .team_service.ListMembersRequest\x1a!.team_service.ListMembersResponse\x12a\n" +
-	"\x10UpdateMemberRole\x12%.team_service.UpdateMemberRoleRequest\x1a&.team_service.UpdateMemberRoleResponse\x12g\n" +
-	"\x12ConfirmDeleteGroup\x12'.team_service.ConfirmDeleteGroupRequest\x1a(.team_service.ConfirmDeleteGroupResponse\x12U\n" +
+	"\x10UpdateMemberRole\x12%.team_service.UpdateMemberRoleRequest\x1a&.team_service.UpdateMemberRoleResponse\x12U\n" +
 	"\fRemoveMember\x12!.team_service.RemoveMemberRequest\x1a\".team_service.RemoveMemberResponse\x12U\n" +
 	"\fCreateInvite\x12!.team_service.CreateInviteRequest\x1a\".team_service.CreateInviteResponse\x12U\n" +
 	"\fAcceptInvite\x12!.team_service.AcceptInviteRequest\x1a\".team_service.AcceptInviteResponse\x12Y\n" +
@@ -1264,26 +1263,24 @@ var file_team_service_group_proto_depIdxs = []int32{
 	28, // 28: team_service.GroupService.DeleteGroup:input_type -> common.IDRequest
 	6,  // 29: team_service.GroupService.ListMembers:input_type -> team_service.ListMembersRequest
 	8,  // 30: team_service.GroupService.UpdateMemberRole:input_type -> team_service.UpdateMemberRoleRequest
-	17, // 31: team_service.GroupService.ConfirmDeleteGroup:input_type -> team_service.ConfirmDeleteGroupRequest
-	10, // 32: team_service.GroupService.RemoveMember:input_type -> team_service.RemoveMemberRequest
-	12, // 33: team_service.GroupService.CreateInvite:input_type -> team_service.CreateInviteRequest
-	14, // 34: team_service.GroupService.AcceptInvite:input_type -> team_service.AcceptInviteRequest
-	28, // 35: team_service.GroupService.GetSimpleUserByGroupID:input_type -> common.IDRequest
-	29, // 36: team_service.GroupService.Ping:output_type -> common.EmptyResponse
-	1,  // 37: team_service.GroupService.CreateGroup:output_type -> team_service.CreateGroupResponse
-	2,  // 38: team_service.GroupService.GetGroup:output_type -> team_service.GetGroupResponse
-	16, // 39: team_service.GroupService.ListGroups:output_type -> team_service.ListGroupsResponse
-	4,  // 40: team_service.GroupService.UpdateGroup:output_type -> team_service.UpdateGroupResponse
-	5,  // 41: team_service.GroupService.DeleteGroup:output_type -> team_service.DeleteGroupResponse
-	7,  // 42: team_service.GroupService.ListMembers:output_type -> team_service.ListMembersResponse
-	9,  // 43: team_service.GroupService.UpdateMemberRole:output_type -> team_service.UpdateMemberRoleResponse
-	18, // 44: team_service.GroupService.ConfirmDeleteGroup:output_type -> team_service.ConfirmDeleteGroupResponse
-	11, // 45: team_service.GroupService.RemoveMember:output_type -> team_service.RemoveMemberResponse
-	13, // 46: team_service.GroupService.CreateInvite:output_type -> team_service.CreateInviteResponse
-	15, // 47: team_service.GroupService.AcceptInvite:output_type -> team_service.AcceptInviteResponse
-	19, // 48: team_service.GroupService.GetSimpleUserByGroupID:output_type -> team_service.GetSimpleUserByGroupIDResponse
-	36, // [36:49] is the sub-list for method output_type
-	23, // [23:36] is the sub-list for method input_type
+	10, // 31: team_service.GroupService.RemoveMember:input_type -> team_service.RemoveMemberRequest
+	12, // 32: team_service.GroupService.CreateInvite:input_type -> team_service.CreateInviteRequest
+	14, // 33: team_service.GroupService.AcceptInvite:input_type -> team_service.AcceptInviteRequest
+	28, // 34: team_service.GroupService.GetSimpleUserByGroupID:input_type -> common.IDRequest
+	29, // 35: team_service.GroupService.Ping:output_type -> common.EmptyResponse
+	1,  // 36: team_service.GroupService.CreateGroup:output_type -> team_service.CreateGroupResponse
+	2,  // 37: team_service.GroupService.GetGroup:output_type -> team_service.GetGroupResponse
+	16, // 38: team_service.GroupService.ListGroups:output_type -> team_service.ListGroupsResponse
+	4,  // 39: team_service.GroupService.UpdateGroup:output_type -> team_service.UpdateGroupResponse
+	5,  // 40: team_service.GroupService.DeleteGroup:output_type -> team_service.DeleteGroupResponse
+	7,  // 41: team_service.GroupService.ListMembers:output_type -> team_service.ListMembersResponse
+	9,  // 42: team_service.GroupService.UpdateMemberRole:output_type -> team_service.UpdateMemberRoleResponse
+	11, // 43: team_service.GroupService.RemoveMember:output_type -> team_service.RemoveMemberResponse
+	13, // 44: team_service.GroupService.CreateInvite:output_type -> team_service.CreateInviteResponse
+	15, // 45: team_service.GroupService.AcceptInvite:output_type -> team_service.AcceptInviteResponse
+	19, // 46: team_service.GroupService.GetSimpleUserByGroupID:output_type -> team_service.GetSimpleUserByGroupIDResponse
+	35, // [35:47] is the sub-list for method output_type
+	23, // [23:35] is the sub-list for method input_type
 	23, // [23:23] is the sub-list for extension type_name
 	23, // [23:23] is the sub-list for extension extendee
 	0,  // [0:23] is the sub-list for field type_name

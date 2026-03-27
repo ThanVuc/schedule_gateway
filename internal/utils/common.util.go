@@ -115,3 +115,10 @@ func PtrOrNilString(v string) *string {
 	}
 	return &v
 }
+
+func SafeBool(b *bool) bool {
+	if b == nil {
+		return false
+	}
+	return *b
+}

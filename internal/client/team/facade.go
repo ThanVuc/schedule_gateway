@@ -25,6 +25,7 @@ type (
 		UpdateMemberRole(c *gin.Context, req *team_service.UpdateMemberRoleRequest) (*team_service.UpdateMemberRoleResponse, error)
 		RemoveMember(c *gin.Context, req *team_service.RemoveMemberRequest) (*team_service.RemoveMemberResponse, error)
 		CreateInvite(c *gin.Context, req *team_service.CreateInviteRequest) (*team_service.CreateInviteResponse, error)
+		AcceptInvite(c *gin.Context, req *team_service.AcceptInviteRequest) (*team_service.AcceptInviteResponse, error)
 	}
 	SprintClient interface {
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
@@ -49,6 +50,10 @@ type (
 		CreateComment(c *gin.Context, req *team_service.CreateCommentRequest) (*team_service.CreateCommentResponse, error)
 		UpdateComment(c *gin.Context, req *team_service.UpdateCommentRequest) (*team_service.UpdateCommentResponse, error)
 		DeleteComment(c *gin.Context, req *common.IDRequest) (*team_service.DeleteCommentResponse, error)
+	}
+	UserClient interface {
+		GetUserInfo(c *gin.Context, req *common.EmptyRequest) (*team_service.GetUserInfoResponse, error)
+		NotificationConfiguration(c *gin.Context, req *team_service.NotificationConfigurationRequest) (*team_service.NotificationConfigurationResponse, error)
 	}
 )
 
@@ -93,5 +98,18 @@ func NewWorkClient() WorkClient {
 
 	return &workClient{
 		workClient: client,
+	}
+}
+
+func NewUserClient() UserClient {
+	conn := getConn(&global.Config.TeamService)
+	client := team_service.NewUserServiceClient(conn)
+
+	if client == nil {
+		panic("Failed to create TeamService client at " + fmt.Sprintf("%s:%d", global.Config.TeamService.GetHost(), global.Config.TeamService.GetPort()))
+	}
+
+	return &usertClient{
+		userClient: client,
 	}
 }
