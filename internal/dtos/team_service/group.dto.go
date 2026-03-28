@@ -54,7 +54,7 @@ type MemberDTO struct {
 }
 
 type UpdateMemberRoleDTO struct {
-	Role int32 `json:"role" binding:"required"`
+	NewRole int32 `json:"new_role" binding:"required"`
 }
 
 type CreateInviteDTO struct {
@@ -67,4 +67,12 @@ type InviteDTO struct {
 	Code      string `json:"code"`
 	ExpiresAt string `json:"expires_at"`
 	CreateAt  string `json:"created_at"`
+}
+
+type CodeDataDTO struct {
+	Data AcceptInviteDTO `json:"data"`
+}
+
+type AcceptInviteDTO struct {
+	Code string `json:"code" binding:"required"`
 }

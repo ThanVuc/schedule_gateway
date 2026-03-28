@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -20,11 +21,14 @@ func EnrichContext(ctx context.Context, c *gin.Context) context.Context {
 	}
 
 	md = md.Copy()
+
 	md.Set("x-request-id", requestID)
 	md.Set("x-user-id", userID)
 	if GroupId != "" {
 		md.Set("x-group-id", GroupId)
 	}
+	baseURL := GetBaseURL(c)
+	md.Set("x-base-url", baseURL)
 
 	return metadata.NewOutgoingContext(ctx, md)
 }
@@ -58,4 +62,17 @@ func ClearCookie(name string) *http.Cookie {
 	}
 
 	return cookie
+}
+
+func GetBaseURL(ctx *gin.Context) string {
+	scheme := ctx.GetHeader("X-Forwarded-Proto")
+	if scheme == "" {
+		if ctx.Request.TLS != nil {
+			scheme = "https"
+		} else {
+			scheme = "http"
+		}
+	}
+
+	return fmt.Sprintf("%s://%s", scheme, ctx.Request.Host)
 }

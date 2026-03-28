@@ -125,3 +125,13 @@ func (wc *groupClient) CreateInvite(c *gin.Context, req *team_service.CreateInvi
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) AcceptInvite(c *gin.Context, req *team_service.AcceptInviteRequest) (*team_service.AcceptInviteResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.AcceptInvite(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

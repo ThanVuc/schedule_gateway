@@ -67,4 +67,10 @@ const (
 	UPDATE_MEMBER_ROLE_ACTION = "update_member_role"
 	REMOVE_MEMBER_ACTION      = "remove_member"
 	CREATE_INVITE_ACTION      = "create_invite"
+	ACCEPT_INVITE_ACTION      = "accept_invite"
+)
+
+// team user resource actions
+const (
+	UPDATE_NOTIFICATION_CONFIGURATION_ACTION = "update_notification_configuration"
 )

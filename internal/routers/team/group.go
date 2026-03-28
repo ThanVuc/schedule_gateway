@@ -29,6 +29,7 @@ func (r *GroupRouter) InitGroupRouter(Router *gin.RouterGroup) {
 		groupRouterPrivate.DELETE("/:group_id/members/:user_id", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.REMOVE_MEMBER_ACTION), groupController.RemoveMember)
 		groupRouterPrivate.POST("/:group_id/invites", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.CREATE_INVITE_ACTION), groupController.CreateInvite)
 		groupRouterPrivate.GET("/:group_id/users/simple", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.READ_LIST_MEMBERS_ACTION), groupController.ListSimpleUsers)
+		groupRouterPrivate.POST("/invitation/acceptance",middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.ACCEPT_INVITE_ACTION), groupController.AcceptInvite)
 	}
 	r.Register()
 }
@@ -74,6 +75,10 @@ func (r *GroupRouter) Register() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.CREATE_INVITE_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.ACCEPT_INVITE_ACTION,
 		},
 	})
 }

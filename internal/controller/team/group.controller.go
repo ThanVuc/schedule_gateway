@@ -2,6 +2,7 @@ package team_controller
 
 import (
 	"fmt"
+	"net/http"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 	dtos "schedule_gateway/internal/dtos/team_service"
@@ -56,7 +57,8 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 		return
 	}
 
-	dto := gc.buildGetGroupResponse(resp)
+	// reuse shared BuildGroupResponse from work.controller.go
+	dto := BuildGroupResponse(resp.GetGroup())
 
 	response.Ok(ctx, "Group created successfully", gin.H{"item": dto})
 }
@@ -73,31 +75,6 @@ func (gc *GroupController) buildCreateGroupRequest(c *gin.Context) *team_service
 
 	return &req
 
-}
-
-func (gc *GroupController) buildGetGroupResponse(resp *team_service.CreateGroupResponse) gin.H {
-	var groupDto *dtos.GroupDTO
-	if resp.Group != nil {
-		group := resp.Group
-		groupDto = &dtos.GroupDTO{
-			ID:          group.Id,
-			Name:        group.Name,
-			Description: utils.SafeString(group.Description),
-			CreatedAt:   group.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-			UpdatedAt:   group.UpdatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-		}
-		if group.Owner != nil {
-			groupDto.Owner = &dtos.SimpleUserDTO{
-				ID:     group.Owner.Id,
-				Email:  group.Owner.Email,
-				Avatar: utils.SafeString(group.Owner.Avatar),
-			}
-		}
-	}
-
-	return gin.H{
-		"item": groupDto,
-	}
 }
 
 func (gc *GroupController) GetGroup(ctx *gin.Context) {
@@ -127,31 +104,11 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 		return
 	}
 
-	var groupDto *dtos.GroupDetailDTO
-	if resp.Group != nil {
-		group := resp.Group
-		groupDto = &dtos.GroupDetailDTO{
-			ID:           group.GetId(),
-			Name:         group.GetName(),
-			Description:  group.GetDescription(),
-			MyRole:       int32(group.GetMyRole()),
-			ActiveSprint: group.GetActiveSprint(),
-			Avatar:       group.GetAvatar(),
-			MembersTotal: group.GetMemberCount(),
-			CreatedAt:    utils.TimestampToISO8601(group.GetCreatedAt()),
-			UpdatedAt:    utils.TimestampToISO8601(group.GetUpdatedAt()),
-		}
-		if group.Owner != nil {
-			groupDto.Owner = &dtos.SimpleUserDTO{
-				ID:     group.Owner.GetId(),
-				Email:  group.Owner.GetEmail(),
-				Avatar: group.Owner.GetAvatar(),
-			}
-		}
-	}
+	// reuse shared BuildGroupResponse
+	dto := BuildGroupResponse(resp.GetGroup())
 
 	response.Ok(ctx, "Group retrieved successfully", gin.H{
-		"item": groupDto,
+		"item": dto,
 	})
 }
 
@@ -295,34 +252,10 @@ func (gc *GroupController) UpdateGroup(ctx *gin.Context) {
 		return
 	}
 
-	dtoResp := gc.builUpdateGroupResponse(resp)
-	response.Ok(ctx, "Group updated successfully", gin.H{"item": dtoResp["item"]})
+	// reuse shared BuildGroupResponse
+	dtoResp := BuildGroupResponse(resp.GetGroup())
+	response.Ok(ctx, "Group updated successfully", gin.H{"item": dtoResp})
 
-}
-
-func (gc *GroupController) builUpdateGroupResponse(resp *team_service.UpdateGroupResponse) gin.H {
-	var groupDto *dtos.GroupDTO
-	if resp.Group != nil {
-		group := resp.Group
-		groupDto = &dtos.GroupDTO{
-			ID:          group.Id,
-			Name:        group.Name,
-			Description: *group.Description,
-			CreatedAt:   group.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-			UpdatedAt:   group.UpdatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-		}
-		if group.Owner != nil {
-			groupDto.Owner = &dtos.SimpleUserDTO{
-				ID:     group.Owner.Id,
-				Email:  group.Owner.Email,
-				Avatar: *group.Owner.Avatar,
-			}
-		}
-	}
-
-	return gin.H{
-		"group": groupDto,
-	}
 }
 
 func (gc *GroupController) DeleteGroup(ctx *gin.Context) {
@@ -364,28 +297,32 @@ func (gc *GroupController) ListMembers(ctx *gin.Context) {
 		return
 	}
 
-	var members []dtos.MemberDTO
-	for _, member := range resp.Members {
-		members = append(members, dtos.MemberDTO{
-			ID:       member.Id,
-			Email:    member.Email,
-			Avatar:   member.Avatar,
-			Role:     int32(*member.Role.Enum()),
-			JoinedAt: member.JoinedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-		})
-	}
-
 	if resp.GetError() != nil {
 		gc.logger.Error("Failed to list group members: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
 		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
 	}
 
+	members := gc.buiListMembersResponse(resp.Members)
+
 	response.Ok(ctx, "Group members retrieved successfully", gin.H{
 		"items": members,
 		"total": len(members),
 	})
+}
 
+func (gc *GroupController) buiListMembersResponse(members []*team_service.MemberMessage) []dtos.MemberDTO {
+	var memberDtos []dtos.MemberDTO
+	for _, member := range members {
+		memberDtos = append(memberDtos, dtos.MemberDTO{
+			ID:       member.GetId(),
+			Email:    member.GetEmail(),
+			Avatar:   member.GetAvatar(),
+			Role:     int32(member.GetRole()),
+			JoinedAt: utils.TimestampToISO8601(member.GetJoinedAt()),
+		})
+	}
+	return memberDtos
 }
 
 func (gc *GroupController) UpdateMemberRole(ctx *gin.Context) {
@@ -410,7 +347,7 @@ func (gc *GroupController) UpdateMemberRole(ctx *gin.Context) {
 	req := &team_service.UpdateMemberRoleRequest{
 		GroupId:  groupId,
 		MemberId: userId,
-		NewRole:  team_service.GroupRole(dto.Role),
+		NewRole:  team_service.GroupRole(dto.NewRole),
 	}
 
 	resp, err := gc.client.UpdateMemberRole(ctx, req)
@@ -426,22 +363,21 @@ func (gc *GroupController) UpdateMemberRole(ctx *gin.Context) {
 		return
 	}
 
-	var memberDto *dtos.MemberDTO
-	if resp.Member != nil {
-		member := resp.Member
-		memberDto = &dtos.MemberDTO{
-			ID:       member.Id,
-			Email:    member.Email,
-			Avatar:   member.Avatar,
-			Role:     int32(*member.Role.Enum()),
-			JoinedAt: member.JoinedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-		}
-	}
+	memberDto := gc.buildMemberDTO(resp.Member)
 
 	response.Ok(ctx, "Member role updated successfully", gin.H{
 		"item": memberDto,
 	})
+}
 
+func (gc *GroupController) buildMemberDTO(member *team_service.MemberMessage) dtos.MemberDTO {
+	return dtos.MemberDTO{
+		ID:       member.GetId(),
+		Email:    member.GetEmail(),
+		Avatar:   member.GetAvatar(),
+		Role:     int32(member.GetRole()),
+		JoinedAt: utils.TimestampToISO8601(member.GetJoinedAt()),
+	}
 }
 
 func (gc *GroupController) RemoveMember(ctx *gin.Context) {
@@ -517,17 +453,88 @@ func (gc *GroupController) CreateInvite(ctx *gin.Context) {
 		return
 	}
 
-	var inviteDto *dtos.InviteDTO
-	if resp.Invite != nil {
-		invite := resp.Invite
-		inviteDto = &dtos.InviteDTO{
-			Code:      invite.Code,
-			ExpiresAt: invite.ExpiresAt.AsTime().Format("2006-01-02T15:04:05Z"),
-			CreateAt:  invite.CreatedAt.AsTime().Format("2006-01-02T15:04:05Z"),
-		}
-	}
+	inviteDto := gc.buildCreateInviteResponse(resp.GetInvite())
 
 	response.Ok(ctx, "Invite created successfully", gin.H{
 		"item": inviteDto,
 	})
+}
+
+func (gc GroupController) buildCreateInviteResponse(invite *team_service.InviteMessage) *dtos.InviteDTO {
+	if invite == nil {
+		return nil
+	}
+
+	return &dtos.InviteDTO{
+		Code:      invite.GetCode(),
+		ExpiresAt: utils.TimestampToISO8601(invite.GetExpiresAt()),
+		CreateAt:  utils.TimestampToISO8601(invite.GetCreatedAt()),
+	}
+}
+
+func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
+	var dto dtos.CodeDataDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	req := &team_service.AcceptInviteRequest{
+		Code: dto.Data.Code,
+	}
+
+	_, exists := ctx.Get("user_id")
+	if !exists {
+		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login")
+		ctx.JSON(401, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	resp, err := gc.client.AcceptInvite(ctx, req)
+	if err != nil {
+		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login1231111111")
+		gc.logger.Error("Failed to accept invite: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to accept invite"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login123333")
+		gc.logger.Error("Failed to accep2222222222t invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	ctx.Redirect(http.StatusFound, resp.GetLocation())
+
+}
+
+func BuildGroupResponse(group *team_service.GroupMessage) gin.H {
+	if group == nil {
+		return gin.H{}
+	}
+
+	var owner gin.H
+	if group.Owner != nil {
+		owner = gin.H{
+			"id":     group.Owner.GetId(),
+			"email":  group.Owner.GetEmail(),
+			"avatar": utils.SafeString(group.Owner.Avatar),
+		}
+	} else {
+		owner = nil
+	}
+
+	return gin.H{
+		"id":            group.GetId(),
+		"name":          group.GetName(),
+		"description":   utils.SafeString(group.Description),
+		"my_role":       int32(group.GetMyRole()),
+		"active_sprint": group.GetActiveSprint(),
+		"avatar":        group.GetAvatar(),
+		"members_total": group.GetMemberCount(),
+		"created_at":    utils.TimestampToISO8601(group.GetCreatedAt()),
+		"updated_at":    utils.TimestampToISO8601(group.GetUpdatedAt()),
+		"owner":         owner,
+	}
 }
