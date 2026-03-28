@@ -1,6 +1,7 @@
 package team_controller
 
 import (
+	"fmt"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 	dtos "schedule_gateway/internal/dtos/team_service"
@@ -236,6 +237,58 @@ func (sc *SprintController) DeleteSprint(ctx *gin.Context) {
 	response.NoContent(ctx, "Delete sprint successful", gin.H{
 		"item": gin.H{"is_success": resp.GetSuccess()},
 	})
+}
+
+func (sc *SprintController) ExportSprint(ctx *gin.Context) {
+	groupID := ctx.Param("group_id")
+	if groupID == "" {
+		response.BadRequest(ctx, "group_id is required")
+		return
+	}
+
+	sprintID := ctx.Param("sprint_id")
+	if sprintID == "" {
+		response.BadRequest(ctx, "Sprint ID is required")
+		return
+	}
+
+	resp, err := sc.client.ExportSprint(ctx, &common.IDRequest{Id: sprintID})
+	if err != nil {
+		sc.logger.Error("Failed to export sprint: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Failed to export sprint")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	file := resp.GetFile()
+	if len(file) == 0 {
+		response.InternalServerError(ctx, "Export file is empty")
+		return
+	}
+
+	contentType := strings.TrimSpace(resp.GetContentType())
+	if contentType == "" {
+		contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+	}
+
+	filename := strings.TrimSpace(resp.GetFilename())
+	if filename == "" {
+		filename = fmt.Sprintf("sprint_%s.xlsx", sprintID)
+	}
+
+	ctx.Header("Content-Type", contentType)
+	ctx.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	ctx.Header("Content-Length", fmt.Sprintf("%d", len(file)))
+	ctx.Data(200, contentType, file)
 }
 
 func (sc *SprintController) buildCreateSprintRequest(ctx *gin.Context) *team_service.CreateSprintRequest {

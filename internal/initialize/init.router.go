@@ -23,6 +23,7 @@ func InitRouter(r *gin.Engine) {
 	groupRouter := routers.RouterGroupApp.TeamRouterEnter.GroupRouter
 	sprintRouter := routers.RouterGroupApp.TeamRouterEnter.SprintRouter
 	teamWorkRouter := routers.RouterGroupApp.TeamRouterEnter.WorkRouter
+	teamUserRouter := routers.RouterGroupApp.TeamRouterEnter.UserRouter
 
 	MainGroup := r.Group("api/v1/")
 	{
@@ -46,5 +47,6 @@ func InitRouter(r *gin.Engine) {
 		groupRouter.InitGroupRouter(MainGroup)
 		sprintRouter.InitSprintRouter(MainGroup)
 		teamWorkRouter.InitWorkRouter(MainGroup)
+		teamUserRouter.InitUserRouter(MainGroup)
 	}
 }
