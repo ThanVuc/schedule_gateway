@@ -48,6 +48,17 @@ func (sc *sprintClient) GetSimpleSprints(c *gin.Context, req *common.IDRequest) 
 
 }
 
+func (sc *sprintClient) ExportSprint(c *gin.Context, req *common.IDRequest) (*team_service.ExportSprintResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := sc.sprintClient.ExportSprint(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+
+}
+
 func (sc *sprintClient) ListSprints(c *gin.Context, req *team_service.ListSprintsRequest) (*team_service.ListSprintsResponse, error) {
 	ctx := context.Background()
 	ctx = utils.EnrichContext(ctx, c)

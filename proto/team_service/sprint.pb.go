@@ -650,6 +650,74 @@ func (x *GetSimpleSprintsResponse) GetError() *Error {
 	return nil
 }
 
+type ExportSprintResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	File          []byte                 `protobuf:"bytes,1,opt,name=file,proto3" json:"file"`
+	Filename      string                 `protobuf:"bytes,2,opt,name=filename,proto3" json:"filename"`
+	ContentType   string                 `protobuf:"bytes,3,opt,name=content_type,json=contentType,proto3" json:"content_type"`
+	Error         *Error                 `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExportSprintResponse) Reset() {
+	*x = ExportSprintResponse{}
+	mi := &file_team_service_sprint_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExportSprintResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExportSprintResponse) ProtoMessage() {}
+
+func (x *ExportSprintResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_sprint_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExportSprintResponse.ProtoReflect.Descriptor instead.
+func (*ExportSprintResponse) Descriptor() ([]byte, []int) {
+	return file_team_service_sprint_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ExportSprintResponse) GetFile() []byte {
+	if x != nil {
+		return x.File
+	}
+	return nil
+}
+
+func (x *ExportSprintResponse) GetFilename() string {
+	if x != nil {
+		return x.Filename
+	}
+	return ""
+}
+
+func (x *ExportSprintResponse) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
+func (x *ExportSprintResponse) GetError() *Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_team_service_sprint_proto protoreflect.FileDescriptor
 
 const file_team_service_sprint_proto_rawDesc = "" +
@@ -708,7 +776,13 @@ const file_team_service_sprint_proto_rawDesc = "" +
 	"\x18GetSimpleSprintsResponse\x12;\n" +
 	"\asprints\x18\x01 \x03(\v2!.team_service.SimpleSprintMessageR\asprints\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xd1\x04\n" +
+	"\x06_error\"\xa3\x01\n" +
+	"\x14ExportSprintResponse\x12\x12\n" +
+	"\x04file\x18\x01 \x01(\fR\x04file\x12\x1a\n" +
+	"\bfilename\x18\x02 \x01(\tR\bfilename\x12!\n" +
+	"\fcontent_type\x18\x03 \x01(\tR\vcontentType\x12.\n" +
+	"\x05error\x18\x04 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\x98\x05\n" +
 	"\rSprintService\x12U\n" +
 	"\fCreateSprint\x12!.team_service.CreateSprintRequest\x1a\".team_service.CreateSprintResponse\x12?\n" +
 	"\tGetSprint\x12\x11.common.IDRequest\x1a\x1f.team_service.GetSprintResponse\x12R\n" +
@@ -716,7 +790,8 @@ const file_team_service_sprint_proto_rawDesc = "" +
 	"\fUpdateSprint\x12!.team_service.UpdateSprintRequest\x1a\".team_service.UpdateSprintResponse\x12g\n" +
 	"\x12UpdateSprintStatus\x12'.team_service.UpdateSprintStatusRequest\x1a(.team_service.UpdateSprintStatusResponse\x12E\n" +
 	"\fDeleteSprint\x12\x11.common.IDRequest\x1a\".team_service.DeleteSprintResponse\x12M\n" +
-	"\x10GetSimpleSprints\x12\x11.common.IDRequest\x1a&.team_service.GetSimpleSprintsResponseB\x14Z\x12proto/team_serviceb\x06proto3"
+	"\x10GetSimpleSprints\x12\x11.common.IDRequest\x1a&.team_service.GetSimpleSprintsResponse\x12E\n" +
+	"\fExportSprint\x12\x11.common.IDRequest\x1a\".team_service.ExportSprintResponseB\x14Z\x12proto/team_serviceb\x06proto3"
 
 var (
 	file_team_service_sprint_proto_rawDescOnce sync.Once
@@ -730,7 +805,7 @@ func file_team_service_sprint_proto_rawDescGZIP() []byte {
 	return file_team_service_sprint_proto_rawDescData
 }
 
-var file_team_service_sprint_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_team_service_sprint_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_team_service_sprint_proto_goTypes = []any{
 	(*CreateSprintRequest)(nil),        // 0: team_service.CreateSprintRequest
 	(*CreateSprintResponse)(nil),       // 1: team_service.CreateSprintResponse
@@ -743,51 +818,55 @@ var file_team_service_sprint_proto_goTypes = []any{
 	(*UpdateSprintStatusResponse)(nil), // 8: team_service.UpdateSprintStatusResponse
 	(*DeleteSprintResponse)(nil),       // 9: team_service.DeleteSprintResponse
 	(*GetSimpleSprintsResponse)(nil),   // 10: team_service.GetSimpleSprintsResponse
-	(*Date)(nil),                       // 11: team_service.Date
-	(*SprintMessage)(nil),              // 12: team_service.SprintMessage
-	(*Error)(nil),                      // 13: team_service.Error
-	(SprintStatus)(0),                  // 14: team_service.SprintStatus
-	(*SimpleSprintMessage)(nil),        // 15: team_service.SimpleSprintMessage
-	(*common.IDRequest)(nil),           // 16: common.IDRequest
+	(*ExportSprintResponse)(nil),       // 11: team_service.ExportSprintResponse
+	(*Date)(nil),                       // 12: team_service.Date
+	(*SprintMessage)(nil),              // 13: team_service.SprintMessage
+	(*Error)(nil),                      // 14: team_service.Error
+	(SprintStatus)(0),                  // 15: team_service.SprintStatus
+	(*SimpleSprintMessage)(nil),        // 16: team_service.SimpleSprintMessage
+	(*common.IDRequest)(nil),           // 17: common.IDRequest
 }
 var file_team_service_sprint_proto_depIdxs = []int32{
-	11, // 0: team_service.CreateSprintRequest.start_date:type_name -> team_service.Date
-	11, // 1: team_service.CreateSprintRequest.end_date:type_name -> team_service.Date
-	12, // 2: team_service.CreateSprintResponse.sprint:type_name -> team_service.SprintMessage
-	13, // 3: team_service.CreateSprintResponse.error:type_name -> team_service.Error
-	12, // 4: team_service.GetSprintResponse.sprint:type_name -> team_service.SprintMessage
-	13, // 5: team_service.GetSprintResponse.error:type_name -> team_service.Error
-	12, // 6: team_service.ListSprintsResponse.sprints:type_name -> team_service.SprintMessage
-	13, // 7: team_service.ListSprintsResponse.error:type_name -> team_service.Error
-	11, // 8: team_service.UpdateSprintRequest.start_date:type_name -> team_service.Date
-	11, // 9: team_service.UpdateSprintRequest.end_date:type_name -> team_service.Date
-	12, // 10: team_service.UpdateSprintResponse.sprint:type_name -> team_service.SprintMessage
-	13, // 11: team_service.UpdateSprintResponse.error:type_name -> team_service.Error
-	14, // 12: team_service.UpdateSprintStatusRequest.status:type_name -> team_service.SprintStatus
-	14, // 13: team_service.UpdateSprintStatusResponse.status:type_name -> team_service.SprintStatus
-	13, // 14: team_service.UpdateSprintStatusResponse.error:type_name -> team_service.Error
-	13, // 15: team_service.DeleteSprintResponse.error:type_name -> team_service.Error
-	15, // 16: team_service.GetSimpleSprintsResponse.sprints:type_name -> team_service.SimpleSprintMessage
-	13, // 17: team_service.GetSimpleSprintsResponse.error:type_name -> team_service.Error
-	0,  // 18: team_service.SprintService.CreateSprint:input_type -> team_service.CreateSprintRequest
-	16, // 19: team_service.SprintService.GetSprint:input_type -> common.IDRequest
-	3,  // 20: team_service.SprintService.ListSprints:input_type -> team_service.ListSprintsRequest
-	5,  // 21: team_service.SprintService.UpdateSprint:input_type -> team_service.UpdateSprintRequest
-	7,  // 22: team_service.SprintService.UpdateSprintStatus:input_type -> team_service.UpdateSprintStatusRequest
-	16, // 23: team_service.SprintService.DeleteSprint:input_type -> common.IDRequest
-	16, // 24: team_service.SprintService.GetSimpleSprints:input_type -> common.IDRequest
-	1,  // 25: team_service.SprintService.CreateSprint:output_type -> team_service.CreateSprintResponse
-	2,  // 26: team_service.SprintService.GetSprint:output_type -> team_service.GetSprintResponse
-	4,  // 27: team_service.SprintService.ListSprints:output_type -> team_service.ListSprintsResponse
-	6,  // 28: team_service.SprintService.UpdateSprint:output_type -> team_service.UpdateSprintResponse
-	8,  // 29: team_service.SprintService.UpdateSprintStatus:output_type -> team_service.UpdateSprintStatusResponse
-	9,  // 30: team_service.SprintService.DeleteSprint:output_type -> team_service.DeleteSprintResponse
-	10, // 31: team_service.SprintService.GetSimpleSprints:output_type -> team_service.GetSimpleSprintsResponse
-	25, // [25:32] is the sub-list for method output_type
-	18, // [18:25] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	12, // 0: team_service.CreateSprintRequest.start_date:type_name -> team_service.Date
+	12, // 1: team_service.CreateSprintRequest.end_date:type_name -> team_service.Date
+	13, // 2: team_service.CreateSprintResponse.sprint:type_name -> team_service.SprintMessage
+	14, // 3: team_service.CreateSprintResponse.error:type_name -> team_service.Error
+	13, // 4: team_service.GetSprintResponse.sprint:type_name -> team_service.SprintMessage
+	14, // 5: team_service.GetSprintResponse.error:type_name -> team_service.Error
+	13, // 6: team_service.ListSprintsResponse.sprints:type_name -> team_service.SprintMessage
+	14, // 7: team_service.ListSprintsResponse.error:type_name -> team_service.Error
+	12, // 8: team_service.UpdateSprintRequest.start_date:type_name -> team_service.Date
+	12, // 9: team_service.UpdateSprintRequest.end_date:type_name -> team_service.Date
+	13, // 10: team_service.UpdateSprintResponse.sprint:type_name -> team_service.SprintMessage
+	14, // 11: team_service.UpdateSprintResponse.error:type_name -> team_service.Error
+	15, // 12: team_service.UpdateSprintStatusRequest.status:type_name -> team_service.SprintStatus
+	15, // 13: team_service.UpdateSprintStatusResponse.status:type_name -> team_service.SprintStatus
+	14, // 14: team_service.UpdateSprintStatusResponse.error:type_name -> team_service.Error
+	14, // 15: team_service.DeleteSprintResponse.error:type_name -> team_service.Error
+	16, // 16: team_service.GetSimpleSprintsResponse.sprints:type_name -> team_service.SimpleSprintMessage
+	14, // 17: team_service.GetSimpleSprintsResponse.error:type_name -> team_service.Error
+	14, // 18: team_service.ExportSprintResponse.error:type_name -> team_service.Error
+	0,  // 19: team_service.SprintService.CreateSprint:input_type -> team_service.CreateSprintRequest
+	17, // 20: team_service.SprintService.GetSprint:input_type -> common.IDRequest
+	3,  // 21: team_service.SprintService.ListSprints:input_type -> team_service.ListSprintsRequest
+	5,  // 22: team_service.SprintService.UpdateSprint:input_type -> team_service.UpdateSprintRequest
+	7,  // 23: team_service.SprintService.UpdateSprintStatus:input_type -> team_service.UpdateSprintStatusRequest
+	17, // 24: team_service.SprintService.DeleteSprint:input_type -> common.IDRequest
+	17, // 25: team_service.SprintService.GetSimpleSprints:input_type -> common.IDRequest
+	17, // 26: team_service.SprintService.ExportSprint:input_type -> common.IDRequest
+	1,  // 27: team_service.SprintService.CreateSprint:output_type -> team_service.CreateSprintResponse
+	2,  // 28: team_service.SprintService.GetSprint:output_type -> team_service.GetSprintResponse
+	4,  // 29: team_service.SprintService.ListSprints:output_type -> team_service.ListSprintsResponse
+	6,  // 30: team_service.SprintService.UpdateSprint:output_type -> team_service.UpdateSprintResponse
+	8,  // 31: team_service.SprintService.UpdateSprintStatus:output_type -> team_service.UpdateSprintStatusResponse
+	9,  // 32: team_service.SprintService.DeleteSprint:output_type -> team_service.DeleteSprintResponse
+	10, // 33: team_service.SprintService.GetSimpleSprints:output_type -> team_service.GetSimpleSprintsResponse
+	11, // 34: team_service.SprintService.ExportSprint:output_type -> team_service.ExportSprintResponse
+	27, // [27:35] is the sub-list for method output_type
+	19, // [19:27] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_team_service_sprint_proto_init() }
@@ -805,13 +884,14 @@ func file_team_service_sprint_proto_init() {
 	file_team_service_sprint_proto_msgTypes[8].OneofWrappers = []any{}
 	file_team_service_sprint_proto_msgTypes[9].OneofWrappers = []any{}
 	file_team_service_sprint_proto_msgTypes[10].OneofWrappers = []any{}
+	file_team_service_sprint_proto_msgTypes[11].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_service_sprint_proto_rawDesc), len(file_team_service_sprint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
