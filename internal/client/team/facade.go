@@ -30,6 +30,7 @@ type (
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
 		GetSprint(c *gin.Context, req *common.IDRequest) (*team_service.GetSprintResponse, error)
 		GetSimpleSprints(c *gin.Context, req *common.IDRequest) (*team_service.GetSimpleSprintsResponse, error)
+		ExportSprint(c *gin.Context, req *common.IDRequest) (*team_service.ExportSprintResponse, error)
 		ListSprints(c *gin.Context, req *team_service.ListSprintsRequest) (*team_service.ListSprintsResponse, error)
 		UpdateSprint(c *gin.Context, req *team_service.UpdateSprintRequest) (*team_service.UpdateSprintResponse, error)
 		UpdateSprintStatus(c *gin.Context, req *team_service.UpdateSprintStatusRequest) (*team_service.UpdateSprintStatusResponse, error)
