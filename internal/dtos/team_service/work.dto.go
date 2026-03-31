@@ -11,7 +11,7 @@ type UpdateWorkDTO struct {
 	Description *string `json:"description,omitempty"`
 	AssigneeID  *string `json:"assignee_id,omitempty"`
 	Status      *int32  `json:"status,omitempty"`
-	StoryPoint  *string `json:"story_point,omitempty"`
+	StoryPoint  *int32  `json:"story_point,omitempty"`
 	DueDate     *string `json:"due_date,omitempty"`
 	Priority    *int32  `json:"priority,omitempty"`
 	Version     *int32  `json:"version" binding:"required"`

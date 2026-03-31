@@ -446,8 +446,6 @@ func (wc *WorkController) buildUpdateWorkRequest(ctx *gin.Context) *team_service
 		priority = &parsedPriority
 	}
 
-	storyPoint := wc.normalizeOptionalString(dto.StoryPoint)
-
 	dueDate, ok := wc.parseOptionalDate(ctx, dto.DueDate, "due_date")
 	if !ok {
 		return nil
@@ -458,7 +456,7 @@ func (wc *WorkController) buildUpdateWorkRequest(ctx *gin.Context) *team_service
 		Name:        name,
 		Description: description,
 		AssigneeId:  assigneeID,
-		StoryPoint:  storyPoint,
+		StoryPoint:  dto.StoryPoint,
 		DueDate:     dueDate,
 		Priority:    priority,
 		Status:      status,
