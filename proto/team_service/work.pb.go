@@ -296,7 +296,7 @@ type UpdateWorkRequest struct {
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name"`
 	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
 	AssigneeId    *string                `protobuf:"bytes,4,opt,name=assignee_id,json=assigneeId,proto3,oneof" json:"assignee_id"`
-	StoryPoint    *string                `protobuf:"bytes,5,opt,name=story_point,json=storyPoint,proto3,oneof" json:"story_point"`
+	StoryPoint    *int32                 `protobuf:"varint,5,opt,name=story_point,json=storyPoint,proto3,oneof" json:"story_point"`
 	DueDate       *Date                  `protobuf:"bytes,6,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date"`
 	Priority      *WorkPriority          `protobuf:"varint,7,opt,name=priority,proto3,enum=team_service.WorkPriority,oneof" json:"priority"`
 	Status        *WorkStatus            `protobuf:"varint,8,opt,name=status,proto3,enum=team_service.WorkStatus,oneof" json:"status"`
@@ -364,11 +364,11 @@ func (x *UpdateWorkRequest) GetAssigneeId() string {
 	return ""
 }
 
-func (x *UpdateWorkRequest) GetStoryPoint() string {
+func (x *UpdateWorkRequest) GetStoryPoint() int32 {
 	if x != nil && x.StoryPoint != nil {
 		return *x.StoryPoint
 	}
-	return ""
+	return 0
 }
 
 func (x *UpdateWorkRequest) GetDueDate() *Date {
@@ -1075,7 +1075,7 @@ const file_team_service_work_proto_rawDesc = "" +
 	"\vdescription\x18\x03 \x01(\tH\x01R\vdescription\x88\x01\x01\x12$\n" +
 	"\vassignee_id\x18\x04 \x01(\tH\x02R\n" +
 	"assigneeId\x88\x01\x01\x12$\n" +
-	"\vstory_point\x18\x05 \x01(\tH\x03R\n" +
+	"\vstory_point\x18\x05 \x01(\x05H\x03R\n" +
 	"storyPoint\x88\x01\x01\x122\n" +
 	"\bdue_date\x18\x06 \x01(\v2\x12.team_service.DateH\x04R\adueDate\x88\x01\x01\x12;\n" +
 	"\bpriority\x18\a \x01(\x0e2\x1a.team_service.WorkPriorityH\x05R\bpriority\x88\x01\x01\x125\n" +
