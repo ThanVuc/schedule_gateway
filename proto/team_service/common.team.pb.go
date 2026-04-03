@@ -1171,11 +1171,12 @@ type WorkMessage struct {
 	Assignee      *SimpleUserMessage     `protobuf:"bytes,6,opt,name=assignee,proto3" json:"assignee"`
 	StoryPoint    int32                  `protobuf:"varint,7,opt,name=story_point,json=storyPoint,proto3" json:"story_point"`
 	DueDate       *Date                  `protobuf:"bytes,8,opt,name=due_date,json=dueDate,proto3" json:"due_date"`
-	CheckList     *ChecklistMessage      `protobuf:"bytes,9,opt,name=check_list,json=checkList,proto3" json:"check_list"`
-	Comments      *CommentListMessage    `protobuf:"bytes,10,opt,name=comments,proto3" json:"comments"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
-	Version       int32                  `protobuf:"varint,13,opt,name=version,proto3" json:"version"`
+	WorkPriority  WorkPriority           `protobuf:"varint,9,opt,name=work_priority,json=workPriority,proto3,enum=team_service.WorkPriority" json:"work_priority"`
+	CheckList     *ChecklistMessage      `protobuf:"bytes,10,opt,name=check_list,json=checkList,proto3" json:"check_list"`
+	Comments      *CommentListMessage    `protobuf:"bytes,11,opt,name=comments,proto3" json:"comments"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	Version       int32                  `protobuf:"varint,14,opt,name=version,proto3" json:"version"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1264,6 +1265,13 @@ func (x *WorkMessage) GetDueDate() *Date {
 		return x.DueDate
 	}
 	return nil
+}
+
+func (x *WorkMessage) GetWorkPriority() WorkPriority {
+	if x != nil {
+		return x.WorkPriority
+	}
+	return WorkPriority_WORK_PRIORITY_UNSPECIFIED
 }
 
 func (x *WorkMessage) GetCheckList() *ChecklistMessage {
@@ -1389,7 +1397,7 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"d\n" +
 	"\x12CommentListMessage\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\x05R\x05total\x128\n" +
-	"\bcomments\x18\x02 \x03(\v2\x1c.team_service.CommentMessageR\bcomments\"\xda\x04\n" +
+	"\bcomments\x18\x02 \x03(\v2\x1c.team_service.CommentMessageR\bcomments\"\x9b\x05\n" +
 	"\vWorkMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1399,16 +1407,17 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"\bassignee\x18\x06 \x01(\v2\x1f.team_service.SimpleUserMessageR\bassignee\x12\x1f\n" +
 	"\vstory_point\x18\a \x01(\x05R\n" +
 	"storyPoint\x12-\n" +
-	"\bdue_date\x18\b \x01(\v2\x12.team_service.DateR\adueDate\x12=\n" +
+	"\bdue_date\x18\b \x01(\v2\x12.team_service.DateR\adueDate\x12?\n" +
+	"\rwork_priority\x18\t \x01(\x0e2\x1a.team_service.WorkPriorityR\fworkPriority\x12=\n" +
 	"\n" +
-	"check_list\x18\t \x01(\v2\x1e.team_service.ChecklistMessageR\tcheckList\x12<\n" +
-	"\bcomments\x18\n" +
-	" \x01(\v2 .team_service.CommentListMessageR\bcomments\x129\n" +
+	"check_list\x18\n" +
+	" \x01(\v2\x1e.team_service.ChecklistMessageR\tcheckList\x12<\n" +
+	"\bcomments\x18\v \x01(\v2 .team_service.CommentListMessageR\bcomments\x129\n" +
 	"\n" +
-	"created_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x18\n" +
-	"\aversion\x18\r \x01(\x05R\aversion*\\\n" +
+	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x18\n" +
+	"\aversion\x18\x0e \x01(\x05R\aversion*\\\n" +
 	"\vUSER_STATUS\x12\x1b\n" +
 	"\x17USER_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12USER_STATUS_ACTIVE\x10\x01\x12\x18\n" +
@@ -1496,15 +1505,16 @@ var file_team_service_common_team_proto_depIdxs = []int32{
 	8,  // 19: team_service.WorkMessage.sprint:type_name -> team_service.SimpleSprintMessage
 	7,  // 20: team_service.WorkMessage.assignee:type_name -> team_service.SimpleUserMessage
 	5,  // 21: team_service.WorkMessage.due_date:type_name -> team_service.Date
-	14, // 22: team_service.WorkMessage.check_list:type_name -> team_service.ChecklistMessage
-	16, // 23: team_service.WorkMessage.comments:type_name -> team_service.CommentListMessage
-	18, // 24: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 25: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
-	26, // [26:26] is the sub-list for method output_type
-	26, // [26:26] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	4,  // 22: team_service.WorkMessage.work_priority:type_name -> team_service.WorkPriority
+	14, // 23: team_service.WorkMessage.check_list:type_name -> team_service.ChecklistMessage
+	16, // 24: team_service.WorkMessage.comments:type_name -> team_service.CommentListMessage
+	18, // 25: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
+	18, // 26: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
+	27, // [27:27] is the sub-list for method output_type
+	27, // [27:27] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_team_service_common_team_proto_init() }
