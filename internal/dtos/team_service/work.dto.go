@@ -7,14 +7,17 @@ type CreateWorkDTO struct {
 }
 
 type UpdateWorkDTO struct {
-	Name        *string `json:"name,omitempty"`
-	Description *string `json:"description,omitempty"`
-	AssigneeID  *string `json:"assignee_id,omitempty"`
-	Status      *int32  `json:"status,omitempty"`
-	StoryPoint  *int32  `json:"story_point,omitempty"`
-	DueDate     *string `json:"due_date,omitempty"`
-	Priority    *int32  `json:"priority,omitempty"`
-	Version     *int32  `json:"version" binding:"required"`
+	Name          *string `json:"name,omitempty"`
+	Description   *string `json:"description,omitempty"`
+	AssigneeID    *string `json:"assignee_id,omitempty"`
+	SprintID      *string `json:"sprint_id,omitempty"`
+	IsUnassigned  *bool   `json:"is_unassigned,omitempty"`
+	IsUnsetSprint *bool   `json:"is_unset_sprint,omitempty"`
+	Status        *int32  `json:"status,omitempty"`
+	StoryPoint    *int32  `json:"story_point,omitempty"`
+	DueDate       *string `json:"due_date,omitempty"`
+	Priority      *int32  `json:"priority,omitempty"`
+	Version       *int32  `json:"version" binding:"required"`
 }
 
 type CreateChecklistItemDTO struct {

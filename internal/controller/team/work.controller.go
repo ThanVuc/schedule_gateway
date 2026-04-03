@@ -380,7 +380,7 @@ func (wc *WorkController) buildUpdateWorkRequest(ctx *gin.Context) *team_service
 		return nil
 	}
 
-	if dto.Name == nil && dto.Description == nil && dto.AssigneeID == nil && dto.Status == nil && dto.StoryPoint == nil && dto.DueDate == nil && dto.Priority == nil {
+	if dto.Name == nil && dto.Description == nil && dto.AssigneeID == nil && dto.SprintID == nil && dto.IsUnassigned == nil && dto.IsUnsetSprint == nil && dto.Status == nil && dto.StoryPoint == nil && dto.DueDate == nil && dto.Priority == nil {
 		response.BadRequest(ctx, "at least one field must be provided")
 		return nil
 	}
@@ -424,6 +424,42 @@ func (wc *WorkController) buildUpdateWorkRequest(ctx *gin.Context) *team_service
 		assigneeID = &trimmedAssigneeID
 	}
 
+	var sprintID *string
+	if dto.SprintID != nil {
+		trimmedSprintID := strings.TrimSpace(*dto.SprintID)
+		if trimmedSprintID == "" {
+			response.BadRequest(ctx, "sprint_id is invalid")
+			return nil
+		}
+
+		if !isValidUUIDString(trimmedSprintID) {
+			response.BadRequest(ctx, "sprint_id must be a valid UUID")
+			return nil
+		}
+
+		sprintID = &trimmedSprintID
+	}
+
+	var isUnassigned *bool
+	if dto.IsUnassigned != nil {
+		if !*dto.IsUnassigned {
+			response.BadRequest(ctx, "is_unassigned only accepts true")
+			return nil
+		}
+
+		isUnassigned = dto.IsUnassigned
+	}
+
+	var isUnsetSprint *bool
+	if dto.IsUnsetSprint != nil {
+		if !*dto.IsUnsetSprint {
+			response.BadRequest(ctx, "is_unset_sprint only accepts true")
+			return nil
+		}
+
+		isUnsetSprint = dto.IsUnsetSprint
+	}
+
 	var status *team_service.WorkStatus
 	if dto.Status != nil {
 		parsedStatus := team_service.WorkStatus(*dto.Status)
@@ -452,15 +488,18 @@ func (wc *WorkController) buildUpdateWorkRequest(ctx *gin.Context) *team_service
 	}
 
 	return &team_service.UpdateWorkRequest{
-		Id:          workID,
-		Name:        name,
-		Description: description,
-		AssigneeId:  assigneeID,
-		StoryPoint:  dto.StoryPoint,
-		DueDate:     dueDate,
-		Priority:    priority,
-		Status:      status,
-		Version:     *dto.Version,
+		Id:            workID,
+		Name:          name,
+		Description:   description,
+		AssigneeId:    assigneeID,
+		IsUnassigned:  isUnassigned,
+		StoryPoint:    dto.StoryPoint,
+		DueDate:       dueDate,
+		Priority:      priority,
+		Status:        status,
+		SprintId:      sprintID,
+		IsUnsetSprint: isUnsetSprint,
+		Version:       *dto.Version,
 	}
 }
 
@@ -641,6 +680,7 @@ func (wc *WorkController) buildWorkResponse(work *team_service.WorkMessage) gin.
 		"name":        work.GetName(),
 		"description": work.GetDescription(),
 		"status":      work.GetStatus(),
+		"priority":    work.GetWorkPriority(),
 		"sprint":      wc.buildSimpleSprintResponse(work.GetSprint()),
 		"assignee":    wc.buildSimpleUserResponse(work.GetAssignee()),
 		"story_point": work.GetStoryPoint(),
