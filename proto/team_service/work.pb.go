@@ -9,6 +9,7 @@ package team_service
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	_ "google.golang.org/protobuf/types/known/wrapperspb"
 	common "schedule_gateway/proto/common"
 	reflect "reflect"
 	sync "sync"
@@ -296,12 +297,14 @@ type UpdateWorkRequest struct {
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name"`
 	Description   *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description"`
 	AssigneeId    *string                `protobuf:"bytes,4,opt,name=assignee_id,json=assigneeId,proto3,oneof" json:"assignee_id"`
-	StoryPoint    *int32                 `protobuf:"varint,5,opt,name=story_point,json=storyPoint,proto3,oneof" json:"story_point"`
-	DueDate       *Date                  `protobuf:"bytes,6,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date"`
-	Priority      *WorkPriority          `protobuf:"varint,7,opt,name=priority,proto3,enum=team_service.WorkPriority,oneof" json:"priority"`
-	Status        *WorkStatus            `protobuf:"varint,8,opt,name=status,proto3,enum=team_service.WorkStatus,oneof" json:"status"`
-	SprintId      *string                `protobuf:"bytes,9,opt,name=sprint_id,json=sprintId,proto3,oneof" json:"sprint_id"`
-	Version       int32                  `protobuf:"varint,10,opt,name=version,proto3" json:"version"`
+	IsUnassigned  *bool                  `protobuf:"varint,5,opt,name=is_unassigned,json=isUnassigned,proto3,oneof" json:"is_unassigned"`
+	StoryPoint    *int32                 `protobuf:"varint,6,opt,name=story_point,json=storyPoint,proto3,oneof" json:"story_point"`
+	DueDate       *Date                  `protobuf:"bytes,7,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date"`
+	Priority      *WorkPriority          `protobuf:"varint,8,opt,name=priority,proto3,enum=team_service.WorkPriority,oneof" json:"priority"`
+	Status        *WorkStatus            `protobuf:"varint,9,opt,name=status,proto3,enum=team_service.WorkStatus,oneof" json:"status"`
+	SprintId      *string                `protobuf:"bytes,10,opt,name=sprint_id,json=sprintId,proto3,oneof" json:"sprint_id"`
+	IsUnsetSprint *bool                  `protobuf:"varint,11,opt,name=is_unset_sprint,json=isUnsetSprint,proto3,oneof" json:"is_unset_sprint"`
+	Version       int32                  `protobuf:"varint,12,opt,name=version,proto3" json:"version"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -364,6 +367,13 @@ func (x *UpdateWorkRequest) GetAssigneeId() string {
 	return ""
 }
 
+func (x *UpdateWorkRequest) GetIsUnassigned() bool {
+	if x != nil && x.IsUnassigned != nil {
+		return *x.IsUnassigned
+	}
+	return false
+}
+
 func (x *UpdateWorkRequest) GetStoryPoint() int32 {
 	if x != nil && x.StoryPoint != nil {
 		return *x.StoryPoint
@@ -397,6 +407,13 @@ func (x *UpdateWorkRequest) GetSprintId() string {
 		return *x.SprintId
 	}
 	return ""
+}
+
+func (x *UpdateWorkRequest) GetIsUnsetSprint() bool {
+	if x != nil && x.IsUnsetSprint != nil {
+		return *x.IsUnsetSprint
+	}
+	return false
 }
 
 func (x *UpdateWorkRequest) GetVersion() int32 {
@@ -1042,7 +1059,7 @@ var File_team_service_work_proto protoreflect.FileDescriptor
 
 const file_team_service_work_proto_rawDesc = "" +
 	"\n" +
-	"\x17team_service/work.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1eteam_service/common.team.proto\"\x8e\x01\n" +
+	"\x17team_service/work.proto\x12\fteam_service\x1a\x12common/error.proto\x1a\x13common/common.proto\x1a\x1eteam_service/common.team.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x8e\x01\n" +
 	"\x11CreateWorkRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x02 \x01(\tH\x00R\vdescription\x88\x01\x01\x12 \n" +
@@ -1068,30 +1085,34 @@ const file_team_service_work_proto_rawDesc = "" +
 	"\x11ListWorksResponse\x12/\n" +
 	"\x05works\x18\x01 \x03(\v2\x19.team_service.WorkMessageR\x05works\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xff\x03\n" +
+	"\x06_error\"\xfc\x04\n" +
 	"\x11UpdateWorkRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
 	"\vdescription\x18\x03 \x01(\tH\x01R\vdescription\x88\x01\x01\x12$\n" +
 	"\vassignee_id\x18\x04 \x01(\tH\x02R\n" +
-	"assigneeId\x88\x01\x01\x12$\n" +
-	"\vstory_point\x18\x05 \x01(\x05H\x03R\n" +
+	"assigneeId\x88\x01\x01\x12(\n" +
+	"\ris_unassigned\x18\x05 \x01(\bH\x03R\fisUnassigned\x88\x01\x01\x12$\n" +
+	"\vstory_point\x18\x06 \x01(\x05H\x04R\n" +
 	"storyPoint\x88\x01\x01\x122\n" +
-	"\bdue_date\x18\x06 \x01(\v2\x12.team_service.DateH\x04R\adueDate\x88\x01\x01\x12;\n" +
-	"\bpriority\x18\a \x01(\x0e2\x1a.team_service.WorkPriorityH\x05R\bpriority\x88\x01\x01\x125\n" +
-	"\x06status\x18\b \x01(\x0e2\x18.team_service.WorkStatusH\x06R\x06status\x88\x01\x01\x12 \n" +
-	"\tsprint_id\x18\t \x01(\tH\aR\bsprintId\x88\x01\x01\x12\x18\n" +
-	"\aversion\x18\n" +
-	" \x01(\x05R\aversionB\a\n" +
+	"\bdue_date\x18\a \x01(\v2\x12.team_service.DateH\x05R\adueDate\x88\x01\x01\x12;\n" +
+	"\bpriority\x18\b \x01(\x0e2\x1a.team_service.WorkPriorityH\x06R\bpriority\x88\x01\x01\x125\n" +
+	"\x06status\x18\t \x01(\x0e2\x18.team_service.WorkStatusH\aR\x06status\x88\x01\x01\x12 \n" +
+	"\tsprint_id\x18\n" +
+	" \x01(\tH\bR\bsprintId\x88\x01\x01\x12+\n" +
+	"\x0fis_unset_sprint\x18\v \x01(\bH\tR\risUnsetSprint\x88\x01\x01\x12\x18\n" +
+	"\aversion\x18\f \x01(\x05R\aversionB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0e\n" +
-	"\f_assignee_idB\x0e\n" +
+	"\f_assignee_idB\x10\n" +
+	"\x0e_is_unassignedB\x0e\n" +
 	"\f_story_pointB\v\n" +
 	"\t_due_dateB\v\n" +
 	"\t_priorityB\t\n" +
 	"\a_statusB\f\n" +
 	"\n" +
-	"_sprint_id\"}\n" +
+	"_sprint_idB\x12\n" +
+	"\x10_is_unset_sprint\"}\n" +
 	"\x12UpdateWorkResponse\x12-\n" +
 	"\x04work\x18\x01 \x01(\v2\x19.team_service.WorkMessageR\x04work\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
