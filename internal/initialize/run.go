@@ -6,7 +6,7 @@ import (
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 	"schedule_gateway/pkg/response"
-	"fmt"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -60,6 +60,6 @@ func Run() {
 	helper.WriteToJsonFile("resources")
 	go InitResource()
 
-	r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
-	// r.Run(":8081")
+	// r.Run(fmt.Sprintf("%s:%d", global.Config.Server.Host, global.Config.Server.Port))
+	r.Run(":8081")
 }

@@ -1309,6 +1309,58 @@ func (x *WorkMessage) GetVersion() int32 {
 	return 0
 }
 
+type AISprintGenerationFile struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ObjectKey     string                 `protobuf:"bytes,1,opt,name=object_key,json=objectKey,proto3" json:"object_key"`
+	Size          int64                  `protobuf:"varint,2,opt,name=size,proto3" json:"size"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AISprintGenerationFile) Reset() {
+	*x = AISprintGenerationFile{}
+	mi := &file_team_service_common_team_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AISprintGenerationFile) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AISprintGenerationFile) ProtoMessage() {}
+
+func (x *AISprintGenerationFile) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_common_team_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AISprintGenerationFile.ProtoReflect.Descriptor instead.
+func (*AISprintGenerationFile) Descriptor() ([]byte, []int) {
+	return file_team_service_common_team_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *AISprintGenerationFile) GetObjectKey() string {
+	if x != nil {
+		return x.ObjectKey
+	}
+	return ""
+}
+
+func (x *AISprintGenerationFile) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
 var File_team_service_common_team_proto protoreflect.FileDescriptor
 
 const file_team_service_common_team_proto_rawDesc = "" +
@@ -1417,7 +1469,11 @@ const file_team_service_common_team_proto_rawDesc = "" +
 	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x18\n" +
-	"\aversion\x18\x0e \x01(\x05R\aversion*\\\n" +
+	"\aversion\x18\x0e \x01(\x05R\aversion\"K\n" +
+	"\x16AISprintGenerationFile\x12\x1d\n" +
+	"\n" +
+	"object_key\x18\x01 \x01(\tR\tobjectKey\x12\x12\n" +
+	"\x04size\x18\x02 \x01(\x03R\x04size*\\\n" +
 	"\vUSER_STATUS\x12\x1b\n" +
 	"\x17USER_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12USER_STATUS_ACTIVE\x10\x01\x12\x18\n" +
@@ -1460,46 +1516,47 @@ func file_team_service_common_team_proto_rawDescGZIP() []byte {
 }
 
 var file_team_service_common_team_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_team_service_common_team_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_team_service_common_team_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_team_service_common_team_proto_goTypes = []any{
-	(USER_STATUS)(0),              // 0: team_service.USER_STATUS
-	(GroupRole)(0),                // 1: team_service.GroupRole
-	(SprintStatus)(0),             // 2: team_service.SprintStatus
-	(WorkStatus)(0),               // 3: team_service.WorkStatus
-	(WorkPriority)(0),             // 4: team_service.WorkPriority
-	(*Date)(nil),                  // 5: team_service.Date
-	(*Error)(nil),                 // 6: team_service.Error
-	(*SimpleUserMessage)(nil),     // 7: team_service.SimpleUserMessage
-	(*SimpleSprintMessage)(nil),   // 8: team_service.SimpleSprintMessage
-	(*MemberMessage)(nil),         // 9: team_service.MemberMessage
-	(*InviteMessage)(nil),         // 10: team_service.InviteMessage
-	(*GroupMessage)(nil),          // 11: team_service.GroupMessage
-	(*SprintMessage)(nil),         // 12: team_service.SprintMessage
-	(*ChecklistItemMessage)(nil),  // 13: team_service.ChecklistItemMessage
-	(*ChecklistMessage)(nil),      // 14: team_service.ChecklistMessage
-	(*CommentMessage)(nil),        // 15: team_service.CommentMessage
-	(*CommentListMessage)(nil),    // 16: team_service.CommentListMessage
-	(*WorkMessage)(nil),           // 17: team_service.WorkMessage
-	(*timestamppb.Timestamp)(nil), // 18: google.protobuf.Timestamp
+	(USER_STATUS)(0),               // 0: team_service.USER_STATUS
+	(GroupRole)(0),                 // 1: team_service.GroupRole
+	(SprintStatus)(0),              // 2: team_service.SprintStatus
+	(WorkStatus)(0),                // 3: team_service.WorkStatus
+	(WorkPriority)(0),              // 4: team_service.WorkPriority
+	(*Date)(nil),                   // 5: team_service.Date
+	(*Error)(nil),                  // 6: team_service.Error
+	(*SimpleUserMessage)(nil),      // 7: team_service.SimpleUserMessage
+	(*SimpleSprintMessage)(nil),    // 8: team_service.SimpleSprintMessage
+	(*MemberMessage)(nil),          // 9: team_service.MemberMessage
+	(*InviteMessage)(nil),          // 10: team_service.InviteMessage
+	(*GroupMessage)(nil),           // 11: team_service.GroupMessage
+	(*SprintMessage)(nil),          // 12: team_service.SprintMessage
+	(*ChecklistItemMessage)(nil),   // 13: team_service.ChecklistItemMessage
+	(*ChecklistMessage)(nil),       // 14: team_service.ChecklistMessage
+	(*CommentMessage)(nil),         // 15: team_service.CommentMessage
+	(*CommentListMessage)(nil),     // 16: team_service.CommentListMessage
+	(*WorkMessage)(nil),            // 17: team_service.WorkMessage
+	(*AISprintGenerationFile)(nil), // 18: team_service.AISprintGenerationFile
+	(*timestamppb.Timestamp)(nil),  // 19: google.protobuf.Timestamp
 }
 var file_team_service_common_team_proto_depIdxs = []int32{
 	2,  // 0: team_service.SimpleSprintMessage.status:type_name -> team_service.SprintStatus
 	1,  // 1: team_service.MemberMessage.role:type_name -> team_service.GroupRole
-	18, // 2: team_service.MemberMessage.joined_at:type_name -> google.protobuf.Timestamp
-	18, // 3: team_service.InviteMessage.expires_at:type_name -> google.protobuf.Timestamp
-	18, // 4: team_service.InviteMessage.created_at:type_name -> google.protobuf.Timestamp
+	19, // 2: team_service.MemberMessage.joined_at:type_name -> google.protobuf.Timestamp
+	19, // 3: team_service.InviteMessage.expires_at:type_name -> google.protobuf.Timestamp
+	19, // 4: team_service.InviteMessage.created_at:type_name -> google.protobuf.Timestamp
 	7,  // 5: team_service.GroupMessage.owner:type_name -> team_service.SimpleUserMessage
 	1,  // 6: team_service.GroupMessage.my_role:type_name -> team_service.GroupRole
-	18, // 7: team_service.GroupMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 8: team_service.GroupMessage.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 7: team_service.GroupMessage.created_at:type_name -> google.protobuf.Timestamp
+	19, // 8: team_service.GroupMessage.updated_at:type_name -> google.protobuf.Timestamp
 	2,  // 9: team_service.SprintMessage.status:type_name -> team_service.SprintStatus
 	5,  // 10: team_service.SprintMessage.start_date:type_name -> team_service.Date
 	5,  // 11: team_service.SprintMessage.end_date:type_name -> team_service.Date
-	18, // 12: team_service.SprintMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 13: team_service.SprintMessage.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 12: team_service.SprintMessage.created_at:type_name -> google.protobuf.Timestamp
+	19, // 13: team_service.SprintMessage.updated_at:type_name -> google.protobuf.Timestamp
 	13, // 14: team_service.ChecklistMessage.items:type_name -> team_service.ChecklistItemMessage
 	7,  // 15: team_service.CommentMessage.creator:type_name -> team_service.SimpleUserMessage
-	18, // 16: team_service.CommentMessage.created_at:type_name -> google.protobuf.Timestamp
+	19, // 16: team_service.CommentMessage.created_at:type_name -> google.protobuf.Timestamp
 	15, // 17: team_service.CommentListMessage.comments:type_name -> team_service.CommentMessage
 	3,  // 18: team_service.WorkMessage.status:type_name -> team_service.WorkStatus
 	8,  // 19: team_service.WorkMessage.sprint:type_name -> team_service.SimpleSprintMessage
@@ -1508,8 +1565,8 @@ var file_team_service_common_team_proto_depIdxs = []int32{
 	4,  // 22: team_service.WorkMessage.work_priority:type_name -> team_service.WorkPriority
 	14, // 23: team_service.WorkMessage.check_list:type_name -> team_service.ChecklistMessage
 	16, // 24: team_service.WorkMessage.comments:type_name -> team_service.CommentListMessage
-	18, // 25: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
-	18, // 26: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 25: team_service.WorkMessage.created_at:type_name -> google.protobuf.Timestamp
+	19, // 26: team_service.WorkMessage.updated_at:type_name -> google.protobuf.Timestamp
 	27, // [27:27] is the sub-list for method output_type
 	27, // [27:27] is the sub-list for method input_type
 	27, // [27:27] is the sub-list for extension type_name
@@ -1532,7 +1589,7 @@ func file_team_service_common_team_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_service_common_team_proto_rawDesc), len(file_team_service_common_team_proto_rawDesc)),
 			NumEnums:      5,
-			NumMessages:   13,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

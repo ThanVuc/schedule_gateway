@@ -291,6 +291,34 @@ func (sc *SprintController) ExportSprint(ctx *gin.Context) {
 	ctx.Data(200, contentType, file)
 }
 
+func (sc *SprintController) GenerateSprint(ctx *gin.Context) {
+	req := sc.buildGenerateSprintRequest(ctx)
+	if req == nil {
+		return
+	}
+
+	resp, err := sc.client.GenerateSprint(ctx, req)
+	if err != nil {
+		sc.logger.Error("Failed to generate sprint with AI: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Failed to generate sprint")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.Ok(ctx, "Generate sprint successful", gin.H{
+		"message": resp.GetMessage(),
+	})
+}
+
 func (sc *SprintController) buildCreateSprintRequest(ctx *gin.Context) *team_service.CreateSprintRequest {
 	groupID := ctx.Param("group_id")
 	if groupID == "" {
@@ -335,6 +363,96 @@ func (sc *SprintController) buildCreateSprintRequest(ctx *gin.Context) *team_ser
 		Goal:      dto.Goal,
 		StartDate: startDate,
 		EndDate:   endDate,
+	}
+}
+
+func (sc *SprintController) buildGenerateSprintRequest(ctx *gin.Context) *team_service.AISprintGenerationRequest {
+	groupID := ctx.Param("group_id")
+	if groupID == "" {
+		response.BadRequest(ctx, "group_id is required")
+		return nil
+	}
+
+	var dto dtos.AISprintGenerationDTO
+	if err := ctx.ShouldBindJSON(&dto); err != nil {
+		response.BadRequest(ctx, "Invalid request body: "+err.Error())
+		return nil
+	}
+
+	name := strings.TrimSpace(dto.Name)
+	if name == "" {
+		response.BadRequest(ctx, "name is required")
+		return nil
+	}
+	if len(name) > 255 {
+		response.BadRequest(ctx, "name must be at most 255 characters")
+		return nil
+	}
+
+	goal := strings.TrimSpace(dto.Goal)
+	if goal == "" {
+		response.BadRequest(ctx, "goal is required")
+		return nil
+	}
+	if len(goal) > 1000 {
+		response.BadRequest(ctx, "goal must be at most 1000 characters")
+		return nil
+	}
+
+	startDate, err := utils.FromStringToDate(dto.StartDate)
+	if err != nil {
+		response.BadRequest(ctx, "start_date must be in format YYYY-MM-DD")
+		return nil
+	}
+
+	endDate, err := utils.FromStringToDate(dto.EndDate)
+	if err != nil {
+		response.BadRequest(ctx, "end_date must be in format YYYY-MM-DD")
+		return nil
+	}
+
+	if utils.DateToTime(startDate).After(utils.DateToTime(endDate)) {
+		response.BadRequest(ctx, "start_date must be before or equal to end_date")
+		return nil
+	}
+
+	var additionalContext *string
+	if dto.AdditionalContext != nil {
+		trimmed := strings.TrimSpace(*dto.AdditionalContext)
+		if len(trimmed) > 2000 {
+			response.BadRequest(ctx, "additional_context must be at most 2000 characters")
+			return nil
+		}
+		if trimmed != "" {
+			additionalContext = &trimmed
+		}
+	}
+
+	files := make([]*team_service.AISprintGenerationFile, 0, len(dto.Files))
+	for i, file := range dto.Files {
+		objectKey := strings.TrimSpace(file.ObjectKey)
+		if objectKey == "" {
+			response.BadRequest(ctx, fmt.Sprintf("files[%d].object_key is required", i))
+			return nil
+		}
+		if file.Size <= 0 {
+			response.BadRequest(ctx, fmt.Sprintf("files[%d].size must be greater than 0", i))
+			return nil
+		}
+
+		files = append(files, &team_service.AISprintGenerationFile{
+			ObjectKey: objectKey,
+			Size:      file.Size,
+		})
+	}
+
+	return &team_service.AISprintGenerationRequest{
+		Name:              name,
+		Goal:              goal,
+		StartDate:         utils.FromDateToString(startDate),
+		EndDate:           utils.FromDateToString(endDate),
+		AdditionalContext: additionalContext,
+		Files:             files,
 	}
 }
 
