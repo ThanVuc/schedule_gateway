@@ -36,6 +36,7 @@ type (
 		UpdateSprint(c *gin.Context, req *team_service.UpdateSprintRequest) (*team_service.UpdateSprintResponse, error)
 		UpdateSprintStatus(c *gin.Context, req *team_service.UpdateSprintStatusRequest) (*team_service.UpdateSprintStatusResponse, error)
 		DeleteSprint(c *gin.Context, req *common.IDRequest) (*team_service.DeleteSprintResponse, error)
+		DeleteDraftSprints(c *gin.Context, req *common.IDRequest) (*team_service.DeleteDraftSprintsResponse, error)
 	}
 	WorkClient interface {
 		CreateWork(c *gin.Context, req *team_service.CreateWorkRequest) (*team_service.CreateWorkResponse, error)

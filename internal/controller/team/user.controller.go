@@ -30,13 +30,14 @@ func (uc *UserController) GetUserInfo(ctx *gin.Context) {
 	req := &common.EmptyRequest{}
 	resp, err := uc.client.GetUserInfo(ctx, req)
 	if err != nil {
-		uc.logger.Error("Failed to create invite: ", "", zap.Error(err))
-		ctx.JSON(500, gin.H{"error": "Failed to create invite"})
+		uc.logger.Error("Failed to get user info: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to get user info"})
 		return
 	}
 
 	if resp.GetError() != nil {
-		uc.logger.Error("Failed to create invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+
+		uc.logger.Error("Failed to get user info: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
 		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
 	}

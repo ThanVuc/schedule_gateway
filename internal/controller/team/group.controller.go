@@ -1,7 +1,6 @@
 package team_controller
 
 import (
-	"fmt"
 	"net/http"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
@@ -51,7 +50,6 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 	}
 
 	if resp.GetError() != nil {
-		fmt.Print("Error code: ", resp.GetError().GetCode())
 		gc.logger.Error("Failed to create group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
 		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
@@ -83,7 +81,6 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": "Group ID is required"})
 		return
 	}
-	fmt.Printf("Group ID: %s\n", id)
 
 	req := &common.IDRequest{Id: id}
 	resp, err := gc.client.GetGroup(ctx, req)
@@ -224,8 +221,6 @@ func (gc *GroupController) UpdateGroup(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": "Group ID is required"})
 		return
 	}
-
-	fmt.Printf("Group ID: %s\n", id)
 
 	var dto dtos.CreateGroupDTO
 	if err := ctx.ShouldBindJSON(&dto); err != nil {
@@ -439,7 +434,7 @@ func (gc *GroupController) CreateInvite(ctx *gin.Context) {
 		Email:   email,
 		Role:    team_service.GroupRole(dto.Role),
 	}
-	fmt.Printf("REQ: %+v\n", req)
+
 	resp, err := gc.client.CreateInvite(ctx, req)
 	if err != nil {
 		gc.logger.Error("Failed to create invite: ", "", zap.Error(err))
