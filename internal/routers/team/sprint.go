@@ -56,6 +56,11 @@ func (r *SprintRouter) InitSprintRouter(Router *gin.RouterGroup) {
 			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.DELETE_ACTION),
 			sprintController.DeleteSprint,
 		)
+
+		sprintRouter.DELETE("/:sprint_id/drafts",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.DELETE_ACTION),
+			sprintController.DeleteDraftSprints,
+		)
 	}
 
 	r.Register()
