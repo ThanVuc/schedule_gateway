@@ -73,4 +73,5 @@ const (
 // team user resource actions
 const (
 	UPDATE_NOTIFICATION_CONFIGURATION_ACTION = "update_notification_configuration"
+	GET_PRESINGED_URLS_ACTION                = "get_presigned_urls"
 )

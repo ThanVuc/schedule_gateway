@@ -26,6 +26,7 @@ type (
 		RemoveMember(c *gin.Context, req *team_service.RemoveMemberRequest) (*team_service.RemoveMemberResponse, error)
 		CreateInvite(c *gin.Context, req *team_service.CreateInviteRequest) (*team_service.CreateInviteResponse, error)
 		AcceptInvite(c *gin.Context, req *team_service.AcceptInviteRequest) (*team_service.AcceptInviteResponse, error)
+		GeneratePresignedURLs(c *gin.Context, req *team_service.GeneratePresignedURLsRequest) (*team_service.GeneratePresignedURLsResponse, error)
 	}
 	SprintClient interface {
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
