@@ -135,3 +135,13 @@ func (wc *groupClient) AcceptInvite(c *gin.Context, req *team_service.AcceptInvi
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) GeneratePresignedURLs(c *gin.Context, req *team_service.GeneratePresignedURLsRequest) (*team_service.GeneratePresignedURLsResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.GeneratePresignedURLs(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

@@ -533,3 +533,49 @@ func BuildGroupResponse(group *team_service.GroupMessage) gin.H {
 		"owner":         owner,
 	}
 }
+
+func (gc *GroupController) GeneratePresignedURLs(ctx *gin.Context) {
+	req := buildPresignURLRequest(ctx)
+	if req == nil {
+		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	resp, err := gc.client.GeneratePresignedURLs(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to generate presigned URLs: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to generate presigned URLs"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to generate presigned URLs: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.Ok(ctx, "Presigned URLs generated successfully", gin.H{
+		"items": resp.GetFiles(),
+	})
+}
+
+func buildPresignURLRequest(c *gin.Context) *team_service.GeneratePresignedURLsRequest {
+	var dto dtos.GeneratePresignedURLsRequest
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		response.BadRequest(c, "Invalid request body: "+err.Error())
+		return nil
+	}
+
+	var req team_service.GeneratePresignedURLsRequest
+
+	req.Files = make([]*team_service.PresignFileItem, len(dto.Files))
+	for i, file := range dto.Files {
+		req.Files[i] = &team_service.PresignFileItem{
+			Index:       int32(i),
+			ContentType: file.ContentType,
+			FileName:    file.FileName,
+		}
+	}
+
+	return &req
+}
