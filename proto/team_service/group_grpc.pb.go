@@ -32,6 +32,7 @@ const (
 	GroupService_CreateInvite_FullMethodName           = "/team_service.GroupService/CreateInvite"
 	GroupService_AcceptInvite_FullMethodName           = "/team_service.GroupService/AcceptInvite"
 	GroupService_GetSimpleUserByGroupID_FullMethodName = "/team_service.GroupService/GetSimpleUserByGroupID"
+	GroupService_GeneratePresignedURLs_FullMethodName  = "/team_service.GroupService/GeneratePresignedURLs"
 )
 
 // GroupServiceClient is the client API for GroupService service.
@@ -52,6 +53,7 @@ type GroupServiceClient interface {
 	CreateInvite(ctx context.Context, in *CreateInviteRequest, opts ...grpc.CallOption) (*CreateInviteResponse, error)
 	AcceptInvite(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error)
 	GetSimpleUserByGroupID(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleUserByGroupIDResponse, error)
+	GeneratePresignedURLs(ctx context.Context, in *GeneratePresignedURLsRequest, opts ...grpc.CallOption) (*GeneratePresignedURLsResponse, error)
 }
 
 type groupServiceClient struct {
@@ -182,6 +184,16 @@ func (c *groupServiceClient) GetSimpleUserByGroupID(ctx context.Context, in *com
 	return out, nil
 }
 
+func (c *groupServiceClient) GeneratePresignedURLs(ctx context.Context, in *GeneratePresignedURLsRequest, opts ...grpc.CallOption) (*GeneratePresignedURLsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GeneratePresignedURLsResponse)
+	err := c.cc.Invoke(ctx, GroupService_GeneratePresignedURLs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GroupServiceServer is the server API for GroupService service.
 // All implementations must embed UnimplementedGroupServiceServer
 // for forward compatibility.
@@ -200,6 +212,7 @@ type GroupServiceServer interface {
 	CreateInvite(context.Context, *CreateInviteRequest) (*CreateInviteResponse, error)
 	AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error)
 	GetSimpleUserByGroupID(context.Context, *common.IDRequest) (*GetSimpleUserByGroupIDResponse, error)
+	GeneratePresignedURLs(context.Context, *GeneratePresignedURLsRequest) (*GeneratePresignedURLsResponse, error)
 	mustEmbedUnimplementedGroupServiceServer()
 }
 
@@ -245,6 +258,9 @@ func (UnimplementedGroupServiceServer) AcceptInvite(context.Context, *AcceptInvi
 }
 func (UnimplementedGroupServiceServer) GetSimpleUserByGroupID(context.Context, *common.IDRequest) (*GetSimpleUserByGroupIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSimpleUserByGroupID not implemented")
+}
+func (UnimplementedGroupServiceServer) GeneratePresignedURLs(context.Context, *GeneratePresignedURLsRequest) (*GeneratePresignedURLsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GeneratePresignedURLs not implemented")
 }
 func (UnimplementedGroupServiceServer) mustEmbedUnimplementedGroupServiceServer() {}
 func (UnimplementedGroupServiceServer) testEmbeddedByValue()                      {}
@@ -483,6 +499,24 @@ func _GroupService_GetSimpleUserByGroupID_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GroupService_GeneratePresignedURLs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GeneratePresignedURLsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServiceServer).GeneratePresignedURLs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GroupService_GeneratePresignedURLs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServiceServer).GeneratePresignedURLs(ctx, req.(*GeneratePresignedURLsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GroupService_ServiceDesc is the grpc.ServiceDesc for GroupService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -537,6 +571,10 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSimpleUserByGroupID",
 			Handler:    _GroupService_GetSimpleUserByGroupID_Handler,
+		},
+		{
+			MethodName: "GeneratePresignedURLs",
+			Handler:    _GroupService_GeneratePresignedURLs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
