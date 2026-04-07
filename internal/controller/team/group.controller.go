@@ -475,7 +475,7 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	}
 
 	req := &team_service.AcceptInviteRequest{
-		Code: dto.Data.Code,
+		Code: dto.Code,
 	}
 
 	_, exists := ctx.Get("user_id")
