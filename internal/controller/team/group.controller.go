@@ -1,7 +1,7 @@
 package team_controller
 
 import (
-	"net/http"
+	"fmt"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 	dtos "schedule_gateway/internal/dtos/team_service"
@@ -480,27 +480,36 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 
 	_, exists := ctx.Get("user_id")
 	if !exists {
-		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login")
-		ctx.JSON(401, gin.H{"error": "Unauthorized"})
+		ctx.JSON(401, gin.H{
+			"error":    "Unauthorized",
+			"redirect": "https://www.schedulr.site/login",
+		})
 		return
 	}
 
 	resp, err := gc.client.AcceptInvite(ctx, req)
 	if err != nil {
-		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login1231111111")
-		gc.logger.Error("Failed to accept invite: ", "", zap.Error(err))
-		ctx.JSON(500, gin.H{"error": "Failed to accept invite"})
+		gc.logger.Error("Failed to accept invite", "", zap.Error(err))
+		ctx.JSON(500, gin.H{
+			"error":    "Internal server error",
+			"redirect": "https://www.schedulr.site/login",
+		})
 		return
 	}
-
 	if resp.GetError() != nil {
-		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login123333")
+		ctx.JSON(401, gin.H{
+			"error":    resp.GetError().GetMessage(),
+			"Location": "https://www.schedulr.site/login",
+		})
 		gc.logger.Error("Failed to accep2222222222t invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
 		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
 	}
+	fmt.Printf("1111111111111111111111111111111111111111111111111 %s\n", resp.GetLocation())
 
-	ctx.Redirect(http.StatusFound, resp.GetLocation())
+	ctx.JSON(200, gin.H{
+		"location": resp.GetLocation(),
+	})
 
 }
 
