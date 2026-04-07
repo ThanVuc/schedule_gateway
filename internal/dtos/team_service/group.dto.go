@@ -70,10 +70,6 @@ type InviteDTO struct {
 }
 
 type CodeDataDTO struct {
-	Data AcceptInviteDTO `json:"data"`
-}
-
-type AcceptInviteDTO struct {
 	Code string `json:"code" binding:"required"`
 }
 
