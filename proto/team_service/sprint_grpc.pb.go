@@ -29,6 +29,7 @@ const (
 	SprintService_GetSimpleSprints_FullMethodName   = "/team_service.SprintService/GetSimpleSprints"
 	SprintService_ExportSprint_FullMethodName       = "/team_service.SprintService/ExportSprint"
 	SprintService_GenerateSprint_FullMethodName     = "/team_service.SprintService/GenerateSprint"
+	SprintService_DeleteDraftSprints_FullMethodName = "/team_service.SprintService/DeleteDraftSprints"
 )
 
 // SprintServiceClient is the client API for SprintService service.
@@ -45,8 +46,8 @@ type SprintServiceClient interface {
 	DeleteSprint(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteSprintResponse, error)
 	GetSimpleSprints(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleSprintsResponse, error)
 	ExportSprint(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*ExportSprintResponse, error)
-	// GenerateSprint creates sprint works asynchronously using AI from provided context and files.
 	GenerateSprint(ctx context.Context, in *AISprintGenerationRequest, opts ...grpc.CallOption) (*AISprintGenerationResponse, error)
+	DeleteDraftSprints(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteDraftSprintsResponse, error)
 }
 
 type sprintServiceClient struct {
@@ -147,6 +148,16 @@ func (c *sprintServiceClient) GenerateSprint(ctx context.Context, in *AISprintGe
 	return out, nil
 }
 
+func (c *sprintServiceClient) DeleteDraftSprints(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*DeleteDraftSprintsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteDraftSprintsResponse)
+	err := c.cc.Invoke(ctx, SprintService_DeleteDraftSprints_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SprintServiceServer is the server API for SprintService service.
 // All implementations must embed UnimplementedSprintServiceServer
 // for forward compatibility.
@@ -161,8 +172,8 @@ type SprintServiceServer interface {
 	DeleteSprint(context.Context, *common.IDRequest) (*DeleteSprintResponse, error)
 	GetSimpleSprints(context.Context, *common.IDRequest) (*GetSimpleSprintsResponse, error)
 	ExportSprint(context.Context, *common.IDRequest) (*ExportSprintResponse, error)
-	// GenerateSprint creates sprint works asynchronously using AI from provided context and files.
 	GenerateSprint(context.Context, *AISprintGenerationRequest) (*AISprintGenerationResponse, error)
+	DeleteDraftSprints(context.Context, *common.IDRequest) (*DeleteDraftSprintsResponse, error)
 	mustEmbedUnimplementedSprintServiceServer()
 }
 
@@ -199,6 +210,9 @@ func (UnimplementedSprintServiceServer) ExportSprint(context.Context, *common.ID
 }
 func (UnimplementedSprintServiceServer) GenerateSprint(context.Context, *AISprintGenerationRequest) (*AISprintGenerationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateSprint not implemented")
+}
+func (UnimplementedSprintServiceServer) DeleteDraftSprints(context.Context, *common.IDRequest) (*DeleteDraftSprintsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDraftSprints not implemented")
 }
 func (UnimplementedSprintServiceServer) mustEmbedUnimplementedSprintServiceServer() {}
 func (UnimplementedSprintServiceServer) testEmbeddedByValue()                       {}
@@ -383,6 +397,24 @@ func _SprintService_GenerateSprint_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SprintService_DeleteDraftSprints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(common.IDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SprintServiceServer).DeleteDraftSprints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SprintService_DeleteDraftSprints_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SprintServiceServer).DeleteDraftSprints(ctx, req.(*common.IDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SprintService_ServiceDesc is the grpc.ServiceDesc for SprintService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -425,6 +457,10 @@ var SprintService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerateSprint",
 			Handler:    _SprintService_GenerateSprint_Handler,
+		},
+		{
+			MethodName: "DeleteDraftSprints",
+			Handler:    _SprintService_DeleteDraftSprints_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

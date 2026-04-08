@@ -70,9 +70,25 @@ type InviteDTO struct {
 }
 
 type CodeDataDTO struct {
-	Data AcceptInviteDTO `json:"data"`
+	Code string `json:"code" binding:"required"`
 }
 
-type AcceptInviteDTO struct {
-	Code string `json:"code" binding:"required"`
+
+type PresignFileItemDTO struct {
+	Index       int32  `json:"index"`
+	ContentType string `json:"content_type"`
+	FileName    string `json:"file_name"`
+}
+
+type GeneratePresignedURLsRequest struct {
+	Files []PresignFileItemDTO `json:"files"`
+}
+
+type PresignedFileItemResponseDTO struct {
+	Index        int32  `json:"index"`
+	PresignedURL string `json:"presigned_url"`
+}
+
+type GeneratePresignedURLsResponse struct {
+	Files []PresignedFileItemResponseDTO `json:"files"`
 }

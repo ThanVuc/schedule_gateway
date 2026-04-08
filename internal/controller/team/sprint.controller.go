@@ -583,3 +583,32 @@ func isValidSprintStatus(status team_service.SprintStatus) bool {
 	_, ok := team_service.SprintStatus_name[int32(status)]
 	return ok
 }
+
+func (sc *SprintController) DeleteDraftSprints(ctx *gin.Context) {
+	sprintID := ctx.Param("sprint_id")
+	if sprintID == "" {
+		response.BadRequest(ctx, "Sprint ID is required")
+		return
+	}
+
+	resp, err := sc.client.DeleteDraftSprints(ctx, &common.IDRequest{Id: sprintID})
+	if err != nil {
+		sc.logger.Error("Failed to delete sprint: ", "", zap.Error(err))
+		response.InternalServerError(ctx, "Failed to delete sprint")
+		return
+	}
+
+	if resp == nil {
+		response.InternalServerError(ctx, "Empty response from service")
+		return
+	}
+
+	if resp.GetError() != nil {
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.NoContent(ctx, "Delete sprint successful", gin.H{
+		"item": gin.H{"is_success": resp.GetSuccess()},
+	})
+}

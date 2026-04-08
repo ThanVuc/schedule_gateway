@@ -26,6 +26,7 @@ type (
 		RemoveMember(c *gin.Context, req *team_service.RemoveMemberRequest) (*team_service.RemoveMemberResponse, error)
 		CreateInvite(c *gin.Context, req *team_service.CreateInviteRequest) (*team_service.CreateInviteResponse, error)
 		AcceptInvite(c *gin.Context, req *team_service.AcceptInviteRequest) (*team_service.AcceptInviteResponse, error)
+		GeneratePresignedURLs(c *gin.Context, req *team_service.GeneratePresignedURLsRequest) (*team_service.GeneratePresignedURLsResponse, error)
 	}
 	SprintClient interface {
 		CreateSprint(c *gin.Context, req *team_service.CreateSprintRequest) (*team_service.CreateSprintResponse, error)
@@ -37,6 +38,7 @@ type (
 		UpdateSprint(c *gin.Context, req *team_service.UpdateSprintRequest) (*team_service.UpdateSprintResponse, error)
 		UpdateSprintStatus(c *gin.Context, req *team_service.UpdateSprintStatusRequest) (*team_service.UpdateSprintStatusResponse, error)
 		DeleteSprint(c *gin.Context, req *common.IDRequest) (*team_service.DeleteSprintResponse, error)
+		DeleteDraftSprints(c *gin.Context, req *common.IDRequest) (*team_service.DeleteDraftSprintsResponse, error)
 	}
 	WorkClient interface {
 		CreateWork(c *gin.Context, req *team_service.CreateWorkRequest) (*team_service.CreateWorkResponse, error)

@@ -113,3 +113,13 @@ func (sc *sprintClient) DeleteSprint(c *gin.Context, req *common.IDRequest) (*te
 	return resp, nil
 
 }
+
+func (sc *sprintClient) DeleteDraftSprints(c *gin.Context, req *common.IDRequest) (*team_service.DeleteDraftSprintsResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := sc.sprintClient.DeleteDraftSprints(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

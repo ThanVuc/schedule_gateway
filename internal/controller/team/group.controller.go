@@ -1,7 +1,6 @@
 package team_controller
 
 import (
-	"fmt"
 	"net/http"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
@@ -51,7 +50,6 @@ func (gc *GroupController) CreateGroup(ctx *gin.Context) {
 	}
 
 	if resp.GetError() != nil {
-		fmt.Print("Error code: ", resp.GetError().GetCode())
 		gc.logger.Error("Failed to create group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
 		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
 		return
@@ -83,7 +81,6 @@ func (gc *GroupController) GetGroup(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": "Group ID is required"})
 		return
 	}
-	fmt.Printf("Group ID: %s\n", id)
 
 	req := &common.IDRequest{Id: id}
 	resp, err := gc.client.GetGroup(ctx, req)
@@ -224,8 +221,6 @@ func (gc *GroupController) UpdateGroup(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": "Group ID is required"})
 		return
 	}
-
-	fmt.Printf("Group ID: %s\n", id)
 
 	var dto dtos.CreateGroupDTO
 	if err := ctx.ShouldBindJSON(&dto); err != nil {
@@ -439,7 +434,7 @@ func (gc *GroupController) CreateInvite(ctx *gin.Context) {
 		Email:   email,
 		Role:    team_service.GroupRole(dto.Role),
 	}
-	fmt.Printf("REQ: %+v\n", req)
+
 	resp, err := gc.client.CreateInvite(ctx, req)
 	if err != nil {
 		gc.logger.Error("Failed to create invite: ", "", zap.Error(err))
@@ -480,7 +475,7 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	}
 
 	req := &team_service.AcceptInviteRequest{
-		Code: dto.Data.Code,
+		Code: dto.Code,
 	}
 
 	_, exists := ctx.Get("user_id")
@@ -537,4 +532,50 @@ func BuildGroupResponse(group *team_service.GroupMessage) gin.H {
 		"updated_at":    utils.TimestampToISO8601(group.GetUpdatedAt()),
 		"owner":         owner,
 	}
+}
+
+func (gc *GroupController) GeneratePresignedURLs(ctx *gin.Context) {
+	req := buildPresignURLRequest(ctx)
+	if req == nil {
+		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	resp, err := gc.client.GeneratePresignedURLs(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to generate presigned URLs: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to generate presigned URLs"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to generate presigned URLs: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.Ok(ctx, "Presigned URLs generated successfully", gin.H{
+		"items": resp.GetFiles(),
+	})
+}
+
+func buildPresignURLRequest(c *gin.Context) *team_service.GeneratePresignedURLsRequest {
+	var dto dtos.GeneratePresignedURLsRequest
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		response.BadRequest(c, "Invalid request body: "+err.Error())
+		return nil
+	}
+
+	var req team_service.GeneratePresignedURLsRequest
+
+	req.Files = make([]*team_service.PresignFileItem, len(dto.Files))
+	for i, file := range dto.Files {
+		req.Files[i] = &team_service.PresignFileItem{
+			Index:       int32(i),
+			ContentType: file.ContentType,
+			FileName:    file.FileName,
+		}
+	}
+
+	return &req
 }
