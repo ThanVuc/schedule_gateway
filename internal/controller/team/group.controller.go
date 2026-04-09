@@ -1,8 +1,8 @@
 package team_controller
 
 import (
-	"fmt"
 	"net/http"
+	"net/url"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
 	dtos "schedule_gateway/internal/dtos/team_service"
@@ -499,15 +499,19 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	}
 
 	notfoundUrl := origin + "/404?error=invite_not_found"
-	inviteUrl := origin + "/invite?code=" + dto.Code
+	redirect := "/invite?code=" + dto.Code
+	inviteUrl := origin + redirect
+	loginUrl := origin + "/login?redirect=" + url.QueryEscape(redirect)
 
 	if resp.GetError() != nil {
-		ctx.Redirect(http.StatusFound, origin)
+		if resp.GetError().GetCode() == "ts.validation.email-not-matched" {
+			ctx.Redirect(http.StatusUnauthorized, loginUrl)
+		}
+
 		gc.logger.Error("Failed to accept invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
 		ctx.Redirect(http.StatusFound, notfoundUrl)
 		return
 	}
-	fmt.Printf("1111111111111111111111111111111111111111111111111 %s\n", resp.GetLocation())
 
 	ctx.Redirect(http.StatusFound, inviteUrl)
 }
