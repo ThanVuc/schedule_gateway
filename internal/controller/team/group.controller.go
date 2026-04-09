@@ -2,7 +2,6 @@ package team_controller
 
 import (
 	"fmt"
-	"net/http"
 	"net/url"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
@@ -475,6 +474,12 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 		origin = "https://www.schedulr.site"
 	}
 
+	respondRedirectURL := func(target string) {
+		response.Ok(ctx, "Redirect URL generated", gin.H{
+			"redirect_url": target,
+		})
+	}
+
 	var dto dtos.CodeDataDTO
 	if err := ctx.ShouldBindJSON(&dto); err != nil {
 		ctx.JSON(400, gin.H{"error": "Invalid request body " + err.Error()})
@@ -488,7 +493,7 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 
 	_, exists := ctx.Get("user_id")
 	if !exists {
-		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/login?redirect=%s", origin, url.QueryEscape(redirect)))
+		respondRedirectURL(origin + "/login?redirect=" + url.QueryEscape(redirect))
 		return
 	}
 
@@ -498,29 +503,28 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 		if origin == "" {
 			origin = "https://www.schedulr.site"
 		}
-		ctx.Redirect(http.StatusFound, origin+"/404?error=invite_unavailable")
+		respondRedirectURL(origin + "/404?error=invite_unavailable")
 		return
 	}
 
 	notfoundUrl := origin + "/404?error=invite_not_found"
 	inviteUrl := origin + redirect
-	loginUrl := origin + "/login?redirect=" + url.QueryEscape(redirect)
-	println("Location: ", resp.Location)
+	loginUrl := origin + "/login?redirect=" + url.QueryEscape(fmt.Sprintf("/te/invite?code=%s", dto.Code))
 	if resp.GetError() != nil {
-		println("entering error handling with code: ", resp.GetError().GetCode())
 		errCode := resp.GetError().GetCode()
 		if errCode == "ts.validation.email-not-matched" || errCode == "ts.auth.unauthorized" {
-			println("Redirecting to login page: ", loginUrl)
-			ctx.Redirect(http.StatusFound, loginUrl)
+			println("Invite code requires login")
+			println("Redirecting to login page: ", errCode)
+			respondRedirectURL(loginUrl)
 			return
 		}
 
 		gc.logger.Error("Failed to accept invite: ", "", zap.String("code", resp.GetError().GetCode()), zap.String("message", utils.SafeString(resp.GetError().Details)))
-		ctx.Redirect(http.StatusFound, notfoundUrl)
+		respondRedirectURL(notfoundUrl)
 		return
 	}
-	println("Redirecting to invite URL: ", inviteUrl)
-	ctx.Redirect(http.StatusFound, inviteUrl)
+
+	respondRedirectURL(inviteUrl)
 }
 
 func BuildGroupResponse(group *team_service.GroupMessage) gin.H {
