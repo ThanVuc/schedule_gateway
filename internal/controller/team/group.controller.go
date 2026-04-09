@@ -468,9 +468,11 @@ func (gc GroupController) buildCreateInviteResponse(invite *team_service.InviteM
 }
 
 func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
+	origin := ctx.GetHeader("Origin")
+
 	var dto dtos.CodeDataDTO
 	if err := ctx.ShouldBindJSON(&dto); err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid request body"})
+		ctx.JSON(400, gin.H{"error": "Invalid request body " + err.Error()})
 		return
 	}
 
@@ -481,7 +483,6 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	_, exists := ctx.Get("user_id")
 	if !exists {
 		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login")
-		ctx.JSON(401, gin.H{"error": "Unauthorized"})
 		return
 	}
 
@@ -489,19 +490,24 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	if err != nil {
 		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login1231111111")
 		gc.logger.Error("Failed to accept invite: ", "", zap.Error(err))
-		ctx.JSON(500, gin.H{"error": "Failed to accept invite"})
 		return
 	}
+
+	if origin == "" {
+		origin = "https://www.schedulr.site"
+	}
+
+	notfoundUrl := origin + "/404?error=invite_not_found"
+	inviteUrl := origin + "/invite?code=" + dto.Code
 
 	if resp.GetError() != nil {
-		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login123333")
-		gc.logger.Error("Failed to accep2222222222t invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
-		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		ctx.Redirect(http.StatusFound, origin)
+		gc.logger.Error("Failed to accept invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		ctx.Redirect(http.StatusFound, notfoundUrl)
 		return
 	}
 
-	ctx.Redirect(http.StatusFound, resp.GetLocation())
-
+	ctx.Redirect(http.StatusFound, inviteUrl)
 }
 
 func BuildGroupResponse(group *team_service.GroupMessage) gin.H {
