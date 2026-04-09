@@ -13,7 +13,8 @@ import (
 func EnrichContext(ctx context.Context, c *gin.Context) context.Context {
 	requestID := c.GetString("request_id")
 	userID := c.GetString("user_id")
-	GroupId := c.Param("group_id")
+	groupId := c.Param("group_id")
+	origin := c.GetHeader("Origin")
 
 	md, ok := metadata.FromOutgoingContext(ctx)
 	if !ok {
@@ -24,11 +25,14 @@ func EnrichContext(ctx context.Context, c *gin.Context) context.Context {
 
 	md.Set("x-request-id", requestID)
 	md.Set("x-user-id", userID)
-	if GroupId != "" {
-		md.Set("x-group-id", GroupId)
+	if groupId != "" {
+		md.Set("x-group-id", groupId)
 	}
 	baseURL := GetBaseURL(c)
 	md.Set("x-base-url", baseURL)
+	if origin != "" {
+		md.Set("x-origin", origin)
+	}
 
 	return metadata.NewOutgoingContext(ctx, md)
 }

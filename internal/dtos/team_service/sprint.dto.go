@@ -19,3 +19,17 @@ type SimpleSprintDTO struct {
 	Name   string `json:"name"`
 	Status int32  `json:"status"`
 }
+
+type AISprintGenerationFileDTO struct {
+	ObjectKey string `json:"object_key"`
+	Size      int64  `json:"size"`
+}
+
+type AISprintGenerationDTO struct {
+	Name              string                      `json:"name"`
+	Goal              string                      `json:"goal"`
+	StartDate         string                      `json:"start_date"`
+	EndDate           string                      `json:"end_date"`
+	AdditionalContext *string                     `json:"additional_context,omitempty"`
+	Files             []AISprintGenerationFileDTO `json:"files,omitempty"`
+}
