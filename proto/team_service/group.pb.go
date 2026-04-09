@@ -1295,6 +1295,102 @@ func (x *GeneratePresignedURLsResponse) GetError() *Error {
 	return nil
 }
 
+type LeaveGroupRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GroupId       string                 `protobuf:"bytes,1,opt,name=group_id,json=groupId,proto3" json:"group_id"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaveGroupRequest) Reset() {
+	*x = LeaveGroupRequest{}
+	mi := &file_team_service_group_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaveGroupRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveGroupRequest) ProtoMessage() {}
+
+func (x *LeaveGroupRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_group_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveGroupRequest.ProtoReflect.Descriptor instead.
+func (*LeaveGroupRequest) Descriptor() ([]byte, []int) {
+	return file_team_service_group_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *LeaveGroupRequest) GetGroupId() string {
+	if x != nil {
+		return x.GroupId
+	}
+	return ""
+}
+
+type LeaveGroupResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success"`
+	Error         *Error                 `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaveGroupResponse) Reset() {
+	*x = LeaveGroupResponse{}
+	mi := &file_team_service_group_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaveGroupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveGroupResponse) ProtoMessage() {}
+
+func (x *LeaveGroupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_team_service_group_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveGroupResponse.ProtoReflect.Descriptor instead.
+func (*LeaveGroupResponse) Descriptor() ([]byte, []int) {
+	return file_team_service_group_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *LeaveGroupResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *LeaveGroupResponse) GetError() *Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_team_service_group_proto protoreflect.FileDescriptor
 
 const file_team_service_group_proto_rawDesc = "" +
@@ -1391,7 +1487,13 @@ const file_team_service_group_proto_rawDesc = "" +
 	"\x1dGeneratePresignedURLsResponse\x125\n" +
 	"\x05files\x18\x01 \x03(\v2\x1f.team_service.PresignedFileItemR\x05files\x12.\n" +
 	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xbb\b\n" +
+	"\x06_error\".\n" +
+	"\x11LeaveGroupRequest\x12\x19\n" +
+	"\bgroup_id\x18\x01 \x01(\tR\agroupId\"h\n" +
+	"\x12LeaveGroupResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12.\n" +
+	"\x05error\x18\x02 \x01(\v2\x13.team_service.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\x8c\t\n" +
 	"\fGroupService\x123\n" +
 	"\x04Ping\x12\x14.common.EmptyRequest\x1a\x15.common.EmptyResponse\x12R\n" +
 	"\vCreateGroup\x12 .team_service.CreateGroupRequest\x1a!.team_service.CreateGroupResponse\x12=\n" +
@@ -1406,7 +1508,9 @@ const file_team_service_group_proto_rawDesc = "" +
 	"\fCreateInvite\x12!.team_service.CreateInviteRequest\x1a\".team_service.CreateInviteResponse\x12U\n" +
 	"\fAcceptInvite\x12!.team_service.AcceptInviteRequest\x1a\".team_service.AcceptInviteResponse\x12Y\n" +
 	"\x16GetSimpleUserByGroupID\x12\x11.common.IDRequest\x1a,.team_service.GetSimpleUserByGroupIDResponse\x12p\n" +
-	"\x15GeneratePresignedURLs\x12*.team_service.GeneratePresignedURLsRequest\x1a+.team_service.GeneratePresignedURLsResponseB\x14Z\x12proto/team_serviceb\x06proto3"
+	"\x15GeneratePresignedURLs\x12*.team_service.GeneratePresignedURLsRequest\x1a+.team_service.GeneratePresignedURLsResponse\x12O\n" +
+	"\n" +
+	"LeaveGroup\x12\x1f.team_service.LeaveGroupRequest\x1a .team_service.LeaveGroupResponseB\x14Z\x12proto/team_serviceb\x06proto3"
 
 var (
 	file_team_service_group_proto_rawDescOnce sync.Once
@@ -1420,7 +1524,7 @@ func file_team_service_group_proto_rawDescGZIP() []byte {
 	return file_team_service_group_proto_rawDescData
 }
 
-var file_team_service_group_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_team_service_group_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_team_service_group_proto_goTypes = []any{
 	(*CreateGroupRequest)(nil),             // 0: team_service.CreateGroupRequest
 	(*CreateGroupResponse)(nil),            // 1: team_service.CreateGroupResponse
@@ -1446,75 +1550,80 @@ var file_team_service_group_proto_goTypes = []any{
 	(*GeneratePresignedURLsRequest)(nil),   // 21: team_service.GeneratePresignedURLsRequest
 	(*PresignedFileItem)(nil),              // 22: team_service.PresignedFileItem
 	(*GeneratePresignedURLsResponse)(nil),  // 23: team_service.GeneratePresignedURLsResponse
-	(*GroupMessage)(nil),                   // 24: team_service.GroupMessage
-	(*Error)(nil),                          // 25: team_service.Error
-	(*MemberMessage)(nil),                  // 26: team_service.MemberMessage
-	(GroupRole)(0),                         // 27: team_service.GroupRole
-	(*InviteMessage)(nil),                  // 28: team_service.InviteMessage
-	(*timestamppb.Timestamp)(nil),          // 29: google.protobuf.Timestamp
-	(*SimpleUserMessage)(nil),              // 30: team_service.SimpleUserMessage
-	(*common.EmptyRequest)(nil),            // 31: common.EmptyRequest
-	(*common.IDRequest)(nil),               // 32: common.IDRequest
-	(*common.EmptyResponse)(nil),           // 33: common.EmptyResponse
+	(*LeaveGroupRequest)(nil),              // 24: team_service.LeaveGroupRequest
+	(*LeaveGroupResponse)(nil),             // 25: team_service.LeaveGroupResponse
+	(*GroupMessage)(nil),                   // 26: team_service.GroupMessage
+	(*Error)(nil),                          // 27: team_service.Error
+	(*MemberMessage)(nil),                  // 28: team_service.MemberMessage
+	(GroupRole)(0),                         // 29: team_service.GroupRole
+	(*InviteMessage)(nil),                  // 30: team_service.InviteMessage
+	(*timestamppb.Timestamp)(nil),          // 31: google.protobuf.Timestamp
+	(*SimpleUserMessage)(nil),              // 32: team_service.SimpleUserMessage
+	(*common.EmptyRequest)(nil),            // 33: common.EmptyRequest
+	(*common.IDRequest)(nil),               // 34: common.IDRequest
+	(*common.EmptyResponse)(nil),           // 35: common.EmptyResponse
 }
 var file_team_service_group_proto_depIdxs = []int32{
-	24, // 0: team_service.CreateGroupResponse.group:type_name -> team_service.GroupMessage
-	25, // 1: team_service.CreateGroupResponse.error:type_name -> team_service.Error
-	24, // 2: team_service.GetGroupResponse.group:type_name -> team_service.GroupMessage
-	25, // 3: team_service.GetGroupResponse.error:type_name -> team_service.Error
-	24, // 4: team_service.UpdateGroupResponse.group:type_name -> team_service.GroupMessage
-	25, // 5: team_service.UpdateGroupResponse.error:type_name -> team_service.Error
-	25, // 6: team_service.DeleteGroupResponse.error:type_name -> team_service.Error
-	26, // 7: team_service.ListMembersResponse.members:type_name -> team_service.MemberMessage
-	25, // 8: team_service.ListMembersResponse.error:type_name -> team_service.Error
-	27, // 9: team_service.UpdateMemberRoleRequest.new_role:type_name -> team_service.GroupRole
-	26, // 10: team_service.UpdateMemberRoleResponse.member:type_name -> team_service.MemberMessage
-	25, // 11: team_service.UpdateMemberRoleResponse.error:type_name -> team_service.Error
-	25, // 12: team_service.RemoveMemberResponse.error:type_name -> team_service.Error
-	27, // 13: team_service.CreateInviteRequest.role:type_name -> team_service.GroupRole
-	28, // 14: team_service.CreateInviteResponse.invite:type_name -> team_service.InviteMessage
-	25, // 15: team_service.CreateInviteResponse.error:type_name -> team_service.Error
-	25, // 16: team_service.AcceptInviteResponse.error:type_name -> team_service.Error
-	24, // 17: team_service.ListGroupsResponse.groups:type_name -> team_service.GroupMessage
-	25, // 18: team_service.ListGroupsResponse.error:type_name -> team_service.Error
-	29, // 19: team_service.ConfirmDeleteGroupResponse.delete_at:type_name -> google.protobuf.Timestamp
-	25, // 20: team_service.ConfirmDeleteGroupResponse.error:type_name -> team_service.Error
-	30, // 21: team_service.GetSimpleUserByGroupIDResponse.users:type_name -> team_service.SimpleUserMessage
-	25, // 22: team_service.GetSimpleUserByGroupIDResponse.error:type_name -> team_service.Error
+	26, // 0: team_service.CreateGroupResponse.group:type_name -> team_service.GroupMessage
+	27, // 1: team_service.CreateGroupResponse.error:type_name -> team_service.Error
+	26, // 2: team_service.GetGroupResponse.group:type_name -> team_service.GroupMessage
+	27, // 3: team_service.GetGroupResponse.error:type_name -> team_service.Error
+	26, // 4: team_service.UpdateGroupResponse.group:type_name -> team_service.GroupMessage
+	27, // 5: team_service.UpdateGroupResponse.error:type_name -> team_service.Error
+	27, // 6: team_service.DeleteGroupResponse.error:type_name -> team_service.Error
+	28, // 7: team_service.ListMembersResponse.members:type_name -> team_service.MemberMessage
+	27, // 8: team_service.ListMembersResponse.error:type_name -> team_service.Error
+	29, // 9: team_service.UpdateMemberRoleRequest.new_role:type_name -> team_service.GroupRole
+	28, // 10: team_service.UpdateMemberRoleResponse.member:type_name -> team_service.MemberMessage
+	27, // 11: team_service.UpdateMemberRoleResponse.error:type_name -> team_service.Error
+	27, // 12: team_service.RemoveMemberResponse.error:type_name -> team_service.Error
+	29, // 13: team_service.CreateInviteRequest.role:type_name -> team_service.GroupRole
+	30, // 14: team_service.CreateInviteResponse.invite:type_name -> team_service.InviteMessage
+	27, // 15: team_service.CreateInviteResponse.error:type_name -> team_service.Error
+	27, // 16: team_service.AcceptInviteResponse.error:type_name -> team_service.Error
+	26, // 17: team_service.ListGroupsResponse.groups:type_name -> team_service.GroupMessage
+	27, // 18: team_service.ListGroupsResponse.error:type_name -> team_service.Error
+	31, // 19: team_service.ConfirmDeleteGroupResponse.delete_at:type_name -> google.protobuf.Timestamp
+	27, // 20: team_service.ConfirmDeleteGroupResponse.error:type_name -> team_service.Error
+	32, // 21: team_service.GetSimpleUserByGroupIDResponse.users:type_name -> team_service.SimpleUserMessage
+	27, // 22: team_service.GetSimpleUserByGroupIDResponse.error:type_name -> team_service.Error
 	20, // 23: team_service.GeneratePresignedURLsRequest.files:type_name -> team_service.PresignFileItem
 	22, // 24: team_service.GeneratePresignedURLsResponse.files:type_name -> team_service.PresignedFileItem
-	25, // 25: team_service.GeneratePresignedURLsResponse.error:type_name -> team_service.Error
-	31, // 26: team_service.GroupService.Ping:input_type -> common.EmptyRequest
-	0,  // 27: team_service.GroupService.CreateGroup:input_type -> team_service.CreateGroupRequest
-	32, // 28: team_service.GroupService.GetGroup:input_type -> common.IDRequest
-	32, // 29: team_service.GroupService.ListGroups:input_type -> common.IDRequest
-	3,  // 30: team_service.GroupService.UpdateGroup:input_type -> team_service.UpdateGroupRequest
-	32, // 31: team_service.GroupService.DeleteGroup:input_type -> common.IDRequest
-	6,  // 32: team_service.GroupService.ListMembers:input_type -> team_service.ListMembersRequest
-	8,  // 33: team_service.GroupService.UpdateMemberRole:input_type -> team_service.UpdateMemberRoleRequest
-	10, // 34: team_service.GroupService.RemoveMember:input_type -> team_service.RemoveMemberRequest
-	12, // 35: team_service.GroupService.CreateInvite:input_type -> team_service.CreateInviteRequest
-	14, // 36: team_service.GroupService.AcceptInvite:input_type -> team_service.AcceptInviteRequest
-	32, // 37: team_service.GroupService.GetSimpleUserByGroupID:input_type -> common.IDRequest
-	21, // 38: team_service.GroupService.GeneratePresignedURLs:input_type -> team_service.GeneratePresignedURLsRequest
-	33, // 39: team_service.GroupService.Ping:output_type -> common.EmptyResponse
-	1,  // 40: team_service.GroupService.CreateGroup:output_type -> team_service.CreateGroupResponse
-	2,  // 41: team_service.GroupService.GetGroup:output_type -> team_service.GetGroupResponse
-	16, // 42: team_service.GroupService.ListGroups:output_type -> team_service.ListGroupsResponse
-	4,  // 43: team_service.GroupService.UpdateGroup:output_type -> team_service.UpdateGroupResponse
-	5,  // 44: team_service.GroupService.DeleteGroup:output_type -> team_service.DeleteGroupResponse
-	7,  // 45: team_service.GroupService.ListMembers:output_type -> team_service.ListMembersResponse
-	9,  // 46: team_service.GroupService.UpdateMemberRole:output_type -> team_service.UpdateMemberRoleResponse
-	11, // 47: team_service.GroupService.RemoveMember:output_type -> team_service.RemoveMemberResponse
-	13, // 48: team_service.GroupService.CreateInvite:output_type -> team_service.CreateInviteResponse
-	15, // 49: team_service.GroupService.AcceptInvite:output_type -> team_service.AcceptInviteResponse
-	19, // 50: team_service.GroupService.GetSimpleUserByGroupID:output_type -> team_service.GetSimpleUserByGroupIDResponse
-	23, // 51: team_service.GroupService.GeneratePresignedURLs:output_type -> team_service.GeneratePresignedURLsResponse
-	39, // [39:52] is the sub-list for method output_type
-	26, // [26:39] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	27, // 25: team_service.GeneratePresignedURLsResponse.error:type_name -> team_service.Error
+	27, // 26: team_service.LeaveGroupResponse.error:type_name -> team_service.Error
+	33, // 27: team_service.GroupService.Ping:input_type -> common.EmptyRequest
+	0,  // 28: team_service.GroupService.CreateGroup:input_type -> team_service.CreateGroupRequest
+	34, // 29: team_service.GroupService.GetGroup:input_type -> common.IDRequest
+	34, // 30: team_service.GroupService.ListGroups:input_type -> common.IDRequest
+	3,  // 31: team_service.GroupService.UpdateGroup:input_type -> team_service.UpdateGroupRequest
+	34, // 32: team_service.GroupService.DeleteGroup:input_type -> common.IDRequest
+	6,  // 33: team_service.GroupService.ListMembers:input_type -> team_service.ListMembersRequest
+	8,  // 34: team_service.GroupService.UpdateMemberRole:input_type -> team_service.UpdateMemberRoleRequest
+	10, // 35: team_service.GroupService.RemoveMember:input_type -> team_service.RemoveMemberRequest
+	12, // 36: team_service.GroupService.CreateInvite:input_type -> team_service.CreateInviteRequest
+	14, // 37: team_service.GroupService.AcceptInvite:input_type -> team_service.AcceptInviteRequest
+	34, // 38: team_service.GroupService.GetSimpleUserByGroupID:input_type -> common.IDRequest
+	21, // 39: team_service.GroupService.GeneratePresignedURLs:input_type -> team_service.GeneratePresignedURLsRequest
+	24, // 40: team_service.GroupService.LeaveGroup:input_type -> team_service.LeaveGroupRequest
+	35, // 41: team_service.GroupService.Ping:output_type -> common.EmptyResponse
+	1,  // 42: team_service.GroupService.CreateGroup:output_type -> team_service.CreateGroupResponse
+	2,  // 43: team_service.GroupService.GetGroup:output_type -> team_service.GetGroupResponse
+	16, // 44: team_service.GroupService.ListGroups:output_type -> team_service.ListGroupsResponse
+	4,  // 45: team_service.GroupService.UpdateGroup:output_type -> team_service.UpdateGroupResponse
+	5,  // 46: team_service.GroupService.DeleteGroup:output_type -> team_service.DeleteGroupResponse
+	7,  // 47: team_service.GroupService.ListMembers:output_type -> team_service.ListMembersResponse
+	9,  // 48: team_service.GroupService.UpdateMemberRole:output_type -> team_service.UpdateMemberRoleResponse
+	11, // 49: team_service.GroupService.RemoveMember:output_type -> team_service.RemoveMemberResponse
+	13, // 50: team_service.GroupService.CreateInvite:output_type -> team_service.CreateInviteResponse
+	15, // 51: team_service.GroupService.AcceptInvite:output_type -> team_service.AcceptInviteResponse
+	19, // 52: team_service.GroupService.GetSimpleUserByGroupID:output_type -> team_service.GetSimpleUserByGroupIDResponse
+	23, // 53: team_service.GroupService.GeneratePresignedURLs:output_type -> team_service.GeneratePresignedURLsResponse
+	25, // 54: team_service.GroupService.LeaveGroup:output_type -> team_service.LeaveGroupResponse
+	41, // [41:55] is the sub-list for method output_type
+	27, // [27:41] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_team_service_group_proto_init() }
@@ -1539,13 +1648,14 @@ func file_team_service_group_proto_init() {
 	file_team_service_group_proto_msgTypes[18].OneofWrappers = []any{}
 	file_team_service_group_proto_msgTypes[19].OneofWrappers = []any{}
 	file_team_service_group_proto_msgTypes[23].OneofWrappers = []any{}
+	file_team_service_group_proto_msgTypes[25].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_service_group_proto_rawDesc), len(file_team_service_group_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
