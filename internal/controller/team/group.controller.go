@@ -591,3 +591,32 @@ func buildPresignURLRequest(c *gin.Context) *team_service.GeneratePresignedURLsR
 
 	return &req
 }
+
+func (gc *GroupController) LeaveGroup(ctx *gin.Context) {
+	groupId := ctx.Param("group_id")
+	if groupId == "" {
+		ctx.JSON(400, gin.H{"error": "Group ID is required"})
+		return
+	}
+
+	req := &team_service.LeaveGroupRequest{
+		GroupId: groupId,
+	}
+
+	resp, err := gc.client.LeaveGroup(ctx, req)
+	if err != nil {
+		gc.logger.Error("Failed to leave group: ", "", zap.Error(err))
+		ctx.JSON(500, gin.H{"error": "Failed to leave group"})
+		return
+	}
+
+	if resp.GetError() != nil {
+		gc.logger.Error("Failed to leave group: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		response.UnprocessableEntity(ctx, resp.GetError().GetCode(), resp.GetError().GetMessage(), utils.SafeString(resp.GetError().Details))
+		return
+	}
+
+	response.Ok(ctx, "Member leaved successfully", gin.H{
+		"item": gin.H{"is_success": resp.Success},
+	})
+}

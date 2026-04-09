@@ -31,6 +31,7 @@ func (r *GroupRouter) InitGroupRouter(Router *gin.RouterGroup) {
 		groupRouterPrivate.GET("/:group_id/users/simple", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.READ_LIST_MEMBERS_ACTION), groupController.ListSimpleUsers)
 		groupRouterPrivate.POST("/invitation/acceptance", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.ACCEPT_INVITE_ACTION), groupController.AcceptInvite)
 		groupRouterPrivate.POST("/generate-presigned-urls", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.GET_PRESINGED_URLS_ACTION), groupController.GeneratePresignedURLs)
+		groupRouterPrivate.PATCH("/:group_id/members/leave", middlewares.CheckPerm(constant.GROUP_RESOURCE, constant.LEAVE_GROUP_ACTION), groupController.LeaveGroup)
 	}
 	r.Register()
 }
@@ -84,6 +85,10 @@ func (r *GroupRouter) Register() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.GET_PRESINGED_URLS_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.LEAVE_GROUP_ACTION,
 		},
 	})
 }
