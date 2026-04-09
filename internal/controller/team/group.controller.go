@@ -1,6 +1,7 @@
 package team_controller
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"schedule_gateway/global"
@@ -470,12 +471,16 @@ func (gc GroupController) buildCreateInviteResponse(invite *team_service.InviteM
 
 func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	origin := ctx.GetHeader("Origin")
+	if origin == "" {
+		origin = "https://www.schedulr.site"
+	}
 
 	var dto dtos.CodeDataDTO
 	if err := ctx.ShouldBindJSON(&dto); err != nil {
 		ctx.JSON(400, gin.H{"error": "Invalid request body " + err.Error()})
 		return
 	}
+	redirect := "/te/invite?code=" + url.QueryEscape(dto.Code)
 
 	req := &team_service.AcceptInviteRequest{
 		Code: dto.Code,
@@ -483,36 +488,38 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 
 	_, exists := ctx.Get("user_id")
 	if !exists {
-		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login")
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/login?redirect=%s", origin, url.QueryEscape(redirect)))
 		return
 	}
 
 	resp, err := gc.client.AcceptInvite(ctx, req)
 	if err != nil {
-		ctx.Redirect(http.StatusFound, "https://www.schedulr.site/login1231111111")
 		gc.logger.Error("Failed to accept invite: ", "", zap.Error(err))
+		if origin == "" {
+			origin = "https://www.schedulr.site"
+		}
+		ctx.Redirect(http.StatusFound, origin+"/404?error=invite_unavailable")
 		return
-	}
-
-	if origin == "" {
-		origin = "https://www.schedulr.site"
 	}
 
 	notfoundUrl := origin + "/404?error=invite_not_found"
-	redirect := "/invite?code=" + dto.Code
 	inviteUrl := origin + redirect
 	loginUrl := origin + "/login?redirect=" + url.QueryEscape(redirect)
-
+	println("Location: ", resp.Location)
 	if resp.GetError() != nil {
-		if resp.GetError().GetCode() == "ts.validation.email-not-matched" {
-			ctx.Redirect(http.StatusUnauthorized, loginUrl)
+		println("entering error handling with code: ", resp.GetError().GetCode())
+		errCode := resp.GetError().GetCode()
+		if errCode == "ts.validation.email-not-matched" || errCode == "ts.auth.unauthorized" {
+			println("Redirecting to login page: ", loginUrl)
+			ctx.Redirect(http.StatusFound, loginUrl)
+			return
 		}
 
-		gc.logger.Error("Failed to accept invite: ", "", zap.String("code", resp.Error.Code), zap.String("message", *resp.Error.Details))
+		gc.logger.Error("Failed to accept invite: ", "", zap.String("code", resp.GetError().GetCode()), zap.String("message", utils.SafeString(resp.GetError().Details)))
 		ctx.Redirect(http.StatusFound, notfoundUrl)
 		return
 	}
-
+	println("Redirecting to invite URL: ", inviteUrl)
 	ctx.Redirect(http.StatusFound, inviteUrl)
 }
 
