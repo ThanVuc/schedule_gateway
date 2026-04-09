@@ -9,6 +9,7 @@ const (
 	DELETE_ACTION             = "delete"
 	ENABLE_AND_DISABLE_ACTION = "enable_and_disable"
 	EXPORT_ACTION             = "export"
+	GENERATE_ACTION           = "generate"
 )
 
 // action and resource constants

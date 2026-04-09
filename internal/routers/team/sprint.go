@@ -42,6 +42,11 @@ func (r *SprintRouter) InitSprintRouter(Router *gin.RouterGroup) {
 			sprintController.ExportSprint,
 		)
 
+		sprintRouter.POST("/generation",
+			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.GENERATE_ACTION),
+			sprintController.GenerateSprint,
+		)
+
 		sprintRouter.PATCH("/:sprint_id",
 			middlewares.CheckPerm(constant.SPRINT_RESOURCE, constant.UPDATE_ACTION),
 			sprintController.UpdateSprint,
@@ -95,6 +100,10 @@ func (r *SprintRouter) Register() {
 		{
 			Id:   register.GenerateActionId(),
 			Name: constant.EXPORT_ACTION,
+		},
+		{
+			Id:   register.GenerateActionId(),
+			Name: constant.GENERATE_ACTION,
 		},
 	})
 }

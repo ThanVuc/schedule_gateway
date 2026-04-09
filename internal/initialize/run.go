@@ -1,12 +1,13 @@
 package initialize
 
 import (
+	"fmt"
 	"net/http"
 	"schedule_gateway/global"
 	"schedule_gateway/internal/helper"
 	"schedule_gateway/internal/middlewares"
 	"schedule_gateway/pkg/response"
-	"fmt"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
