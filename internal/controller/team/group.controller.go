@@ -508,8 +508,8 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 	}
 
 	notfoundUrl := origin + "/404?error=invite_not_found"
-	inviteUrl := origin + redirect
 	loginUrl := origin + "/login?redirect=" + url.QueryEscape(fmt.Sprintf("/te/invite?code=%s", dto.Code))
+	successUrl := origin + "te/groups"
 	if resp.GetError() != nil {
 		errCode := resp.GetError().GetCode()
 		if errCode == "ts.validation.email-not-matched" || errCode == "ts.auth.unauthorized" {
@@ -524,7 +524,7 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 		return
 	}
 
-	respondRedirectURL(inviteUrl)
+	respondRedirectURL(successUrl)
 }
 
 func BuildGroupResponse(group *team_service.GroupMessage) gin.H {
