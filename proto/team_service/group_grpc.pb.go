@@ -33,6 +33,7 @@ const (
 	GroupService_AcceptInvite_FullMethodName           = "/team_service.GroupService/AcceptInvite"
 	GroupService_GetSimpleUserByGroupID_FullMethodName = "/team_service.GroupService/GetSimpleUserByGroupID"
 	GroupService_GeneratePresignedURLs_FullMethodName  = "/team_service.GroupService/GeneratePresignedURLs"
+	GroupService_LeaveGroup_FullMethodName             = "/team_service.GroupService/LeaveGroup"
 )
 
 // GroupServiceClient is the client API for GroupService service.
@@ -54,6 +55,7 @@ type GroupServiceClient interface {
 	AcceptInvite(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error)
 	GetSimpleUserByGroupID(ctx context.Context, in *common.IDRequest, opts ...grpc.CallOption) (*GetSimpleUserByGroupIDResponse, error)
 	GeneratePresignedURLs(ctx context.Context, in *GeneratePresignedURLsRequest, opts ...grpc.CallOption) (*GeneratePresignedURLsResponse, error)
+	LeaveGroup(ctx context.Context, in *LeaveGroupRequest, opts ...grpc.CallOption) (*LeaveGroupResponse, error)
 }
 
 type groupServiceClient struct {
@@ -194,6 +196,16 @@ func (c *groupServiceClient) GeneratePresignedURLs(ctx context.Context, in *Gene
 	return out, nil
 }
 
+func (c *groupServiceClient) LeaveGroup(ctx context.Context, in *LeaveGroupRequest, opts ...grpc.CallOption) (*LeaveGroupResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LeaveGroupResponse)
+	err := c.cc.Invoke(ctx, GroupService_LeaveGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GroupServiceServer is the server API for GroupService service.
 // All implementations must embed UnimplementedGroupServiceServer
 // for forward compatibility.
@@ -213,6 +225,7 @@ type GroupServiceServer interface {
 	AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error)
 	GetSimpleUserByGroupID(context.Context, *common.IDRequest) (*GetSimpleUserByGroupIDResponse, error)
 	GeneratePresignedURLs(context.Context, *GeneratePresignedURLsRequest) (*GeneratePresignedURLsResponse, error)
+	LeaveGroup(context.Context, *LeaveGroupRequest) (*LeaveGroupResponse, error)
 	mustEmbedUnimplementedGroupServiceServer()
 }
 
@@ -261,6 +274,9 @@ func (UnimplementedGroupServiceServer) GetSimpleUserByGroupID(context.Context, *
 }
 func (UnimplementedGroupServiceServer) GeneratePresignedURLs(context.Context, *GeneratePresignedURLsRequest) (*GeneratePresignedURLsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GeneratePresignedURLs not implemented")
+}
+func (UnimplementedGroupServiceServer) LeaveGroup(context.Context, *LeaveGroupRequest) (*LeaveGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveGroup not implemented")
 }
 func (UnimplementedGroupServiceServer) mustEmbedUnimplementedGroupServiceServer() {}
 func (UnimplementedGroupServiceServer) testEmbeddedByValue()                      {}
@@ -517,6 +533,24 @@ func _GroupService_GeneratePresignedURLs_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GroupService_LeaveGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServiceServer).LeaveGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GroupService_LeaveGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServiceServer).LeaveGroup(ctx, req.(*LeaveGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GroupService_ServiceDesc is the grpc.ServiceDesc for GroupService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -575,6 +609,10 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GeneratePresignedURLs",
 			Handler:    _GroupService_GeneratePresignedURLs_Handler,
+		},
+		{
+			MethodName: "LeaveGroup",
+			Handler:    _GroupService_LeaveGroup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

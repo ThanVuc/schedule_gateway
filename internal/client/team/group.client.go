@@ -145,3 +145,13 @@ func (wc *groupClient) GeneratePresignedURLs(c *gin.Context, req *team_service.G
 	}
 	return resp, nil
 }
+
+func (wc *groupClient) LeaveGroup(c *gin.Context, req *team_service.LeaveGroupRequest) (*team_service.LeaveGroupResponse, error) {
+	ctx := context.Background()
+	ctx = utils.EnrichContext(ctx, c)
+	resp, err := wc.groupClient.LeaveGroup(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
