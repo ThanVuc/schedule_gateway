@@ -1,6 +1,7 @@
 package team_controller
 
 import (
+	"fmt"
 	"net/http"
 	"schedule_gateway/global"
 	team_client "schedule_gateway/internal/client/team"
@@ -506,6 +507,7 @@ func (gc *GroupController) AcceptInvite(ctx *gin.Context) {
 		ctx.Redirect(http.StatusFound, notfoundUrl)
 		return
 	}
+	fmt.Printf("1111111111111111111111111111111111111111111111111 %s\n", resp.GetLocation())
 
 	ctx.Redirect(http.StatusFound, inviteUrl)
 }
