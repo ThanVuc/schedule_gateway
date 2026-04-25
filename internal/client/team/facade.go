@@ -64,6 +64,7 @@ type (
 
 func getConn(baseConfig settings.GrpcBase) *grpc.ClientConn {
 	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", baseConfig.GetHost(), baseConfig.GetPort()), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	println("TEAM CONN: "+fmt.Sprintf("%s:%d", baseConfig.GetHost(), baseConfig.GetPort()), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic("Failed to connect to gRPC server: " + err.Error())
 	}
