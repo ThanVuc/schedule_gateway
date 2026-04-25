@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"fmt"
 	"schedule_gateway/global"
 
 	"github.com/thanvuc/go-core-lib/config"
@@ -17,4 +18,6 @@ func LoadConfig() {
 	if err != nil {
 		panic("Failed to load configuration: " + err.Error())
 	}
+
+	fmt.Printf("🔥 FULL CONFIG: %+v\n", global.Config)
 }
